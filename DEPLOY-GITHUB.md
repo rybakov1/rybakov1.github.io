@@ -57,9 +57,11 @@ git push -u origin main --force
 
 1. Открой репозиторий **rybakov1.github.io** на GitHub.
 2. **Settings** → **Pages**.
-3. В **Source** выбери **GitHub Actions**.
+3. В блоке **Build and deployment** в поле **Source** выбери **GitHub Actions** (не «Deploy from a branch»).
 
-После первого пуша в `main` запустится workflow: сборка Astro и деплой. Сайт будет доступен по адресу:
+Если выбран «Deploy from a branch», GitHub будет собирать сайт через Jekyll и выдаст ошибки вроде «Invalid YAML front matter» в .astro файлах — наш сайт на Astro должен собираться только через workflow «Deploy to GitHub Pages».
+
+После выбора **GitHub Actions** при пуше в `main` запустится этот workflow: сборка Astro и деплой. Сайт будет доступен по адресу:
 
 **https://rybakov1.github.io**
 
@@ -83,3 +85,18 @@ git push -u origin main --force
 | Включить сайт | Repo → Settings → Pages → Source: **GitHub Actions** |
 
 Сборка и деплой выполняются автоматически при каждом `git push` в `main`.
+
+---
+
+## Если проверки (checks) падают
+
+1. **Убедись, что в Pages выбран источник «GitHub Actions»**  
+   Settings → Pages → **Source: GitHub Actions**. Если выбран «Deploy from a branch», вкладка «pages build and deployment» будет пытаться собрать сайт по-своему и падать — наш Astro-сайт собирает только workflow «Deploy to GitHub Pages».
+
+2. **Посмотри логи падающего workflow**  
+   Вкладка **Actions** → открой упавший run → шаг **Build**. Там будет текст ошибки (например, от `npm run build`). Частые причины:
+   - не закоммичен **package-lock.json** — в workflow стоит `npm install`, но лучше добавить в репо: `git add package-lock.json && git commit -m "Add lock file" && git push`;
+   - ошибка при сборке Astro — исправь по логу и запушь снова.
+
+3. **Проверь сборку локально**  
+   Выполни `npm install` и `npm run build` у себя на компьютере. Если команды падают, то и в Actions будет то же самое — сначала почини сборку локально.
