@@ -1,0 +1,63 @@
+---
+import Layout from '@layouts/Layout.astro';
+import Header from '@components/Header.astro';
+import Footer from '@components/Footer.astro';
+import { projects } from '../../data/projects';
+---
+
+<Layout
+  title="Our Projects — Brij & Co | Exhibition Stand Builders"
+  description="Portfolio of custom exhibition stands, kiosks, and displays. Sydney & NSW."
+  canonical="https://rybakov1.github.io/projects"
+>
+  <Header />
+  <main id="main">
+    <section class="bg-brand-cream border-b border-gray-200">
+      <div class="content-box py-10 md:py-12">
+        <nav class="text-sm text-gray-500 mb-2" aria-label="Breadcrumb">
+          <a href="/" class="hover:text-brand-gold transition-colors">Home</a>
+          <span class="mx-2">»</span>
+          <span class="text-gray-700 font-medium">Projects</span>
+        </nav>
+        <h1 class="text-3xl md:text-4xl font-display font-bold text-gray-900">Our Projects</h1>
+        <p class="mt-3 text-gray-600 max-w-2xl">
+          Exhibition stands, kiosks, and displays we’ve designed and built for clients across Australia.
+        </p>
+      </div>
+    </section>
+
+    <section class="section-padding bg-white">
+      <div class="content-box">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+          {projects.map((project, i) => (
+            <a
+              href={`/projects/${project.slug}`}
+              class="group block animate-on-scroll hover-lift"
+              data-delay={String((i % 6) + 1)}
+            >
+              <div class="aspect-[4/3] rounded-xl overflow-hidden bg-brand-dark mb-4">
+                <img
+                  src={project.image}
+                  alt={`${project.title} — ${project.category}`}
+                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  loading="lazy"
+                />
+              </div>
+              <span class="text-brand-gold text-xs font-semibold uppercase tracking-wider">{project.category}</span>
+              <h2 class="font-display text-xl font-bold text-gray-900 mt-1 group-hover:text-brand-gold transition-colors">
+                {project.title}
+              </h2>
+              <span class="inline-flex items-center gap-1 text-sm font-medium text-gray-500 mt-2 group-hover:text-brand-gold transition-colors">
+                View project
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Layout>

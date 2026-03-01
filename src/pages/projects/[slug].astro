@@ -1,0 +1,86 @@
+---
+import Layout from '@layouts/Layout.astro';
+import Header from '@components/Header.astro';
+import Footer from '@components/Footer.astro';
+import { projects } from '../../data/projects';
+
+export function getStaticPaths() {
+  return projects.map((project) => ({ params: { slug: project.slug } }));
+}
+
+const { slug } = Astro.params;
+const project = projects.find((p) => p.slug === slug);
+
+if (!project) {
+  return Astro.redirect('/404');
+}
+---
+
+<Layout
+  title={`${project.title} — Brij & Co Projects`}
+  description={project.description.length > 160 ? project.description.slice(0, 157) + '...' : project.description}
+  canonical={`https://rybakov1.github.io/projects/${project.slug}`}
+>
+  <Header />
+  <main id="main">
+    <article class="section-padding bg-white">
+      <div class="content-box max-w-4xl">
+        <nav class="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
+          <a href="/" class="hover:text-brand-gold transition-colors">Home</a>
+          <span class="mx-2">»</span>
+          <a href="/projects" class="hover:text-brand-gold transition-colors">Projects</a>
+          <span class="mx-2">»</span>
+          <span class="text-gray-700 font-medium">{project.title}</span>
+        </nav>
+
+        <header class="mb-10">
+          <span class="text-brand-gold text-xs font-semibold uppercase tracking-wider">{project.category}</span>
+          <h1 class="text-3xl md:text-4xl font-display font-bold text-gray-900 mt-2">{project.title}</h1>
+        </header>
+
+        <!-- Photo collage -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
+          <div class="md:col-span-2 aspect-[4/3] rounded-xl overflow-hidden bg-brand-dark">
+            <img
+              src={project.images[0]}
+              alt={`${project.title} — main`}
+              class="w-full h-full object-cover"
+            />
+          </div>
+          <div class="grid grid-rows-2 gap-4">
+            <div class="rounded-xl overflow-hidden bg-brand-dark">
+              <img
+                src={project.images[1]}
+                alt=""
+                class="w-full h-full object-cover min-h-[120px]"
+              />
+            </div>
+            <div class="rounded-xl overflow-hidden bg-brand-dark">
+              <img
+                src={project.images[2]}
+                alt=""
+                class="w-full h-full object-cover min-h-[120px]"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div class="prose prose-gray max-w-none">
+          <h2 class="font-display text-xl font-bold text-gray-900 mb-4">About this project</h2>
+          <p class="text-gray-600 leading-relaxed">{project.description}</p>
+        </div>
+
+        <p class="mt-12">
+          <a
+            href="/projects"
+            class="text-brand-gold font-semibold text-sm inline-flex items-center gap-1 hover:underline"
+          >
+            ← All projects
+          </a>
+        </p>
+      </div>
+    </article>
+  </main>
+  <Footer />
+</Layout>
