@@ -1,0 +1,55 @@
+---
+const highlights = [
+  {
+    title: 'Tailored Expo Solutions',
+    description: 'We create custom exhibition stand designs that perfectly reflect your brand\'s essence and objectives. Our skilled designers collaborate with you to transform your vision into reality.',
+  },
+  {
+    title: 'Strategic Implementation',
+    description: 'A successful exhibition goes beyond just design — it requires meticulous planning and flawless execution. We craft a well-rounded strategy that ensures maximum impact.',
+  },
+  {
+    title: 'Superior Craftsmanship',
+    description: 'We use high-quality materials and cutting-edge construction techniques to ensure durability, functionality, and a visually striking display that leaves a lasting impression.',
+  },
+  {
+    title: 'End-to-End Solutions',
+    description: 'From concept development and design to construction, installation, and dismantling, we manage every step with precision. Our expert team handles the logistics.',
+  },
+];
+---
+
+<section class="section-padding bg-brand-dark relative overflow-hidden">
+  <div class="absolute inset-0">
+    <div class="absolute bottom-0 right-0 w-96 h-96 bg-brand-gold/10 rounded-full blur-3xl opacity-50"></div>
+  </div>
+
+  <div class="content-box relative">
+    <div class="text-center mb-12 animate-on-scroll">
+      <h2 class="section-title text-white mb-4">
+        Services Across Australia
+      </h2>
+      <p class="section-subtitle !text-gray-400">
+        From our workshop in Sydney we design and build custom exhibition stands for clients across NSW and Australia. We deliver and install where you need us.
+      </p>
+      <p class="text-brand-gold font-medium text-sm mt-4">
+        Quality build and reliable delivery — your stand ready when you need it.
+      </p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 gap-6">
+      {highlights.map((item, i) => (
+        <div
+          class="animate-on-scroll hover-lift group bg-white/5 backdrop-blur-sm border border-white/5 hover:border-brand-gold/20 rounded-2xl p-8"
+          data-delay={String((i % 6) + 1)}
+        >
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-2 h-2 rounded-full bg-brand-gold"></div>
+            <h3 class="font-display font-bold text-white text-lg">{item.title}</h3>
+          </div>
+          <p class="text-gray-400 leading-relaxed text-sm">{item.description}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

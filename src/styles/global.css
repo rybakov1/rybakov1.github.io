@@ -1,0 +1,148 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply font-sans text-gray-900 bg-white;
+  }
+
+  ::selection {
+    @apply bg-brand-gold/30 text-gray-900;
+  }
+}
+
+/* Skip link for accessibility (visible on focus) */
+.skip-link {
+  @apply absolute left-4 top-4 -translate-y-20 bg-brand-gold text-white px-4 py-2 rounded-lg font-semibold z-[100] transition-transform focus:translate-y-0 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-brand-dark;
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-7 py-3.5 bg-brand-gold text-white font-semibold rounded-lg
+           hover:opacity-90 transition-all duration-300 hover:shadow-lg hover:shadow-black/10
+           active:scale-[0.98] text-sm tracking-wide;
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center justify-center px-7 py-3.5 border-2 border-white text-white font-semibold rounded-lg
+           hover:bg-white hover:text-brand-dark transition-all duration-300
+           active:scale-[0.98] text-sm tracking-wide;
+  }
+
+  .btn-dark {
+    @apply inline-flex items-center justify-center px-7 py-3.5 bg-brand-gold text-white font-semibold rounded-lg
+           hover:opacity-90 transition-all duration-300 hover:shadow-lg
+           active:scale-[0.98] text-sm tracking-wide;
+  }
+
+  /* Единый контейнер: контент по центру, не растягивается, отступы от краёв экрана */
+  .content-box {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 1340px;
+    margin-left: auto;
+    margin-right: auto;
+    /* Отступы от краёв — контент не прилипает к экрану */
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+  @media (min-width: 640px) {
+    .content-box {
+      padding-left: 2.5rem;
+      padding-right: 2.5rem;
+    }
+  }
+  @media (min-width: 1024px) {
+    .content-box {
+      padding-left: 4rem;
+      padding-right: 4rem;
+    }
+  }
+  @media (min-width: 1280px) {
+    .content-box {
+      padding-left: 5rem;
+      padding-right: 5rem;
+    }
+  }
+
+  .section-padding {
+    @apply py-16 md:py-20;
+  }
+
+  .container-main {
+    @apply max-w-container mx-auto w-full;
+  }
+
+  .section-title {
+    @apply font-display text-3xl md:text-[2.5rem] lg:text-[2.75rem] font-extrabold leading-tight tracking-tight;
+  }
+
+  .section-subtitle {
+    @apply text-base md:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed;
+  }
+
+  .gold-underline {
+    @apply w-16 h-1 bg-brand-gold rounded-full;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Scroll-triggered animations */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.animate-on-scroll.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stagger delays for grid children */
+.animate-on-scroll[data-delay="1"] { transition-delay: 0.1s; }
+.animate-on-scroll[data-delay="2"] { transition-delay: 0.2s; }
+.animate-on-scroll[data-delay="3"] { transition-delay: 0.3s; }
+.animate-on-scroll[data-delay="4"] { transition-delay: 0.4s; }
+.animate-on-scroll[data-delay="5"] { transition-delay: 0.5s; }
+.animate-on-scroll[data-delay="6"] { transition-delay: 0.6s; }
+
+/* Hero entrance */
+.hero-entrance {
+  opacity: 0;
+  transform: translateY(32px);
+  animation: heroEntrance 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.hero-entrance-delay-1 { animation-delay: 0.15s; }
+.hero-entrance-delay-2 { animation-delay: 0.3s; }
+.hero-entrance-delay-3 { animation-delay: 0.45s; }
+.hero-entrance-delay-4 { animation-delay: 0.6s; }
+.hero-entrance-delay-5 { animation-delay: 0.75s; }
+.hero-entrance-delay-6 { animation-delay: 0.9s; }
+.hero-entrance-delay-7 { animation-delay: 1.05s; }
+@keyframes heroEntrance {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Subtle hover lift for cards */
+.hover-lift {
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
+}
+.hover-lift:hover {
+  transform: translateY(-4px);
+}

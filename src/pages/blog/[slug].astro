@@ -1,0 +1,54 @@
+---
+import Layout from '@layouts/Layout.astro';
+import Header from '@components/Header.astro';
+import Footer from '@components/Footer.astro';
+import { posts, formatDate } from '../../data/blog';
+
+export function getStaticPaths() {
+  return posts.map((post) => ({ params: { slug: post.slug } }));
+}
+
+const { slug } = Astro.params;
+const post = posts.find((p) => p.slug === slug);
+
+if (!post) {
+  return Astro.redirect('/404');
+}
+---
+
+<Layout
+  title={`${post.title} — Brij & Co Blog`}
+  description={post.excerpt}
+  canonical={`https://brijnco.com.au/blog/${post.slug}`}
+>
+  <Header />
+  <main id="main">
+    <article class="section-padding bg-white">
+      <div class="content-box max-w-3xl">
+        <nav class="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
+          <a href="/" class="hover:text-brand-gold transition-colors">Home</a>
+          <span class="mx-2">»</span>
+          <a href="/blog" class="hover:text-brand-gold transition-colors">Blog</a>
+          <span class="mx-2">»</span>
+          <span class="text-gray-700 font-medium line-clamp-1">{post.title}</span>
+        </nav>
+        <header class="mb-8">
+          <h1 class="text-3xl md:text-4xl font-display font-bold text-gray-900 mb-4">{post.title}</h1>
+          <time class="text-gray-500 text-sm" datetime={post.date}>{formatDate(post.date)}</time>
+        </header>
+        <div class="aspect-video rounded-xl overflow-hidden bg-brand-dark mb-10">
+          <img src={post.image} alt="" class="w-full h-full object-cover" />
+        </div>
+        <div class="prose prose-gray max-w-none">
+          <p class="text-gray-600 leading-relaxed">{post.body}</p>
+        </div>
+        <p class="mt-10">
+          <a href="/blog" class="text-brand-gold font-semibold text-sm inline-flex items-center gap-1 hover:underline">
+            ← Back to Blog
+          </a>
+        </p>
+      </div>
+    </article>
+  </main>
+  <Footer />
+</Layout>

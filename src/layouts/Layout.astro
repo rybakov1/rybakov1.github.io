@@ -1,0 +1,130 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  canonical?: string;
+}
+
+const {
+  title,
+  description = 'Brij & Co — Custom Exhibition Stand Builders in Sydney & NSW. Design, build & deliver standout exhibition displays across Australia.',
+  canonical = 'https://brijnco.com.au/',
+} = Astro.props;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  name: 'Brij & Co',
+  description: 'Custom Exhibition Stand Builders in Sydney & NSW. Exhibition design, build and installation across Australia.',
+  url: 'https://brijnco.com.au',
+  telephone: '+61 1800 957 469',
+  email: 'info@brijnco.com',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: '4/8 Kerr Road',
+    addressLocality: 'Ingleburn',
+    addressRegion: 'NSW',
+    postalCode: '2565',
+    addressCountry: 'AU',
+  },
+  areaServed: [
+    { '@type': 'City', name: 'Sydney' },
+    { '@type': 'City', name: 'Melbourne' },
+    { '@type': 'City', name: 'Brisbane' },
+    { '@type': 'City', name: 'Gold Coast' },
+  ],
+  openingHoursSpecification: {
+    '@type': 'OpeningHoursSpecification',
+    dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+    opens: '08:00',
+    closes: '17:00',
+  },
+};
+---
+
+<!doctype html>
+<html lang="en-AU">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#D4A843" />
+    <meta name="robots" content="index, follow" />
+    <meta name="keywords" content="exhibition stands Sydney, custom exhibition stands Melbourne, trade show stands Brisbane, exhibition stand builders Australia, display stands, pop-up displays, retail fit-outs Sydney, vinyl print cutting" />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonical} />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content="en_AU" />
+    <meta property="og:site_name" content="Brij & Co" />
+    <meta property="og:image" content="https://brijnco.com.au/og.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content="https://brijnco.com.au/og.jpg" />
+
+    <!-- Preconnect for faster font load; display=swap avoids invisible text -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700;800;900&display=swap"
+    />
+
+    <title>{title}</title>
+
+    <!-- JSON-LD for SEO -->
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+  <body class="overflow-x-hidden">
+    <a href="#main" class="skip-link">Skip to main content</a>
+    <slot />
+
+    <script is:inline>
+      (function() {
+        var observer = new IntersectionObserver(
+          function(entries) {
+            entries.forEach(function(entry) {
+              if (entry.isIntersecting) entry.target.classList.add('is-visible');
+            });
+          },
+          { threshold: 0.08, rootMargin: '0px 0px -40px 0px' }
+        );
+        document.querySelectorAll('.animate-on-scroll').forEach(function(el) {
+          observer.observe(el);
+        });
+      })();
+      document.addEventListener('DOMContentLoaded', function() {
+        ['hero-form', 'contact-form'].forEach(function(id) {
+          var form = document.getElementById(id);
+          if (form) {
+            form.addEventListener('submit', function(e) {
+              e.preventDefault();
+              var btn = form.querySelector('button[type="submit"]');
+              if (btn) {
+                var text = btn.textContent;
+                btn.disabled = true;
+                btn.textContent = 'Sending…';
+                setTimeout(function() {
+                  btn.textContent = 'Thank you! We\'ll be in touch.';
+                  btn.classList.add('!bg-green-600');
+                }, 600);
+              }
+            });
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

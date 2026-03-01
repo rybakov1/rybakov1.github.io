@@ -1,0 +1,29 @@
+---
+import Layout from '@layouts/Layout.astro';
+import Header from '@components/Header.astro';
+import Contact from '@components/Contact.astro';
+import Footer from '@components/Footer.astro';
+---
+
+<Layout
+  title="Contact Us — Brij & Co | Exhibition Stand Builders Sydney"
+  description="Get in touch with Brij & Co for custom exhibition stand design and build. Phone 1800 957 469, email info@brijnco.com. Ingleburn, NSW."
+  canonical="https://brijnco.com.au/contact"
+>
+  <Header />
+  <main id="main">
+    <!-- Page title & breadcrumb -->
+    <section class="bg-brand-cream border-b border-gray-200">
+      <div class="content-box py-10 md:py-12">
+        <nav class="text-sm text-gray-500 mb-2" aria-label="Breadcrumb">
+          <a href="/" class="hover:text-brand-gold transition-colors">Home</a>
+          <span class="mx-2">»</span>
+          <span class="text-gray-700 font-medium">Contact Us</span>
+        </nav>
+        <h1 class="text-3xl md:text-4xl font-display font-bold text-gray-900">Contact Us</h1>
+      </div>
+    </section>
+    <Contact fullPage={true} />
+  </main>
+  <Footer />
+</Layout>
