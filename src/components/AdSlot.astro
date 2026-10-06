@@ -1,0 +1,58 @@
+---
+/**
+ * Quiet ad placeholder — minimal chrome so conversion pages stay calm.
+ * Not rendered on home, /shows or /stand-brief (marketing + conversion pages).
+ */
+import { siteConfig, type AdSlotKey } from '../../site.config';
+import { t } from '../i18n/en';
+
+interface Props {
+  slot: AdSlotKey;
+  class?: string;
+}
+
+const { slot, class: className = '' } = Astro.props;
+const cfg = siteConfig.ads.slots[slot];
+const enabled = siteConfig.ads.enabled;
+const strings = t();
+---
+
+{
+  enabled && (
+    <aside
+      class:list={['ad-slot', `ad-slot--${cfg.format}`, className]}
+      data-ad-slot={cfg.id}
+      data-ad-format={cfg.format}
+      aria-label={strings.adLabel}
+    >
+      {siteConfig.ads.showPlaceholderLabel && (
+        <span class="ad-slot__label">{strings.adPlaceholder}</span>
+      )}
+      <div class="ad-slot__box" data-ad-sizes={cfg.sizes.join(',')}></div>
+    </aside>
+  )
+}
+
+<style>
+  .ad-slot {
+    margin: 2rem 0;
+  }
+  .ad-slot__label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    margin-bottom: 0.4rem;
+  }
+  .ad-slot__box {
+    min-height: 70px;
+    border: 1px dashed var(--rule);
+    border-radius: 2px;
+  }
+  .ad-slot--in-content .ad-slot__box {
+    min-height: 200px;
+    max-width: 300px;
+  }
+</style>

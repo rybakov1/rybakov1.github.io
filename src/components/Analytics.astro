@@ -1,0 +1,38 @@
+---
+/**
+ * Analytics slot — OFF by default.
+ * Enable via site.config.ts → analytics.provider, or at build time with
+ * PUBLIC_ANALYTICS_PROVIDER=plausible|ga4 (+ PUBLIC_PLAUSIBLE_DOMAIN / PUBLIC_GA4_ID).
+ * Plausible is cookieless; GA4 sets cookies — update the Cookie policy if you enable it.
+ */
+import { siteConfig } from '../../site.config';
+
+const env = import.meta.env;
+const provider = (env.PUBLIC_ANALYTICS_PROVIDER || siteConfig.analytics.provider || 'none') as
+  | 'none'
+  | 'plausible'
+  | 'ga4';
+const plausibleDomain = env.PUBLIC_PLAUSIBLE_DOMAIN || siteConfig.analytics.plausible.domain;
+const plausibleSrc = env.PUBLIC_PLAUSIBLE_SRC || siteConfig.analytics.plausible.scriptSrc;
+const ga4Id = env.PUBLIC_GA4_ID || siteConfig.analytics.ga4.measurementId;
+const ga4Init = `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}window.gtag=gtag;gtag('js',new Date());gtag('config',${JSON.stringify(ga4Id)},{anonymize_ip:true});`;
+---
+
+{
+  provider === 'plausible' && plausibleDomain && (
+    <>
+      <script is:inline defer data-domain={plausibleDomain} src={plausibleSrc} />
+      <script is:inline>
+        window.plausible = window.plausible || function () { (window.plausible.q = window.plausible.q || []).push(arguments); };
+      </script>
+    </>
+  )
+}
+{
+  provider === 'ga4' && ga4Id && (
+    <>
+      <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${ga4Id}`} />
+      <script is:inline set:html={ga4Init} />
+    </>
+  )
+}

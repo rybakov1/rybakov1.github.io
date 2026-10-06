@@ -1,0 +1,363 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import ShowRow from '../../components/ShowRow.astro';
+import Crumbs from '../../components/Crumbs.astro';
+import {
+  shows,
+  getShowBySlug,
+  formatShowDates,
+  getShowDateParts,
+  getRelatedShows,
+} from '../../data/shows';
+import { getIndustryBySlug, getCityByName } from '../../data/taxonomy';
+import { breadcrumbLd, eventLd } from '../../lib/seo';
+
+export function getStaticPaths() {
+  return shows.map((show) => ({
+    params: { slug: show.slug },
+  }));
+}
+
+const { slug } = Astro.params;
+const show = getShowBySlug(slug!);
+if (!show) {
+  return Astro.redirect('/shows');
+}
+
+const d = getShowDateParts(show);
+const city = getCityByName(show.city)!;
+const cats = show.categories.map((c) => getIndustryBySlug(c)!).filter(Boolean);
+const related = getRelatedShows(show, 4);
+const crumbs = [
+  { name: 'Home', path: '/' },
+  { name: 'Shows', path: '/shows' },
+  { name: show.city, path: `/shows/city/${city.slug}` },
+  { name: show.name, path: `/shows/${show.slug}` },
+];
+const audienceLabel = { trade: 'Trade only', consumer: 'Consumer / public', mixed: 'Trade & public' };
+const verified = new Date(show.verifiedOn + 'T12:00:00').toLocaleDateString('en-AU', {
+  day: 'numeric',
+  month: 'short',
+  year: 'numeric',
+});
+const jsonLd = [eventLd(show), breadcrumbLd(crumbs)];
+const year = show.startDate.slice(0, 4);
+const pageTitle = show.name.includes(year)
+  ? `${show.name} — ${show.city} dates & venue`
+  : `${show.name} ${year} — ${show.city} dates & venue`;
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={`${show.name}: ${formatShowDates(show)}, ${show.venue}, ${show.city}. ${show.blurb}`.slice(0, 300)}
+  path={`/shows/${show.slug}`}
+  ogType="article"
+  jsonLd={jsonLd}
+>
+  <article class="wrap show-detail">
+    <div class="show-detail__back">
+      <Crumbs items={crumbs} />
+    </div>
+
+    <header class="show-detail__head">
+      <div class="show-detail__date" aria-hidden="true">
+        <span class="show-detail__days">{d.days}</span>
+        <span class="show-detail__month">{d.month} {d.year}</span>
+      </div>
+      <div>
+        <p class="eyebrow eyebrow--rule">
+          <a class="eyebrow-link" href={`/shows/city/${city.slug}`}>{show.city}</a> ·
+          <a class="eyebrow-link" href={`/shows/industry/${cats[0].slug}`}>{cats[0].short}</a>
+        </p>
+        <h1>{show.name}</h1>
+        {
+          show.illustrative && (
+            <p class="badge badge--muted" style="margin: 0 0 1rem;">
+              Partly confirmed — verify before booking
+            </p>
+          )
+        }
+        <p class="lead" style="margin-bottom: 0;">{show.blurb}</p>
+      </div>
+    </header>
+
+    <dl class="meta-grid">
+      <div>
+        <dt>Dates</dt>
+        <dd>{formatShowDates(show)}</dd>
+      </div>
+      <div>
+        <dt>City</dt>
+        <dd><a class="dd-link" href={`/shows/city/${city.slug}`}>{show.city}</a>, {city.stateCode}</dd>
+      </div>
+      <div>
+        <dt>Venue</dt>
+        <dd>{show.venue}</dd>
+      </div>
+      <div>
+        <dt>Industry</dt>
+        <dd>
+          {cats.map((c, i) => (
+            <>
+              {i > 0 && ', '}
+              <a class="dd-link" href={`/shows/industry/${c.slug}`}>{c.short}</a>
+            </>
+          ))}
+          <div class="tags" style="margin:0.4rem 0 0;">
+            {show.industries.map((i) => (
+              <span class="tag">{i}</span>
+            ))}
+          </div>
+        </dd>
+      </div>
+    </dl>
+
+    <p class="show-detail__facts">
+      {show.audience && <span>{audienceLabel[show.audience]}</span>}
+      {show.organiser && <span>Organiser: {show.organiser}</span>}
+      <span>Checked against official source {verified}</span>
+    </p>
+
+    {
+      show.illustrative && show.flagNote && (
+        <p class="notice show-detail__flag">
+          <strong>What still needs confirming:</strong> {show.flagNote}
+        </p>
+      )
+    }
+
+    <div class="hero__actions">
+      <a class="btn" href={`/stand-brief?show=${show.slug}`}>Request a stand brief</a>
+      {
+        show.officialSite ? (
+          <a
+            class="btn btn--ghost"
+            href={show.officialSite}
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            Official show site ↗
+          </a>
+        ) : (
+          <span class="footer-meta">Official site not linked — search the show name to confirm details.</span>
+        )
+      }
+    </div>
+
+    <p class="notice">
+      This page is an independent listing for planning and stand enquiries. It is{' '}
+      <strong>not</strong> the official organiser site
+      {show.officialSite ? ' — use the official link for tickets, booth sales, and floorplans.' : '.'}
+    </p>
+
+    <AdSlot slot="inContent" />
+
+    <section class="show-detail__plan" aria-labelledby="plan-heading">
+      <div class="section-head">
+        <span class="section-head__num">01</span>
+        <h2 id="plan-heading">Planning a stand here</h2>
+        <a class="section-head__aside text-link" href="/exhibition-stand-builders">Stand builder guide</a>
+      </div>
+      <div class="show-detail__plan-grid">
+        <p>
+          Exhibiting at {show.name}? Most exhibitors choose between the organiser’s shell scheme
+          and a space-only site with a custom or modular stand. Read our
+          <a href="/exhibition-stand-builders">guide to exhibition stand builders</a> for what drives
+          cost and what to put in a brief, or see what else is on in
+          <a href={`/shows/city/${city.slug}`}>{show.city}</a> and across
+          <a href={`/shows/industry/${cats[0].slug}`}>{cats[0].name.toLowerCase()}</a>.
+        </p>
+        <a class="btn btn--ink" href={`/stand-brief?show=${show.slug}`}>Brief a stand for this show</a>
+      </div>
+    </section>
+
+    {
+      related.length > 0 && (
+        <section class="show-detail__related" aria-labelledby="related-shows">
+          <div class="section-head">
+            <span class="section-head__num">02</span>
+            <h2 id="related-shows">Related shows</h2>
+            <a class="section-head__aside text-link" href="/shows">Full calendar</a>
+          </div>
+          <ul class="show-list">
+            {related.map((r) => (
+              <ShowRow show={r} />
+            ))}
+          </ul>
+        </section>
+      )
+    }
+  </article>
+</BaseLayout>
+
+<style>
+  .eyebrow-link,
+  .dd-link {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .eyebrow-link:hover,
+  .dd-link:hover {
+    color: var(--ochre-deep);
+    border-bottom-color: currentColor;
+  }
+
+  .show-detail__facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 1.25rem;
+    margin: 1rem 0 1.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .show-detail__facts span + span::before {
+    content: '·';
+    margin-right: 1.25rem;
+    color: var(--ochre);
+  }
+
+  .show-detail__plan,
+  .show-detail__related {
+    margin-top: clamp(3rem, 7vw, 4.5rem);
+  }
+
+  .show-detail__plan-grid {
+    display: grid;
+    gap: 1.5rem;
+    align-items: center;
+  }
+
+  .show-detail__plan-grid p {
+    margin: 0;
+    max-width: 40rem;
+    color: var(--ink-2);
+    font-size: 1.02rem;
+    line-height: 1.6;
+  }
+
+  @media (min-width: 720px) {
+    .show-detail__plan-grid {
+      grid-template-columns: 8.5rem 1fr auto;
+      column-gap: 1.75rem;
+    }
+    .show-detail__plan-grid p {
+      grid-column: 2;
+    }
+  }
+
+  .show-detail {
+    padding: clamp(2rem, 5vw, 3rem) 0 clamp(3rem, 7vw, 5rem);
+  }
+
+  .show-detail__back {
+    margin: calc(-1 * clamp(2rem, 5vw, 3rem)) 0 clamp(1.5rem, 4vw, 3rem);
+  }
+
+  .show-detail__head {
+    display: grid;
+    gap: 1.5rem;
+    padding-bottom: clamp(2rem, 5vw, 3rem);
+  }
+
+  .show-detail__head h1 {
+    font-size: clamp(2.25rem, 5.5vw, 3.75rem);
+    margin-bottom: 1.25rem;
+  }
+
+  .show-detail__date {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+  }
+
+  .show-detail__days {
+    font-family: var(--font-display);
+    font-weight: 250;
+    font-size: clamp(3.5rem, 11vw, 6rem);
+    line-height: 0.85;
+    letter-spacing: -0.04em;
+    color: var(--ink);
+  }
+
+  .show-detail__month {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ochre-deep);
+  }
+
+  @media (min-width: 900px) {
+    .show-detail__head {
+      grid-template-columns: 15rem minmax(0, 1fr);
+      gap: 3.5rem;
+    }
+    .show-detail__date {
+      flex-direction: column;
+      gap: 0.85rem;
+      padding-top: 0.5rem;
+    }
+  }
+
+  .meta-grid {
+    display: grid;
+    margin: 0 0 0.5rem;
+    border-top: 1px solid var(--ink);
+  }
+
+  .meta-grid > div {
+    padding: 1.1rem 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  @media (min-width: 640px) {
+    .meta-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+    .meta-grid > div:nth-child(odd) {
+      padding-right: 1.5rem;
+    }
+  }
+
+  @media (min-width: 960px) {
+    .meta-grid {
+      grid-template-columns: 1fr 1fr 2fr 1.5fr;
+    }
+    .meta-grid > div + div {
+      padding-left: 1.5rem;
+      border-left: 1px solid var(--rule);
+    }
+  }
+
+  .meta-grid dt {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 0.4rem;
+  }
+
+  .meta-grid dd {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 400;
+    line-height: 1.35;
+    color: var(--ink);
+  }
+
+  .meta-grid .tags {
+    font-family: var(--font-text);
+  }
+</style>

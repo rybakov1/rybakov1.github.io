@@ -1,0 +1,131 @@
+---
+import { siteConfig } from '../../site.config';
+import { t } from '../i18n/en';
+
+const strings = t();
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="site-footer__top">
+      <div class="site-footer__brand">
+        <p class="site-footer__name">{siteConfig.name}</p>
+        <p class="site-footer__note">{siteConfig.poweredByNote}</p>
+      </div>
+      <nav class="footer-nav" aria-label="Footer">
+        <div>
+          <p class="footer-nav__label">Plan</p>
+          <a href="/shows">Show calendar</a>
+          <a href="/exhibition-stand-builders">Stand builder guide</a>
+          <a href="/stand-brief">{strings.standBrief}</a>
+        </div>
+        <div>
+          <p class="footer-nav__label">Cities</p>
+          <a href="/shows/city/sydney">Sydney</a>
+          <a href="/shows/city/melbourne">Melbourne</a>
+          <a href="/shows/city/brisbane">Brisbane</a>
+          <a href="/shows/city/perth">Perth</a>
+        </div>
+        <div>
+          <p class="footer-nav__label">Legal</p>
+          <a href="/privacy">{strings.privacy}</a>
+          <a href="/cookies">{strings.cookies}</a>
+        </div>
+      </nav>
+    </div>
+    <div class="site-footer__base">
+      <p>© {year} {siteConfig.author}</p>
+      <p>Independent calendar · Not an official organiser · Not affiliated with listed shows or venues</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    margin-top: auto;
+    background: var(--paper-2);
+    border-top: 1px solid var(--rule);
+    padding: clamp(2.75rem, 6vw, 4rem) 0 1.75rem;
+  }
+
+  .site-footer__top {
+    display: grid;
+    gap: 2.25rem;
+    padding-bottom: 2.25rem;
+  }
+
+  .site-footer__name {
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 340;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    color: var(--ink);
+    margin: 0 0 0.85rem;
+  }
+
+  .site-footer__note {
+    max-width: 26rem;
+    font-size: 0.925rem;
+    color: var(--ink-2);
+    margin: 0;
+  }
+
+  .footer-nav {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 10rem));
+    gap: 1.5rem;
+  }
+
+  .footer-nav div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .footer-nav__label {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 0.35rem;
+  }
+
+  .footer-nav a {
+    color: var(--ink);
+    text-decoration: none;
+    font-size: 0.95rem;
+    width: fit-content;
+  }
+
+  .footer-nav a:hover {
+    color: var(--ochre-deep);
+  }
+
+  .site-footer__base {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.35rem 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--rule);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+  }
+
+  .site-footer__base p {
+    margin: 0;
+  }
+
+  @media (min-width: 720px) {
+    .site-footer__top {
+      grid-template-columns: 1fr auto;
+      align-items: end;
+    }
+  }
+</style>

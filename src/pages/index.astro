@@ -1,0 +1,404 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import FAQ from '../components/FAQ.astro';
+import RelatedTools from '../components/RelatedTools.astro';
+import ShowRow from '../components/ShowRow.astro';
+import BrowseIndex from '../components/BrowseIndex.astro';
+import { organizationLd, websiteLd } from '../lib/seo';
+import { siteConfig } from '../../site.config';
+import {
+  shows,
+  getAllCities,
+  getFeaturedShows,
+  getShowDateParts,
+  formatShowDates,
+} from '../data/shows';
+
+// One "poster" show in the hero, the following six in the calendar list.
+const featured = getFeaturedShows(7);
+const [next, ...upcoming] = featured;
+const nextDate = next ? getShowDateParts(next) : null;
+const cityCount = getAllCities().length;
+
+const jsonLd = [organizationLd(), websiteLd()];
+---
+
+<BaseLayout
+  title="Trade Show Stands — Australian trade show calendar & exhibition stand briefs"
+  description="Upcoming Australian trade shows for 2026–2027 in Sydney, Melbourne, Brisbane, Perth and more — then send a free exhibition stand brief. Independent calendar; stand enquiries handled by Brijnco."
+  path="/"
+  jsonLd={jsonLd}
+>
+  <section class="hero">
+    <div class="wrap hero__grid">
+      <div class="hero__copy">
+        <p class="eyebrow eyebrow--rule">Australian exhibitions · For exhibitors</p>
+        <h1 class="hero__title">Find the show.<br /><em>Brief the stand.</em></h1>
+        <p class="lead">
+          A considered calendar of Australian trade shows, and one structured brief that
+          gets your stand in front of a builder — without the middlemen.
+        </p>
+        <div class="actions">
+          <a class="btn" href="/stand-brief">Request a stand brief</a>
+          <a class="text-link" href="/shows">Browse the calendar</a>
+        </div>
+      </div>
+
+      {
+        next && nextDate && (
+          <a class="poster" href={`/shows/${next.slug}`} aria-label={`Next on the floor: ${next.name}, ${formatShowDates(next)}, ${next.city}`}>
+            <span class="poster__label">Next on the floor</span>
+            <span class="poster__days" aria-hidden="true">{nextDate.days}</span>
+            <span class="poster__month" aria-hidden="true">{nextDate.month} {nextDate.year}</span>
+            <span class="poster__name">{next.name}</span>
+            <span class="poster__venue">{next.city} · {next.venue}</span>
+            <span class="poster__cta" aria-hidden="true">View show <span>→</span></span>
+          </a>
+        )
+      }
+    </div>
+
+    <div class="wrap">
+      <ol class="steps" aria-label="How it works">
+        <li>
+          <span class="steps__num">01</span>
+          <h2 class="steps__title">Pick a show</h2>
+          <p>{shows.length} curated exhibitions across {cityCount} cities, filterable by industry.</p>
+        </li>
+        <li>
+          <span class="steps__num">02</span>
+          <h2 class="steps__title">Brief the stand</h2>
+          <p>Size, type, budget and timing in one tidy form. About three minutes.</p>
+        </li>
+        <li>
+          <span class="steps__num">03</span>
+          <h2 class="steps__title">Hear from a builder</h2>
+          <p>Brijnco, an Australian stand builder, replies to you directly.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section home-calendar" aria-labelledby="upcoming-heading">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="section-head__num">01</span>
+        <h2 id="upcoming-heading">Coming up</h2>
+        <a class="section-head__aside text-link" href="/shows">Full calendar</a>
+      </div>
+      {
+        upcoming.length === 0 ? (
+          <p class="empty">No further upcoming shows in the curated list — check back soon.</p>
+        ) : (
+          <ul class="show-list">
+            {upcoming.map((show) => (
+              <ShowRow show={show} />
+            ))}
+          </ul>
+        )
+      }
+      <p class="notice">
+        Independent planning aid. Confirm dates, floorplans, and exhibitor rules on each
+        show’s official website before you book.
+      </p>
+    </div>
+  </section>
+
+  <section class="brief-band" aria-labelledby="brief-heading">
+    <div class="wrap brief-band__grid">
+      <div>
+        <span class="section-head__num">02</span>
+        <h2 id="brief-heading" class="brief-band__title">Need a stand <em>built?</em></h2>
+        <p class="brief-band__text">
+          Tell Brijnco about size, budget and timeline. Your brief goes straight to the
+          stand team — no marketplace, no fees on this form.
+        </p>
+        <a class="btn btn--ink" href="/stand-brief">Start your stand brief</a>
+      </div>
+      <dl class="brief-band__types">
+        <div>
+          <dt>Shell scheme</dt>
+          <dd>Organiser walls, upgraded with graphics, lighting and furniture.</dd>
+        </div>
+        <div>
+          <dt>Space only</dt>
+          <dd>Raw floor space, designed and built to your footprint.</dd>
+        </div>
+        <div>
+          <dt>Custom build</dt>
+          <dd>Bespoke joinery and structures for flagship presence.</dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+
+  <div class="section">
+    <div class="wrap stack home-tail">
+      <BrowseIndex number="03" title="Browse by city & industry" />
+      <FAQ
+        items={[...siteConfig.faq]}
+        title="Questions, answered"
+        number="04"
+        intro="The short version before you send a brief."
+      />
+      <RelatedTools />
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  /* ---------- Hero ---------- */
+  .hero {
+    position: relative;
+    padding: clamp(3rem, 9vw, 6.5rem) 0 clamp(2.5rem, 6vw, 4rem);
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  /* Quiet 12-col grid, fading out — a nod to floorplans */
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image: linear-gradient(to right, var(--rule-soft) 1px, transparent 1px);
+    background-size: calc(100% / 12) 100%;
+    mask-image: linear-gradient(to bottom, #000 0%, transparent 85%);
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, transparent 85%);
+    opacity: 0.8;
+  }
+
+  .hero__grid {
+    display: grid;
+    gap: 3rem;
+    align-items: end;
+  }
+
+  .hero__title {
+    font-size: clamp(3rem, 9.5vw, 6.5rem);
+    line-height: 0.96;
+    letter-spacing: -0.035em;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero__title em {
+    display: inline-block;
+    padding-right: 0.06em;
+  }
+
+  /* Poster card: next show, date set large */
+  .poster {
+    display: grid;
+    gap: 0.35rem;
+    padding: 1.5rem 1.5rem 1.35rem;
+    background: var(--sheet);
+    border: 1px solid var(--rule);
+    border-top: 3px solid var(--ochre);
+    color: var(--ink);
+    text-decoration: none;
+    transition:
+      border-color 0.25s var(--ease),
+      transform 0.35s var(--ease);
+  }
+
+  .poster:hover {
+    border-color: var(--ink);
+    border-top-color: var(--ochre);
+    transform: translateY(-2px);
+    color: var(--ink);
+  }
+
+  .poster__label,
+  .poster__month,
+  .poster__cta {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .poster__label {
+    color: var(--ochre-deep);
+    margin-bottom: 1rem;
+  }
+
+  .poster__days {
+    font-family: var(--font-display);
+    font-weight: 250;
+    font-size: clamp(4rem, 12vw, 5.75rem);
+    line-height: 0.85;
+    letter-spacing: -0.04em;
+    font-variant-numeric: lining-nums;
+  }
+
+  .poster__month {
+    margin-bottom: 1.25rem;
+    color: var(--ink-2);
+  }
+
+  .poster__name {
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    font-weight: 420;
+    line-height: 1.2;
+    padding-top: 1rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  .poster__venue {
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+
+  .poster__cta {
+    margin-top: 1rem;
+    color: var(--ink);
+  }
+
+  .poster__cta span {
+    display: inline-block;
+    color: var(--ochre);
+    transition: transform 0.25s var(--ease);
+  }
+
+  .poster:hover .poster__cta span {
+    transform: translateX(4px);
+  }
+
+  @media (min-width: 900px) {
+    .hero__grid {
+      grid-template-columns: minmax(0, 1fr) 20rem;
+      gap: 4rem;
+    }
+  }
+
+  /* Steps: numbered ruled row */
+  .steps {
+    list-style: none;
+    margin: clamp(3rem, 7vw, 5rem) 0 0;
+    padding: 0;
+    display: grid;
+    border-top: 1px solid var(--ink);
+  }
+
+  .steps li {
+    display: grid;
+    grid-template-columns: 2.75rem 1fr;
+    column-gap: 0.5rem;
+    padding: 1.25rem 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .steps__num {
+    grid-row: span 2;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: var(--ochre);
+    padding-top: 0.35rem;
+  }
+
+  .steps__title {
+    font-size: 1.25rem;
+    font-weight: 420;
+    margin: 0 0 0.3rem;
+  }
+
+  .steps p {
+    margin: 0;
+    font-size: 0.925rem;
+    color: var(--muted);
+  }
+
+  @media (min-width: 720px) {
+    .steps {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .steps li {
+      grid-template-columns: 1fr;
+      padding: 1.25rem 2rem 0.25rem 0;
+      border-bottom: none;
+    }
+    .steps li + li {
+      padding-left: 1.5rem;
+      border-left: 1px solid var(--rule);
+    }
+    .steps__num {
+      grid-row: auto;
+      padding: 0 0 1.5rem;
+    }
+  }
+
+  /* ---------- Calendar ---------- */
+  .home-calendar .notice {
+    margin-top: 2rem;
+  }
+
+  /* ---------- Brief band ---------- */
+  .brief-band {
+    background: var(--paper-2);
+    border-block: 1px solid var(--rule);
+    padding: clamp(3rem, 8vw, 5.5rem) 0;
+  }
+
+  .brief-band__grid {
+    display: grid;
+    gap: 2.5rem;
+  }
+
+  .brief-band__title {
+    font-size: clamp(2.25rem, 5.5vw, 3.5rem);
+    font-weight: 340;
+    letter-spacing: -0.03em;
+    margin: 0.75rem 0 1rem;
+  }
+
+  .brief-band__text {
+    max-width: 30rem;
+    margin-bottom: 2rem;
+  }
+
+  .brief-band__types {
+    margin: 0;
+    display: grid;
+    border-top: 1px solid var(--ink);
+  }
+
+  .brief-band__types div {
+    display: grid;
+    gap: 0.2rem;
+    padding: 1.1rem 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .brief-band__types dt {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 420;
+    color: var(--ink);
+  }
+
+  .brief-band__types dd {
+    margin: 0;
+    font-size: 0.925rem;
+    color: var(--muted);
+  }
+
+  @media (min-width: 900px) {
+    .brief-band__grid {
+      grid-template-columns: 1.1fr 1fr;
+      gap: 5rem;
+      align-items: end;
+    }
+  }
+
+  .home-tail {
+    gap: clamp(3rem, 7vw, 5rem);
+  }
+
+  .home-tail :global(.browse) {
+    margin-top: 0;
+  }
+</style>

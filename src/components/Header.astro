@@ -1,0 +1,198 @@
+---
+import { siteConfig } from '../../site.config';
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+---
+
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="/" aria-label={`${siteConfig.name} home`}>
+      <span class="brand__mark" aria-hidden="true">{siteConfig.wordmark.mark}</span>
+      <span class="brand__name">{siteConfig.wordmark.name}</span>
+    </a>
+    <nav class="nav" aria-label="Primary">
+      {
+        siteConfig.nav.map((item) => {
+          const current =
+            item.href === '/'
+              ? path === '/'
+              : path === item.href || path.startsWith(item.href + '/');
+          const isCta = item.href === '/stand-brief';
+          return (
+            <a
+              href={item.href}
+              class:list={[
+                'nav__link',
+                {
+                  'nav__link--cta': isCta,
+                  'nav__link--home': item.href === '/',
+                  'nav__link--secondary': item.href === '/exhibition-stand-builders',
+                  'nav__link--shows': item.href === '/shows',
+                },
+              ]}
+              aria-current={current ? 'page' : undefined}
+            >
+              {item.label}
+            </a>
+          );
+        })
+      }
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: color-mix(in srgb, var(--paper) 88%, transparent);
+    backdrop-filter: saturate(1.2) blur(10px);
+    -webkit-backdrop-filter: saturate(1.2) blur(10px);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .site-header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 4rem;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    text-decoration: none;
+    color: var(--ink);
+  }
+
+  .brand__mark {
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border: 1px solid var(--ink);
+    border-radius: 50%;
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    transition:
+      background 0.2s var(--ease),
+      color 0.2s var(--ease),
+      border-color 0.2s var(--ease);
+  }
+
+  .brand:hover .brand__mark {
+    background: var(--ochre);
+    border-color: var(--ochre);
+    color: #fff;
+  }
+
+  .brand__name {
+    white-space: nowrap;
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 450;
+    letter-spacing: -0.01em;
+  }
+
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem 1.5rem;
+  }
+
+  .nav__link {
+    position: relative;
+    text-decoration: none;
+    color: var(--ink-2);
+    font-size: 0.925rem;
+    font-weight: 500;
+    padding: 0.4rem 0;
+    white-space: nowrap;
+  }
+
+  .nav__link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0.1rem;
+    height: 1px;
+    background: var(--ochre);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s var(--ease);
+  }
+
+  .nav__link:hover::after,
+  .nav__link[aria-current='page']::after {
+    transform: scaleX(1);
+  }
+
+  .nav__link:hover,
+  .nav__link[aria-current='page'] {
+    color: var(--ink);
+  }
+
+  .nav__link--cta {
+    padding: 0.45rem 0.95rem;
+    border: 1px solid var(--ink);
+    border-radius: 999px;
+    color: var(--ink);
+    transition:
+      background 0.2s var(--ease),
+      color 0.2s var(--ease);
+  }
+
+  .nav__link--cta::after {
+    content: none;
+  }
+
+  .nav__link--cta:hover,
+  .nav__link--cta[aria-current='page'] {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  @media (max-width: 719px) {
+    .nav__link--secondary {
+      display: none;
+    }
+  }
+
+  @media (max-width: 479px) {
+    .nav__link--home {
+      display: none;
+    }
+    .brand {
+      gap: 0.5rem;
+    }
+    .brand__mark {
+      width: 1.75rem;
+      height: 1.75rem;
+      font-size: 0.56rem;
+    }
+    .brand__name {
+      font-size: 1rem;
+    }
+    .nav {
+      gap: 0.9rem;
+    }
+    .nav__link {
+      font-size: 0.875rem;
+    }
+    .nav__link--cta {
+      padding: 0.4rem 0.75rem;
+    }
+  }
+
+  @media (max-width: 379px) {
+    .nav__link--shows {
+      display: none;
+    }
+  }
+</style>

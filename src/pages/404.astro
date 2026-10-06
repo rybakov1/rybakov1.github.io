@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Page not found"
+  description="That page isn’t on the calendar."
+  path="/404"
+  noindex={true}
+>
+  <div class="container" style="padding: clamp(4rem, 12vw, 8rem) 0; text-align: center;">
+    <p class="badge" style="margin-bottom: 1.5rem;">404</p>
+    <h1>Not on the <em>calendar.</em></h1>
+    <p class="lead" style="margin-inline: auto;">
+      The page you’re after has moved or never existed. Shows roll over each year, so an older
+      edition may have been replaced by the next one.
+    </p>
+    <div class="hero__actions" style="justify-content: center;">
+      <a class="btn" href="/shows">Browse the calendar</a>
+      <a class="btn btn--ghost" href="/stand-brief">Send a stand brief</a>
+    </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,112 @@
+---
+/**
+ * Shows grouped under editorial month headings (used by /shows, city and industry pages).
+ */
+import ShowRow from './ShowRow.astro';
+import { getShowDateParts, type TradeShow } from '../data/shows';
+
+interface Props {
+  shows: TradeShow[];
+  variant?: 'full' | 'compact';
+  /** add data-* attributes used by the /shows filter script */
+  withFilterData?: boolean;
+  hideCity?: boolean;
+  id?: string;
+  /** sticky offset for month titles (desktop) */
+  stickyTop?: string;
+}
+
+const { shows, variant = 'full', withFilterData = false, hideCity = false, id, stickyTop = '10rem' } = Astro.props;
+const sorted = [...shows].sort((a, b) => a.startDate.localeCompare(b.startDate));
+const months: { key: string; label: string; year: string; items: TradeShow[] }[] = [];
+for (const show of sorted) {
+  const d = getShowDateParts(show);
+  const last = months[months.length - 1];
+  if (last && last.key === d.monthKey) last.items.push(show);
+  else months.push({ key: d.monthKey, label: d.monthLabel, year: show.startDate.slice(0, 4), items: [show] });
+}
+---
+
+<div id={id} class="months" style={`--month-sticky-top: ${stickyTop}`}>
+  {
+    months.map((m) => (
+      <section class="month" aria-label={`${m.label} ${m.year}`}>
+        <h2 class="month__title">
+          <span class="month__name">{m.label}</span>
+          <span class="month__year">{m.year}</span>
+        </h2>
+        <ul class="show-list">
+          {m.items.map((show) =>
+            withFilterData ? (
+              <ShowRow
+                show={show}
+                variant={variant}
+                hideCity={hideCity}
+                data-city={show.city}
+                data-industries={show.categories.join('|')}
+                data-start={show.startDate}
+                data-end={show.endDate}
+              />
+            ) : (
+              <ShowRow show={show} variant={variant} hideCity={hideCity} />
+            )
+          )}
+        </ul>
+      </section>
+    ))
+  }
+</div>
+
+<style>
+  /* Month index */
+  .months {
+    padding-top: 1rem;
+  }
+
+  .month {
+    display: grid;
+    gap: 0.5rem;
+    padding-top: clamp(1.75rem, 4vw, 3rem);
+  }
+
+  .month__title {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    margin: 0;
+  }
+
+  .month__name {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(1.75rem, 3.5vw, 2.25rem);
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+
+  .month__year {
+    font-family: var(--font-mono);
+    font-style: normal;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    color: var(--ochre);
+  }
+
+  @media (min-width: 960px) {
+    .month {
+      grid-template-columns: 11rem minmax(0, 1fr);
+      gap: 2rem;
+    }
+    .month__title {
+      position: sticky;
+      top: var(--month-sticky-top, 10rem);
+      align-self: start;
+      flex-direction: column;
+      gap: 0.25rem;
+      padding-top: 1.5rem;
+    }
+  }
+
+</style>

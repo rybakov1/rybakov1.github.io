@@ -1,0 +1,53 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { siteConfig } from '../../site.config';
+import { t } from '../i18n/en';
+
+const strings = t();
+const updated = '2026-10-06';
+const provider = import.meta.env.PUBLIC_ANALYTICS_PROVIDER || siteConfig.analytics.provider;
+---
+
+<BaseLayout
+  title={strings.cookieStubTitle}
+  description={`Cookie policy for ${siteConfig.name}.`}
+  path="/cookies"
+>
+  <article class="container section prose">
+    <h1>{strings.cookieStubTitle}</h1>
+    <p class="eyebrow eyebrow--rule">{strings.lastUpdated}: {updated}</p>
+
+    <div class="stack" style="gap: 0.25rem;">
+      <h2>Essential</h2>
+      <p>
+        The site is static and does not set its own cookies. Our host (Cloudflare) may use strictly
+        necessary security cookies to protect the site and the stand brief form from abuse.
+      </p>
+      <h2>Analytics</h2>
+      {
+        provider === 'plausible' ? (
+          <p>We use Plausible Analytics, which measures visits in aggregate without cookies.</p>
+        ) : provider === 'ga4' ? (
+          <p>
+            We use Google Analytics 4 with IP anonymisation to understand which pages are useful. GA4
+            sets first-party cookies (<code>_ga</code>, <code>_ga_*</code>).
+          </p>
+        ) : (
+          <p>No analytics are currently active on this site.</p>
+        )
+      }
+      <h2>Advertising</h2>
+      <p>No advertising cookies are used.</p>
+      {
+        siteConfig.contactEmail && (
+          <>
+            <h2>Contact</h2>
+            <p>
+              <a href={`mailto:${siteConfig.contactEmail}`}>{siteConfig.contactEmail}</a>
+            </p>
+          </>
+        )
+      }
+    </div>
+  </article>
+</BaseLayout>

@@ -1,0 +1,90 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { siteConfig } from '../../site.config';
+import { t } from '../i18n/en';
+
+const strings = t();
+const updated = '2026-10-06';
+const email = siteConfig.contactEmail;
+---
+
+<BaseLayout
+  title={strings.privacyStubTitle}
+  description={`Privacy policy for ${siteConfig.name} — what the stand brief collects and how it is shared with Brijnco.`}
+  path="/privacy"
+>
+  <article class="container section prose">
+    <h1>{strings.privacyStubTitle}</h1>
+    <p class="eyebrow eyebrow--rule">{strings.lastUpdated}: {updated}</p>
+
+    <div class="stack" style="gap: 0.25rem;">
+      <p>
+        This notice explains how {siteConfig.name} ({siteConfig.domain.replace('https://', '')}) handles
+        personal information. It is written to align with the Australian Privacy Principles; have it
+        reviewed before running paid campaigns at scale.
+      </p>
+
+      <h2>Who we are</h2>
+      <p>
+        {siteConfig.name} is an independent calendar of Australian trade shows, operated in connection
+        with <strong>{siteConfig.author}</strong>, an Australian exhibition stand builder. We are not a
+        show organiser and are not affiliated with the shows or venues listed.
+        {email && (
+          <>
+            {' '}Contact: <a href={`mailto:${email}`}>{email}</a>.
+          </>
+        )}
+      </p>
+
+      <h2>What the stand brief collects</h2>
+      <p>
+        When you submit a stand brief we collect what you enter — name, work email, phone, company,
+        website, target show, stand size and type, budget band, timeline, design-asset status, your
+        message and how you heard about us — plus the page address, any campaign (UTM) tags, and the
+        date and time of submission. For security and spam prevention our endpoint also sees your IP
+        address, approximate country and browser type.
+      </p>
+
+      <h2>How it is used and shared</h2>
+      <p>
+        Your brief is sent to <strong>{siteConfig.author}</strong> so they can contact you about
+        exhibition stand services — that is the purpose of the form. We assign a simple priority
+        (hot / warm / cold) from your budget, timeline, stand size and show date to help them respond.
+        We do not sell your information.
+      </p>
+      <p>Service providers that process the brief on our behalf:</p>
+      <ul>
+        <li><strong>Cloudflare</strong> — website hosting and the serverless form endpoint.</li>
+        <li><strong>Resend</strong> — delivers the brief by email to {siteConfig.author}’s inbox.</li>
+        <li>
+          Optionally, a workflow or CRM tool connected by webhook to log enquiries. Some providers may
+          store data outside Australia.
+        </li>
+      </ul>
+
+      <h2>Retention</h2>
+      <p>
+        The website itself does not keep a database of briefs. Copies are held in {siteConfig.author}’s
+        email and any connected CRM for as long as needed to respond and manage the business
+        relationship, then deleted or de-identified.
+      </p>
+
+      <h2>Analytics &amp; cookies</h2>
+      <p>
+        Analytics are off by default. If enabled we use privacy-friendly, aggregate measurement. See the
+        <a href="/cookies">Cookie policy</a>.
+      </p>
+
+      <h2>Your choices and rights</h2>
+      <p>
+        You can ask to access or correct the personal information we hold about you, or ask us to delete
+        it{email ? (
+          <>
+            {' '}— email <a href={`mailto:${email}`}>{email}</a>
+          </>
+        ) : ''}. If you are unhappy with how we handled your information you can contact the Office of
+        the Australian Information Commissioner (OAIC).
+      </p>
+    </div>
+  </article>
+</BaseLayout>

@@ -1,0 +1,687 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Crumbs from '../components/Crumbs.astro';
+import FAQ from '../components/FAQ.astro';
+import BrowseIndex from '../components/BrowseIndex.astro';
+import { siteConfig } from '../../site.config';
+import { getShowsByCity, getUpcomingShows } from '../data/shows';
+import { cities } from '../data/taxonomy';
+import { abs, breadcrumbLd } from '../lib/seo';
+
+const path = '/exhibition-stand-builders';
+const updated = '2026-10-06';
+const crumbs = [
+  { name: 'Home', path: '/' },
+  { name: 'Stand builder guide', path },
+];
+const upcoming = new Set(getUpcomingShows().map((s) => s.slug));
+const cityBlocks = cities
+  .map((c) => ({ ...c, shows: getShowsByCity(c.name).filter((s) => upcoming.has(s.slug)) }))
+  .filter((c) => c.shows.length > 0);
+
+// Organiser-published floor-space rates (ex GST), ISSA Cleaning & Hygiene Expo 2026, Tier 2 (from 1 Apr 2026)
+const ISSA_SRC = 'https://cleaninghygieneexpo.issa.com/exhibit/';
+const issa = {
+  shellMember: 690,
+  shellNon: 856,
+  spaceMember: 575,
+  spaceNon: 658,
+};
+const aud = (n: number) => '$' + n.toLocaleString('en-AU');
+
+const faq = [
+  {
+    question: 'How much does an exhibition stand cost in Australia?',
+    answer:
+      'There are two separate costs. <strong>Floor space</strong> is sold by the show organiser, usually per square metre — for example, the ISSA Cleaning &amp; Hygiene Expo 2026 published rates of $575–$658/m² (ex GST) for space only and $690–$856/m² for shell scheme in its later booking tier. <strong>The stand itself</strong> (design, build, graphics, furniture, AV, freight, labour) is quoted by the builder and varies widely with size, finish and reuse. We don’t publish build prices; send a brief for a quote based on your show and footprint.',
+  },
+  {
+    question: 'What is the difference between shell scheme and space only?',
+    answer:
+      'Shell scheme is a ready-made booth supplied by the organiser — typically white walls, carpet, a fascia sign, lights and a power point. Space only is bare floor (sometimes with carpet) where you bring your own stand, designed and built to the footprint by a stand builder.',
+  },
+  {
+    question: 'How far ahead should I brief a stand builder?',
+    answer:
+      'Work back from the organiser’s exhibitor-manual deadlines: stand plans, rigging and electrical orders are due well before bump-in. Briefing a builder a few months out leaves time for design, approvals and production; shell scheme upgrades can be turned around faster.',
+  },
+  {
+    question: 'Do I need a stand builder for a shell scheme booth?',
+    answer:
+      'Not necessarily — you can exhibit in the bare shell. Many exhibitors still use a builder to add printed wall graphics, a counter, lighting, shelving and flooring so the booth doesn’t look like every other one in the aisle.',
+  },
+  {
+    question: 'Who handles the brief I send through this site?',
+    answer: `Briefs go to <strong>${siteConfig.author}</strong>, an Australian exhibition stand builder. ${siteConfig.name} is an independent calendar and is not affiliated with any show organiser or venue.`,
+  },
+];
+
+const articleLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: 'Exhibition stand builders in Australia: how to choose, brief and budget',
+  description:
+    'A practical guide to exhibition stand builders in Sydney, Melbourne, Brisbane and across Australia — stand types, what drives cost, and what to put in a brief.',
+  datePublished: updated,
+  dateModified: updated,
+  inLanguage: siteConfig.locale,
+  mainEntityOfPage: abs(path),
+  image: [abs('/og-default.png')],
+  author: { '@type': 'Organization', name: siteConfig.name, url: siteConfig.domain },
+  publisher: { '@id': abs('/#organization') },
+};
+---
+
+<BaseLayout
+  title="Exhibition stand builders in Sydney, Melbourne & across Australia — a practical guide"
+  description="How to choose and brief an exhibition stand builder in Sydney, Melbourne, Brisbane, Perth and Adelaide — shell scheme vs space only, what drives cost (with organiser-published floor rates) and a builder checklist."
+  path={path}
+  ogType="article"
+  jsonLd={[articleLd, breadcrumbLd(crumbs)]}
+>
+  <div class="wrap">
+    <Crumbs items={crumbs} />
+    <header class="page-head guide-head">
+      <p class="eyebrow eyebrow--rule">Guide · Updated {new Date(updated + 'T12:00:00').toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' })}</p>
+      <h1>Exhibition stand <em>builders</em></h1>
+      <p class="lead">
+        How to choose, brief and budget for a trade show stand in Sydney, Melbourne, Brisbane and
+        beyond — written for exhibitors, not for the industry.
+      </p>
+    </header>
+
+    <nav class="guide-toc" aria-label="On this page">
+      <p class="guide-toc__label">On this page</p>
+      <ol>
+        <li><a href="#types">Stand types</a></li>
+        <li><a href="#cost">What drives cost</a></li>
+        <li><a href="#cities">Builders by city</a></li>
+        <li><a href="#checklist">Builder checklist</a></li>
+        <li><a href="#timeline">Timeline</a></li>
+        <li><a href="#brief">Writing the brief</a></li>
+      </ol>
+    </nav>
+
+    <!-- 01 Types -->
+    <section class="guide-section" id="types" aria-labelledby="types-h">
+      <div class="section-head">
+        <span class="section-head__num">01</span>
+        <h2 id="types-h">Four ways to build a stand</h2>
+      </div>
+      <div class="guide-body">
+        <p>
+          Before you compare builders, decide what kind of stand you need. The choice is usually
+          made for you by the organiser’s floor plan: smaller sites are sold as shell scheme,
+          larger sites as space only.
+        </p>
+        <dl class="guide-types">
+          <div>
+            <dt>Shell scheme</dt>
+            <dd>
+              The organiser’s ready-made booth. <a href="https://www.arbs.com.au/arbs2026standoptions/" rel="noopener" target="_blank">ARBS 2026</a>, for example, lists 2.4 m white walls, carpet tiles,
+              a printed fascia sign, two LED spotlights and a single power point in its shell scheme
+              package. A builder can upgrade it with wall graphics, counters, shelving and lighting.
+            </dd>
+          </div>
+          <div>
+            <dt>Space only</dt>
+            <dd>
+              Bare floor — sometimes just carpet tiles — and complete creative freedom. You need a stand
+              builder to design, engineer, build and install the stand, and to submit plans to the
+              organiser for approval.
+            </dd>
+          </div>
+          <div>
+            <dt>Modular / system</dt>
+            <dd>
+              Reusable aluminium frames with fabric or panel graphics. Lower cost per show if you exhibit
+              several times a year or in several cities, and easy to freight to Perth, Adelaide or Darwin.
+            </dd>
+          </div>
+          <div>
+            <dt>Custom build</dt>
+            <dd>
+              Bespoke joinery, structures, meeting rooms and integrated AV. The flagship option for large
+              sites at shows like IMARC, Fine Food Australia or the Security Exhibition &amp; Conference.
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- 02 Cost -->
+    <section class="guide-section" id="cost" aria-labelledby="cost-h">
+      <div class="section-head">
+        <span class="section-head__num">02</span>
+        <h2 id="cost-h">What drives the cost</h2>
+      </div>
+      <div class="guide-body">
+        <p>
+          Exhibiting has two separate bills: the <strong>floor space</strong>, sold by the organiser, and
+          the <strong>stand</strong>, quoted by your builder. Venue services (power, rigging, internet,
+          cleaning) and logistics sit on top.
+        </p>
+
+        <figure class="guide-table">
+          <figcaption>
+            <span class="guide-table__label">Sourced example · floor space only</span>
+            ISSA Cleaning &amp; Hygiene Expo 2026 (MCEC) — organiser-published rates, per m², ex GST,
+            booking tier from 1 April 2026.
+          </figcaption>
+          <table>
+            <thead>
+              <tr><th scope="col">Stand type</th><th scope="col">ISSA member</th><th scope="col">Non-member</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Shell scheme (18 m² and under)</th><td>{aud(issa.shellMember)}/m²</td><td>{aud(issa.shellNon)}/m²</td></tr>
+              <tr><th scope="row">Space only (18 m² and over)</th><td>{aud(issa.spaceMember)}/m²</td><td>{aud(issa.spaceNon)}/m²</td></tr>
+            </tbody>
+          </table>
+          <p class="guide-table__note">
+            Source: <a href={ISSA_SRC} rel="noopener" target="_blank">ISSA Cleaning &amp; Hygiene Expo — Exhibit</a>
+            (checked {updated}). Rates differ for every show; always use your organiser’s prospectus.
+          </p>
+        </figure>
+
+        <div class="guide-estimate">
+          <p class="guide-estimate__label">Estimate · worked from the rates above</p>
+          <ul>
+            <li>
+              <strong>9 m² shell scheme (3 × 3 m):</strong>
+              {aud(9 * issa.shellMember)}–{aud(9 * issa.shellNon)} ex GST for the space and shell package
+              alone.
+            </li>
+            <li>
+              <strong>36 m² space only (6 × 6 m):</strong>
+              {aud(36 * issa.spaceMember)}–{aud(36 * issa.spaceNon)} ex GST for floor space — before any stand
+              is built.
+            </li>
+          </ul>
+          <p class="small">Arithmetic estimates for one show, not quotes. Other shows price differently.</p>
+        </div>
+
+        <h3>Line items your builder will quote</h3>
+        <ol class="guide-list">
+          <li><span>01</span><p><strong>Design</strong> — concept, 3D renders, technical drawings for organiser approval.</p></li>
+          <li><span>02</span><p><strong>Structure &amp; joinery</strong> — walls, counters, storage, flooring; hired system vs built-to-own.</p></li>
+          <li><span>03</span><p><strong>Graphics</strong> — fabric or rigid prints, signage, hanging banners (rigging is often extra).</p></li>
+          <li><span>04</span><p><strong>Furniture, AV &amp; lighting</strong> — hire or supply; screens, LED walls, track lighting.</p></li>
+          <li><span>05</span><p><strong>Logistics &amp; labour</strong> — freight, storage, bump-in and bump-out crews, on-site supervision.</p></li>
+          <li><span>06</span><p><strong>Venue services</strong> — power, water, rigging points, internet; usually ordered through the organiser or venue.</p></li>
+        </ol>
+        <p class="small">
+          The budget bands on our <a href="/stand-brief">stand brief form</a> (under $15k through $80k+) are
+          planning bands that help a builder respond sensibly — they are not price quotes.
+        </p>
+      </div>
+    </section>
+
+    <!-- 03 Cities -->
+    <section class="guide-section" id="cities" aria-labelledby="cities-h">
+      <div class="section-head">
+        <span class="section-head__num">03</span>
+        <h2 id="cities-h">Stand builders by city</h2>
+      </div>
+      <div class="guide-body">
+        <p>
+          Every Australian venue has its own rules, loading docks and approved contractors. A builder
+          who regularly works the venue will know them; one who doesn’t should say how they’ll manage
+          it. Here is what to ask for in each city, with the shows coming up.
+        </p>
+        <div class="guide-cities">
+          {
+            cityBlocks.map((c) => (
+              <article class="guide-city" id={c.slug}>
+                <h3>
+                  <a href={`/shows/city/${c.slug}`}>Exhibition stand builders, {c.name}</a>
+                </h3>
+                <p class="guide-city__venues">{c.venues.join(' · ')}</p>
+                <p>{c.planning[0]}</p>
+                <p class="guide-city__shows">
+                  <span>Coming up:</span>{' '}
+                  {c.shows.slice(0, 3).map((s, i) => (
+                    <>
+                      {i > 0 && ', '}
+                      <a href={`/shows/${s.slug}`}>{s.name}</a>
+                    </>
+                  ))}
+                  {c.shows.length > 3 && (
+                    <>
+                      {' '}and <a href={`/shows/city/${c.slug}`}>{c.shows.length - 3} more</a>
+                    </>
+                  )}
+                </p>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- 04 Checklist -->
+    <section class="guide-section" id="checklist" aria-labelledby="check-h">
+      <div class="section-head">
+        <span class="section-head__num">04</span>
+        <h2 id="check-h">Ten questions to ask a stand builder</h2>
+      </div>
+      <div class="guide-body">
+        <ol class="guide-list guide-list--two">
+          <li><span>01</span><p>Have you built at this venue — and at this show — before? Can I see photos?</p></li>
+          <li><span>02</span><p>Is design and fabrication in-house, or subcontracted?</p></li>
+          <li><span>03</span><p>Can you provide a certificate of currency for public liability insurance at the level the organiser requires?</p></li>
+          <li><span>04</span><p>Will you prepare and submit stand plans to the organiser, and manage approval changes?</p></li>
+          <li><span>05</span><p>What’s included — and excluded? Power, rigging, furniture, freight, storage, cleaning?</p></li>
+          <li><span>06</span><p>Who supervises bump-in and bump-out on site?</p></li>
+          <li><span>07</span><p>Can parts of the stand be stored and reused at future shows or in other cities?</p></li>
+          <li><span>08</span><p>How do you handle sustainability — reusable systems, recyclable graphics, waste?</p></li>
+          <li><span>09</span><p>What are the payment terms and the deadline for design sign-off?</p></li>
+          <li><span>10</span><p>How many revision rounds are included in the design fee?</p></li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- 05 Timeline -->
+    <section class="guide-section" id="timeline" aria-labelledby="time-h">
+      <div class="section-head">
+        <span class="section-head__num">05</span>
+        <h2 id="time-h">A sensible timeline</h2>
+      </div>
+      <div class="guide-body">
+        <p>
+          The fixed points are the organiser’s deadlines in the exhibitor manual — stand plan approval,
+          services orders and freight cut-offs. Work backwards from those. A suggested sequence for a
+          space-only stand:
+        </p>
+        <ol class="guide-timeline">
+          <li><span>Book space</span><p>Secure the site and download the exhibitor manual. Note every deadline.</p></li>
+          <li><span>Brief</span><p>Send one structured brief to builders: show, footprint, budget band, goals, must-haves.</p></li>
+          <li><span>Design</span><p>Concept, revisions and sign-off — leave room before the plan-approval deadline.</p></li>
+          <li><span>Approve &amp; order</span><p>Builder submits plans; you order power, rigging and internet on time.</p></li>
+          <li><span>Build</span><p>Production, graphics printing, pre-build checks, freight.</p></li>
+          <li><span>Show</span><p>Bump-in, the show, bump-out — and storage for next time.</p></li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- 06 Brief -->
+    <section class="guide-section" id="brief" aria-labelledby="brief-h">
+      <div class="section-head">
+        <span class="section-head__num">06</span>
+        <h2 id="brief-h">What to put in your brief</h2>
+      </div>
+      <div class="guide-body guide-brief">
+        <div>
+          <p>
+            Good briefs get better quotes. Include the show and dates, your site size and type, a budget
+            band, the date you need designs, what the stand must achieve (leads, launches, meetings,
+            sales), must-have features, and whether you have brand assets ready.
+          </p>
+          <p>
+            Our stand brief collects exactly that in about three minutes and sends it to
+            {' '}<strong>{siteConfig.author}</strong>, an Australian exhibition stand builder, who replies
+            directly. It’s free and there’s no obligation.
+          </p>
+        </div>
+        <div class="guide-brief__cta">
+          <a class="btn" href="/stand-brief">Start your stand brief</a>
+          <a class="text-link" href="/shows">Find your show first</a>
+        </div>
+      </div>
+    </section>
+
+    <div class="guide-faq">
+      <FAQ items={faq} title="Stand builder FAQ" number="07" intro="Short answers to the questions exhibitors ask most." />
+    </div>
+
+    <p class="notice">
+      {siteConfig.name} is an independent calendar and is not affiliated with any show organiser or
+      venue. Stand briefs submitted on this site are passed to {siteConfig.author}. Figures above are
+      either quoted from the named organiser’s published rates or clearly labelled estimates.
+    </p>
+
+    <BrowseIndex number="08" title="Browse shows by city & industry" />
+    <div style="height: clamp(3rem, 7vw, 5rem)"></div>
+  </div>
+</BaseLayout>
+
+<style>
+  .guide-head h1 {
+    font-size: clamp(2.75rem, 8vw, 5rem);
+  }
+
+  .guide-toc {
+    border-top: 1px solid var(--ink);
+    padding: 1rem 0 0;
+    margin-bottom: clamp(2rem, 5vw, 3rem);
+  }
+
+  .guide-toc__label {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 0.5rem;
+  }
+
+  .guide-toc ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    counter-reset: toc;
+  }
+
+  .guide-toc li {
+    counter-increment: toc;
+  }
+
+  .guide-toc li::before {
+    content: counter(toc, decimal-leading-zero);
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: var(--ochre);
+    margin-right: 0.45rem;
+  }
+
+  .guide-toc a {
+    color: var(--ink);
+    text-decoration: none;
+    font-size: 0.95rem;
+  }
+
+  .guide-toc a:hover {
+    color: var(--ochre-deep);
+  }
+
+  .guide-section {
+    margin-top: clamp(2.5rem, 6vw, 4rem);
+    scroll-margin-top: 5rem;
+  }
+
+  .guide-body {
+    max-width: 46rem;
+  }
+
+  @media (min-width: 720px) {
+    .guide-body {
+      margin-left: calc(8.5rem + 1.75rem);
+    }
+  }
+
+  .guide-body > p {
+    font-size: 1.05rem;
+    line-height: 1.65;
+    color: var(--ink-2);
+  }
+
+  .guide-body h3 {
+    margin-top: 2rem;
+  }
+
+  .guide-types {
+    margin: 1.5rem 0 0;
+    border-top: 1px solid var(--rule);
+  }
+
+  .guide-types div {
+    display: grid;
+    gap: 0.25rem 1.5rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  @media (min-width: 640px) {
+    .guide-types div {
+      grid-template-columns: 10rem 1fr;
+    }
+  }
+
+  .guide-types dt {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-style: italic;
+    font-weight: 340;
+    color: var(--ink);
+  }
+
+  .guide-types dd {
+    margin: 0;
+    color: var(--ink-2);
+    line-height: 1.55;
+  }
+
+  .guide-table {
+    margin: 1.75rem 0;
+    background: var(--sheet);
+    border: 1px solid var(--rule);
+    border-top: 3px solid var(--ochre);
+    padding: 1.25rem;
+  }
+
+  .guide-table figcaption {
+    font-size: 0.95rem;
+    color: var(--ink-2);
+    margin-bottom: 0.85rem;
+  }
+
+  .guide-table__label,
+  .guide-estimate__label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ochre-deep);
+    margin: 0 0 0.35rem;
+  }
+
+  .guide-table table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+  }
+
+  .guide-table th,
+  .guide-table td {
+    text-align: left;
+    padding: 0.6rem 0.5rem 0.6rem 0;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+  }
+
+  .guide-table thead th {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .guide-table tbody th {
+    font-weight: 500;
+  }
+
+  .guide-table td {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-variant-numeric: lining-nums tabular-nums;
+    white-space: nowrap;
+  }
+
+  .guide-table__note {
+    margin: 0.85rem 0 0;
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+
+  .guide-estimate {
+    border-left: 2px solid var(--ochre);
+    padding: 0.25rem 0 0.25rem 1.1rem;
+    margin: 0 0 1.5rem;
+  }
+
+  .guide-estimate ul {
+    margin: 0.25rem 0 0.5rem;
+    padding-left: 1.1rem;
+    color: var(--ink-2);
+  }
+
+  .guide-estimate li {
+    margin-bottom: 0.35rem;
+  }
+
+  .guide-list {
+    list-style: none;
+    margin: 0.5rem 0 1rem;
+    padding: 0;
+    border-top: 1px solid var(--rule);
+  }
+
+  .guide-list li {
+    display: grid;
+    grid-template-columns: 2.25rem 1fr;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .guide-list span {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: var(--ochre);
+    padding-top: 0.2rem;
+  }
+
+  .guide-list p {
+    margin: 0;
+    color: var(--ink-2);
+    line-height: 1.55;
+  }
+
+  @media (min-width: 820px) {
+    .guide-list--two {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      column-gap: 2rem;
+    }
+  }
+
+  .guide-cities {
+    display: grid;
+    gap: 0;
+    margin-top: 1.25rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  .guide-city {
+    padding: 1.25rem 0;
+    border-bottom: 1px solid var(--rule);
+    scroll-margin-top: 5rem;
+  }
+
+  .guide-city h3 {
+    margin: 0 0 0.35rem;
+    font-size: 1.3rem;
+  }
+
+  .guide-city h3 a {
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .guide-city h3 a:hover {
+    color: var(--ochre-deep);
+  }
+
+  .guide-city__venues {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 0.6rem;
+  }
+
+  .guide-city p {
+    color: var(--ink-2);
+    margin: 0 0 0.5rem;
+  }
+
+  .guide-city__shows {
+    font-size: 0.92rem;
+  }
+
+  .guide-city__shows span {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ochre-deep);
+  }
+
+  .guide-timeline {
+    list-style: none;
+    margin: 1rem 0 0;
+    padding: 0;
+    border-left: 1px solid var(--ink);
+  }
+
+  .guide-timeline li {
+    position: relative;
+    padding: 0 0 1.1rem 1.4rem;
+  }
+
+  .guide-timeline li::before {
+    content: '';
+    position: absolute;
+    left: -5px;
+    top: 0.4rem;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--paper);
+    border: 1px solid var(--ochre);
+  }
+
+  .guide-timeline span {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.15rem;
+    color: var(--ink);
+  }
+
+  .guide-timeline p {
+    margin: 0.15rem 0 0;
+    color: var(--ink-2);
+  }
+
+  .guide-brief {
+    display: grid;
+    gap: 1.5rem;
+    max-width: none;
+  }
+
+  .guide-brief p {
+    font-size: 1.05rem;
+    line-height: 1.65;
+    color: var(--ink-2);
+    max-width: 40rem;
+  }
+
+  .guide-brief__cta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 1.5rem;
+  }
+
+  .guide-faq {
+    margin-top: clamp(3rem, 7vw, 4.5rem);
+  }
+</style>

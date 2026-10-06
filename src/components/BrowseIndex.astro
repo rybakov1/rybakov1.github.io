@@ -1,0 +1,140 @@
+---
+/**
+ * Editorial index of city + industry landing pages (internal linking hub).
+ */
+import { cities, industries } from '../data/taxonomy';
+import { getShowsByCity, getShowsByIndustry, getUpcomingShows } from '../data/shows';
+
+interface Props {
+  number?: string;
+  title?: string;
+  /** slug to mark as current */
+  currentCity?: string;
+  currentIndustry?: string;
+}
+
+const { number = '', title = 'Browse the calendar', currentCity, currentIndustry } = Astro.props;
+const upcoming = new Set(getUpcomingShows().map((s) => s.slug));
+const cityRows = cities
+  .map((c) => ({ ...c, count: getShowsByCity(c.name).filter((s) => upcoming.has(s.slug)).length }))
+  .filter((c) => c.count > 0);
+const industryRows = industries
+  .map((i) => ({ ...i, count: getShowsByIndustry(i.slug).filter((s) => upcoming.has(s.slug)).length }))
+  .filter((i) => i.count > 0);
+---
+
+<section class="browse" aria-labelledby="browse-heading">
+  <div class="section-head">
+    <span class="section-head__num">{number}</span>
+    <h2 id="browse-heading">{title}</h2>
+    <a class="section-head__aside text-link" href="/exhibition-stand-builders">Stand builder guide</a>
+  </div>
+  <div class="browse__grid">
+    <div>
+      <p class="browse__label">By city</p>
+      <ul class="browse__list">
+        {
+          cityRows.map((c) => (
+            <li>
+              <a href={`/shows/city/${c.slug}`} aria-current={currentCity === c.slug ? 'page' : undefined}>
+                <span class="browse__name">{c.name}</span>
+                <span class="browse__count">{String(c.count).padStart(2, '0')}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+    <div>
+      <p class="browse__label">By industry</p>
+      <ul class="browse__list">
+        {
+          industryRows.map((i) => (
+            <li>
+              <a href={`/shows/industry/${i.slug}`} aria-current={currentIndustry === i.slug ? 'page' : undefined}>
+                <span class="browse__name">{i.short}</span>
+                <span class="browse__count">{String(i.count).padStart(2, '0')}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .browse {
+    margin-top: clamp(3rem, 7vw, 5rem);
+  }
+
+  .browse__grid {
+    display: grid;
+    gap: 2rem;
+  }
+
+  @media (min-width: 720px) {
+    .browse__grid {
+      grid-template-columns: 8.5rem 1fr 1fr;
+      column-gap: 1.75rem;
+    }
+    .browse__grid > div:first-child {
+      grid-column: 2;
+    }
+  }
+
+  .browse__label {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 0.5rem;
+  }
+
+  .browse__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--rule);
+  }
+
+  .browse__list li {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .browse__list a {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.7rem 0;
+    text-decoration: none;
+    color: var(--ink);
+  }
+
+  .browse__name {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    transition: color 0.2s var(--ease);
+  }
+
+  .browse__count {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: var(--muted);
+  }
+
+  .browse__list a:hover .browse__name,
+  .browse__list a[aria-current='page'] .browse__name {
+    color: var(--ochre-deep);
+  }
+
+  .browse__list a[aria-current='page'] .browse__name {
+    font-style: italic;
+  }
+</style>

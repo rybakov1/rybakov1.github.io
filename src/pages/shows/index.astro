@@ -1,0 +1,199 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ShowMonths from '../../components/ShowMonths.astro';
+import BrowseIndex from '../../components/BrowseIndex.astro';
+import { shows, getAllCities, getUsedIndustries, verifiedCount } from '../../data/shows';
+import { getIndustryBySlug } from '../../data/taxonomy';
+import { breadcrumbLd, itemListLd } from '../../lib/seo';
+
+const cities = getAllCities();
+const industries = getUsedIndustries().map((s) => getIndustryBySlug(s)!);
+const sorted = [...shows].sort((a, b) => a.startDate.localeCompare(b.startDate));
+const jsonLd = [
+  breadcrumbLd([
+    { name: 'Home', path: '/' },
+    { name: 'Shows', path: '/shows' },
+  ]),
+  itemListLd(sorted, 'Australian trade shows 2026–2027'),
+];
+---
+
+<BaseLayout
+  title="Australian trade show calendar 2026–2027"
+  description={`${shows.length} Australian trade shows and expos for 2026–2027 — Sydney, Melbourne, Brisbane, Perth, Adelaide, Gold Coast, Canberra and Darwin. Filter by city and industry, then brief your stand.`}
+  path="/shows"
+  jsonLd={jsonLd}
+>
+  <div class="wrap">
+    <header class="page-head shows-head">
+      <p class="eyebrow eyebrow--rule">Calendar · {shows.length} listed · {cities.length} cities</p>
+      <h1>The show <em>calendar</em></h1>
+      <p class="lead">
+        Curated Australian exhibitions, each checked against the organiser’s website
+        ({verifiedCount()} fully confirmed; the rest carry a “Verify” flag). Filter by city or
+        industry, then open a show for dates, venue and a direct line to request a stand brief.
+      </p>
+    </header>
+
+    <div class="filter-bar" id="show-filters" role="group" aria-label="Filter shows">
+      <div class="field">
+        <label for="filter-city">City</label>
+        <select id="filter-city">
+          <option value="">All cities</option>
+          {cities.map((c) => <option value={c}>{c}</option>)}
+        </select>
+      </div>
+      <div class="field">
+        <label for="filter-industry">Industry</label>
+        <select id="filter-industry">
+          <option value="">All industries</option>
+          {industries.map((i) => <option value={i.slug}>{i.short}</option>)}
+        </select>
+      </div>
+      <div class="field">
+        <label for="filter-when">When</label>
+        <select id="filter-when">
+          <option value="upcoming">Upcoming</option>
+          <option value="all">All listed</option>
+          <option value="past">Past (listed)</option>
+        </select>
+      </div>
+      <p id="filter-count" class="filter-bar__count" aria-live="polite"></p>
+    </div>
+
+    <ShowMonths id="show-results" shows={sorted} withFilterData={true} />
+    <p id="show-empty" class="empty" hidden>No shows match these filters.</p>
+
+    <BrowseIndex />
+
+    <aside class="shows-cta">
+      <p>Exhibiting at one of these?</p>
+      <a class="btn" href="/stand-brief">Request a stand brief</a>
+    </aside>
+  </div>
+</BaseLayout>
+
+<style>
+  .shows-head h1 {
+    font-size: clamp(2.75rem, 8vw, 5rem);
+  }
+
+  .filter-bar {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem 1rem;
+    align-items: end;
+    padding: 1rem 0;
+    background: color-mix(in srgb, var(--paper) 94%, transparent);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-top: 1px solid var(--ink);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .filter-bar .field {
+    margin: 0;
+  }
+
+  .filter-bar label {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .filter-bar select {
+    min-height: 2.75rem;
+    padding-block: 0.55rem;
+    background-color: var(--sheet);
+  }
+
+  .filter-bar__count {
+    margin: 0 0 0.85rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+  }
+
+  @media (min-width: 720px) {
+    .filter-bar {
+      position: sticky;
+      top: 4rem;
+      z-index: 10;
+      grid-template-columns: repeat(3, minmax(0, 13rem)) 1fr;
+      gap: 1.25rem;
+    }
+    .filter-bar__count {
+      grid-column: auto;
+      justify-self: end;
+    }
+  }
+
+  .shows-cta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem 2rem;
+    margin: clamp(3rem, 7vw, 5rem) 0 clamp(3rem, 7vw, 5rem);
+    padding: 1.75rem 0;
+    border-top: 1px solid var(--ink);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .shows-cta p {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(1.4rem, 3vw, 1.9rem);
+    font-weight: 360;
+    color: var(--ink);
+    letter-spacing: -0.015em;
+  }
+</style>
+
+<script is:inline>
+  (function () {
+    const cityEl = document.getElementById('filter-city');
+    const indEl = document.getElementById('filter-industry');
+    const whenEl = document.getElementById('filter-when');
+    const items = Array.from(document.querySelectorAll('#show-results .show-list__item'));
+    const groups = Array.from(document.querySelectorAll('#show-results .month'));
+    const empty = document.getElementById('show-empty');
+    const countEl = document.getElementById('filter-count');
+    const today = new Date().toISOString().slice(0, 10);
+
+    function apply() {
+      const city = cityEl.value;
+      const industry = indEl.value;
+      const when = whenEl.value;
+      let visible = 0;
+      items.forEach((li) => {
+        const matchCity = !city || li.dataset.city === city;
+        const matchInd =
+          !industry || (li.dataset.industries || '').split('|').includes(industry);
+        const end = li.dataset.end || '';
+        let matchWhen = true;
+        if (when === 'upcoming') matchWhen = end >= today;
+        else if (when === 'past') matchWhen = end < today;
+        const show = matchCity && matchInd && matchWhen;
+        li.hidden = !show;
+        if (show) visible++;
+      });
+      // Hide month headings with no visible rows
+      groups.forEach((g) => {
+        g.hidden = !g.querySelector('.show-list__item:not([hidden])');
+      });
+      empty.hidden = visible > 0;
+      countEl.textContent = visible + ' show' + (visible === 1 ? '' : 's');
+    }
+
+    cityEl.addEventListener('change', apply);
+    indEl.addEventListener('change', apply);
+    whenEl.addEventListener('change', apply);
+    apply();
+  })();
+</script>

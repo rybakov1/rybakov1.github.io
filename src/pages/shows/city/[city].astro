@@ -1,0 +1,92 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ShowMonths from '../../../components/ShowMonths.astro';
+import BrowseIndex from '../../../components/BrowseIndex.astro';
+import LandingIntro from '../../../components/LandingIntro.astro';
+import LandingCta from '../../../components/LandingCta.astro';
+import Crumbs from '../../../components/Crumbs.astro';
+import { cities, type CityInfo } from '../../../data/taxonomy';
+import { getShowsByCity, getUpcomingShows } from '../../../data/shows';
+import { breadcrumbLd, itemListLd } from '../../../lib/seo';
+
+export function getStaticPaths() {
+  return cities
+    .filter((c) => getShowsByCity(c.name).length > 0)
+    .map((city) => ({ params: { city: city.slug }, props: { city } }));
+}
+
+interface Props {
+  city: CityInfo;
+}
+
+const { city } = Astro.props;
+const upcomingSlugs = new Set(getUpcomingShows().map((s) => s.slug));
+const list = getShowsByCity(city.name).filter((s) => upcomingSlugs.has(s.slug));
+const path = `/shows/city/${city.slug}`;
+const crumbs = [
+  { name: 'Home', path: '/' },
+  { name: 'Shows', path: '/shows' },
+  { name: city.name, path },
+];
+const jsonLd = [breadcrumbLd(crumbs), itemListLd(list, `Trade shows in ${city.name}`)];
+const yearSpan = [...new Set(list.map((s) => s.startDate.slice(0, 4)))].join('–');
+---
+
+<BaseLayout title={city.title} description={city.description} path={path} jsonLd={jsonLd}>
+  <div class="wrap">
+    <Crumbs items={crumbs} />
+    <header class="page-head city-head">
+      <p class="eyebrow eyebrow--rule">
+        {city.state} · {list.length} upcoming {list.length === 1 ? 'show' : 'shows'}{yearSpan && ` · ${yearSpan}`}
+      </p>
+      <h1>{city.name} trade <em>shows</em></h1>
+      <p class="lead">{city.standfirst}</p>
+    </header>
+
+    <LandingIntro
+      intro={city.intro}
+      asideTitle={`Main venues in ${city.name}`}
+      asideItems={city.venues}
+      notesTitle="Exhibitor notes"
+      notes={city.planning}
+    />
+
+    <div class="section-head landing-list-head">
+      <span class="section-head__num">01</span>
+      <h2>Upcoming in {city.name}</h2>
+      <a class="section-head__aside text-link" href="/shows">All cities</a>
+    </div>
+    {
+      list.length > 0 ? (
+        <ShowMonths shows={list} hideCity={true} stickyTop="5.5rem" />
+      ) : (
+        <p class="empty">No upcoming {city.name} shows in the calendar yet — check back soon.</p>
+      )
+    }
+    <p class="notice">
+      Independent listings, checked against each organiser’s website. Trade Show Stands is not
+      affiliated with any show or venue — confirm details with the organiser before booking.
+    </p>
+
+    <LandingCta
+      heading={`Exhibiting in <em>${city.name}?</em>`}
+      text={`Send one structured brief — size, budget, timing — and Brijnco, an Australian exhibition stand builder, will follow up about your ${city.name} stand.`}
+    />
+
+    <BrowseIndex number="02" title="More cities & industries" currentCity={city.slug} />
+    <div class="landing-bottom"></div>
+  </div>
+</BaseLayout>
+
+<style>
+  .city-head h1 {
+    font-size: clamp(2.75rem, 8vw, 5rem);
+  }
+  .landing-list-head {
+    margin-top: clamp(1.5rem, 4vw, 2.5rem);
+    margin-bottom: 0;
+  }
+  .landing-bottom {
+    height: clamp(3rem, 7vw, 5rem);
+  }
+</style>

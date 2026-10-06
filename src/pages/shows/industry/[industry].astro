@@ -1,0 +1,102 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ShowMonths from '../../../components/ShowMonths.astro';
+import BrowseIndex from '../../../components/BrowseIndex.astro';
+import LandingIntro from '../../../components/LandingIntro.astro';
+import LandingCta from '../../../components/LandingCta.astro';
+import Crumbs from '../../../components/Crumbs.astro';
+import { industries, type IndustryInfo } from '../../../data/taxonomy';
+import { getShowsByIndustry, getUpcomingShows } from '../../../data/shows';
+import { breadcrumbLd, itemListLd } from '../../../lib/seo';
+
+export function getStaticPaths() {
+  return industries
+    .filter((i) => getShowsByIndustry(i.slug).length > 0)
+    .map((industry) => ({ params: { industry: industry.slug }, props: { industry } }));
+}
+
+interface Props {
+  industry: IndustryInfo;
+}
+
+const { industry } = Astro.props;
+const upcomingSlugs = new Set(getUpcomingShows().map((s) => s.slug));
+const list = getShowsByIndustry(industry.slug).filter((s) => upcomingSlugs.has(s.slug));
+const path = `/shows/industry/${industry.slug}`;
+const crumbs = [
+  { name: 'Home', path: '/' },
+  { name: 'Shows', path: '/shows' },
+  { name: industry.short, path },
+];
+const jsonLd = [breadcrumbLd(crumbs), itemListLd(list, `${industry.name} trade shows in Australia`)];
+const cityNames = [...new Set(list.map((s) => s.city))];
+// Italicise the last term of the industry name, editorial-style: "Defence & <em>security</em>"
+const escHtml = (t: string) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+const cut = Math.max(industry.name.lastIndexOf(' & '), industry.name.lastIndexOf(', '));
+const cutEnd = cut < 0 ? 0 : industry.name.startsWith(' & ', cut) ? cut + 3 : cut + 2;
+const h1Html =
+  cut > 0
+    ? `${escHtml(industry.name.slice(0, cutEnd))}<em>${escHtml(industry.name.slice(cutEnd))}</em>`
+    : `<em>${escHtml(industry.name)}</em>`;
+---
+
+<BaseLayout title={industry.title} description={industry.description} path={path} jsonLd={jsonLd}>
+  <div class="wrap">
+    <Crumbs items={crumbs} />
+    <header class="page-head ind-head">
+      <p class="eyebrow eyebrow--rule">
+        Industry · {list.length} upcoming {list.length === 1 ? 'show' : 'shows'} · {cityNames.length}
+        {cityNames.length === 1 ? 'city' : 'cities'}
+      </p>
+      <h1 set:html={h1Html} />
+      <p class="lead">{industry.standfirst}</p>
+    </header>
+
+    <LandingIntro
+      intro={industry.intro}
+      asideTitle="Cities in this list"
+      asideItems={cityNames.map((c) => `${c} — ${list.filter((s) => s.city === c).length} ${list.filter((s) => s.city === c).length === 1 ? 'show' : 'shows'}`)}
+      notesTitle="What works on the stand"
+      notes={industry.standTips}
+    />
+
+    <div class="section-head landing-list-head">
+      <span class="section-head__num">01</span>
+      <h2>Upcoming shows</h2>
+      <a class="section-head__aside text-link" href="/shows">Full calendar</a>
+    </div>
+    {
+      list.length > 0 ? (
+        <ShowMonths shows={list} stickyTop="5.5rem" />
+      ) : (
+        <p class="empty">No upcoming shows in this category yet — check back soon.</p>
+      )
+    }
+    <p class="notice">
+      Independent listings, checked against each organiser’s website. Trade Show Stands is not
+      affiliated with any show or venue — confirm details with the organiser before booking.
+    </p>
+
+    <LandingCta
+      heading={`Planning a <em>${industry.short.toLowerCase()}</em> stand?`}
+      text="Tell Brijnco about the show, footprint, budget and timeline. One brief, a direct reply from an Australian stand builder."
+    />
+
+    <BrowseIndex number="02" title="More industries & cities" currentIndustry={industry.slug} />
+    <div class="landing-bottom"></div>
+  </div>
+</BaseLayout>
+
+<style>
+  .ind-head h1 {
+    font-size: clamp(2.5rem, 7vw, 4.5rem);
+    max-width: 16ch;
+  }
+  .landing-list-head {
+    margin-top: clamp(1.5rem, 4vw, 2.5rem);
+    margin-bottom: 0;
+  }
+  .landing-bottom {
+    height: clamp(3rem, 7vw, 5rem);
+  }
+</style>

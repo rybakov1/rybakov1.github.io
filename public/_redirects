@@ -1,0 +1,4 @@
+# Cloudflare Pages redirects (www → apex is better done with a Cloudflare Redirect Rule; see DEPLOY.md)
+/shows/          /shows          301
+/builders        /exhibition-stand-builders  301
+/guide           /exhibition-stand-builders  301

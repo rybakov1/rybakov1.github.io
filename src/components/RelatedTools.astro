@@ -1,0 +1,84 @@
+---
+import { siteConfig } from '../../site.config';
+import { t } from '../i18n/en';
+
+interface RelatedTool {
+  title: string;
+  href: string;
+  description: string;
+}
+
+interface Props {
+  tools?: RelatedTool[];
+}
+
+const strings = t();
+const tools = Astro.props.tools ?? [...siteConfig.relatedTools];
+---
+
+{
+  tools.length > 0 && (
+    <section class="related" aria-labelledby="related-heading">
+      <h2 id="related-heading" class="related__label">{strings.relatedTools}</h2>
+      <ul class="related__list">
+        {tools.map((tool) => (
+          <li>
+            <a href={tool.href}>{tool.title}</a>
+            <span>{tool.description}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}
+
+<style>
+  .related {
+    display: grid;
+    gap: 0.5rem 1rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  .related__label {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0;
+    padding-top: 0.25rem;
+  }
+
+  .related__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .related__list li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.15rem 0.85rem;
+    font-size: 0.925rem;
+    color: var(--muted);
+  }
+
+  .related__list a {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 420;
+    color: var(--ink);
+  }
+
+  @media (min-width: 720px) {
+    .related {
+      grid-template-columns: 4.5rem 1fr;
+    }
+  }
+</style>

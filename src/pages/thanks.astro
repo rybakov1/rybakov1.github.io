@@ -1,0 +1,41 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Thank you"
+  description="Your stand brief was submitted."
+  path="/thanks"
+  noindex={true}
+>
+  <div class="container" style="padding: clamp(4rem, 12vw, 8rem) 0; text-align: center;">
+    <p class="badge" id="thanks-badge" style="margin-bottom: 1.5rem;">Enquiry received</p>
+    <h1>Brief <em>received.</em></h1>
+    <p class="lead" id="thanks-lead" style="margin-inline: auto;">
+      Thanks — your stand brief is with the Brijnco team. They will follow up using
+      the contact details you provided.
+    </p>
+    <div class="hero__actions" style="justify-content: center;">
+      <a class="btn" href="/shows">Browse more shows</a>
+      <a class="btn btn--ghost" href="/">Home</a>
+    </div>
+  </div>
+</BaseLayout>
+
+<script is:inline>
+  (function () {
+    try {
+      const q = new URLSearchParams(window.location.search).get('q');
+      const el = document.getElementById('thanks-badge');
+      if (!el) return;
+      if (q === 'hot') el.textContent = 'Priority enquiry';
+      else if (q === 'warm') el.textContent = 'Enquiry received';
+      else if (q === 'cold') el.textContent = 'Thanks';
+      if (new URLSearchParams(window.location.search).get('via') === 'mailto') {
+        el.textContent = 'Check your email app';
+        const lead = document.getElementById('thanks-lead');
+        if (lead) lead.textContent = 'Your email app should have opened with the brief filled in. Press send to deliver it to the Brijnco team.';
+      }
+    } catch (_) {}
+  })();
+</script>

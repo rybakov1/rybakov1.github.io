@@ -1,0 +1,577 @@
+---
+import { shows, formatShowDates, type TradeShow } from '../data/shows';
+import { siteConfig } from '../../site.config';
+import { HONEYPOT_FIELD } from '../lib/lead';
+
+interface Props {
+  preselectedSlug?: string;
+}
+
+const { preselectedSlug = '' } = Astro.props;
+const sorted = [...shows].sort((a, b) => a.startDate.localeCompare(b.startDate));
+const showsJson = sorted.map((s: TradeShow) => ({
+  slug: s.slug,
+  name: s.name,
+  city: s.city,
+  venue: s.venue,
+  startDate: s.startDate,
+  label: `${s.name} — ${formatShowDates(s)} (${s.city})`,
+}));
+
+const leadsConfig = {
+  endpoint: siteConfig.leads.endpoint,
+  mailtoEmail: siteConfig.leads.mailtoFallbackEmail,
+  mailtoEnabled: siteConfig.leads.mailtoFallbackEnabled,
+  mailtoHosts: [...siteConfig.leads.mailtoFallbackHosts],
+  analytics: siteConfig.analytics.provider,
+};
+---
+
+<form id="stand-brief-form" class="brief-form" method="post" action={siteConfig.leads.endpoint} novalidate>
+  <p id="formError" class="form-error" role="alert" tabindex="-1" hidden></p>
+  <p class="form-section-title"><span aria-hidden="true">01</span> Contact</p>
+  <div class="grid-2">
+    <div class="field">
+      <label for="fullName">Full name <span aria-hidden="true">*</span></label>
+      <input id="fullName" name="fullName" type="text" autocomplete="name" required />
+      <p class="error" data-error-for="fullName" hidden></p>
+    </div>
+    <div class="field">
+      <label for="email">Work email <span aria-hidden="true">*</span></label>
+      <input id="email" name="email" type="email" autocomplete="email" required />
+      <p class="error" data-error-for="email" hidden></p>
+    </div>
+  </div>
+  <div class="grid-2">
+    <div class="field">
+      <label for="phone">Phone <span aria-hidden="true">*</span></label>
+      <input
+        id="phone"
+        name="phone"
+        type="tel"
+        autocomplete="tel"
+        placeholder="+61 …"
+        required
+      />
+      <p class="hint">Australian format preferred (e.g. 04xx xxx xxx or +61 …)</p>
+      <p class="error" data-error-for="phone" hidden></p>
+    </div>
+    <div class="field">
+      <label for="company">Company name <span aria-hidden="true">*</span></label>
+      <input id="company" name="company" type="text" autocomplete="organization" required />
+      <p class="error" data-error-for="company" hidden></p>
+    </div>
+  </div>
+  <div class="field">
+    <label for="website">Website</label>
+    <input id="website" name="website" type="url" placeholder="https://" autocomplete="url" />
+    <p class="error" data-error-for="website" hidden></p>
+  </div>
+
+  <p class="form-section-title"><span aria-hidden="true">02</span> Show & stand</p>
+  <div class="field">
+    <label for="targetShow">Target show <span aria-hidden="true">*</span></label>
+    <select id="targetShow" name="targetShow" required>
+      <option value="">Select a show…</option>
+      {showsJson.map((s) => (
+        <option value={s.slug} selected={s.slug === preselectedSlug}>
+          {s.label}
+        </option>
+      ))}
+      <option value="other">Other / not listed</option>
+    </select>
+    <p class="error" data-error-for="targetShow" hidden></p>
+  </div>
+  <div class="field" id="otherShowWrap" hidden>
+    <label for="otherShow">Other show name <span aria-hidden="true">*</span></label>
+    <input id="otherShow" name="otherShow" type="text" />
+    <p class="error" data-error-for="otherShow" hidden></p>
+  </div>
+  <div class="grid-2">
+    <div class="field">
+      <label for="showCity">Show city / venue</label>
+      <input id="showCity" name="showCity" type="text" />
+      <p class="hint">Prefills from the calendar when you pick a listed show</p>
+    </div>
+    <div class="field">
+      <label for="standSize">Stand size (m²) <span aria-hidden="true">*</span></label>
+      <select id="standSize" name="standSize" required>
+        <option value="">Select…</option>
+        <option value="<18">Under 18</option>
+        <option value="18-36">18–36</option>
+        <option value="36-54">36–54</option>
+        <option value="54+">54+</option>
+      </select>
+      <p class="error" data-error-for="standSize" hidden></p>
+    </div>
+  </div>
+  <div class="field">
+    <label for="standType">Stand type <span aria-hidden="true">*</span></label>
+    <select id="standType" name="standType" required>
+      <option value="">Select…</option>
+      <option value="shell">Shell scheme</option>
+      <option value="space">Space only</option>
+      <option value="custom">Custom build</option>
+      <option value="unsure">Unsure</option>
+    </select>
+    <p class="error" data-error-for="standType" hidden></p>
+  </div>
+
+  <p class="form-section-title"><span aria-hidden="true">03</span> Budget & timing</p>
+  <div class="grid-2">
+    <div class="field">
+      <label for="budget">Budget range (AUD) <span aria-hidden="true">*</span></label>
+      <select id="budget" name="budget" required>
+        <option value="">Select…</option>
+        <option value="<15k">Under 15k</option>
+        <option value="15-40k">15–40k</option>
+        <option value="40-80k">40–80k</option>
+        <option value="80k+">80k+</option>
+        <option value="prefer-not">Prefer not to say</option>
+      </select>
+      <p class="error" data-error-for="budget" hidden></p>
+    </div>
+    <div class="field">
+      <label for="timeline">Timeline <span aria-hidden="true">*</span></label>
+      <select id="timeline" name="timeline" required>
+        <option value="">Select…</option>
+        <option value="ready">Ready to brief</option>
+        <option value="1-3m">1–3 months</option>
+        <option value="3-6m">3–6 months</option>
+        <option value="researching">Researching</option>
+      </select>
+      <p class="error" data-error-for="timeline" hidden></p>
+    </div>
+  </div>
+  <div class="field">
+    <label for="designAssets">Design assets ready?</label>
+    <select id="designAssets" name="designAssets">
+      <option value="">Select…</option>
+      <option value="yes">Yes</option>
+      <option value="partial">Partial</option>
+      <option value="no">No</option>
+    </select>
+  </div>
+  <div class="field">
+    <label for="message">Message / goals</label>
+    <textarea id="message" name="message" rows="4" placeholder="What should the stand achieve?"></textarea>
+  </div>
+  <div class="field">
+    <label for="heardAbout">How did you hear about us?</label>
+    <input id="heardAbout" name="heardAbout" type="text" />
+  </div>
+
+  <label class="checkbox-row">
+    <input id="consent" name="consent" type="checkbox" required />
+    <span>
+      I agree to be contacted about exhibition stand services. Enquiries are shared with
+      Brijnco as the service partner. See the <a href="/privacy">Privacy policy</a>.
+      <span aria-hidden="true">*</span>
+    </span>
+  </label>
+  <p class="error" data-error-for="consent" hidden style="margin: -0.5rem 0 1.25rem 2.1rem;"></p>
+
+  <input type="hidden" name="utm_source" id="utm_source" />
+  <input type="hidden" name="utm_medium" id="utm_medium" />
+  <input type="hidden" name="utm_campaign" id="utm_campaign" />
+  <input type="hidden" name="formStartedAt" id="formStartedAt" />
+  <input type="hidden" name="pageUrl" id="pageUrl" />
+  <!-- Honeypot: hidden from people and assistive tech; bots tend to fill it -->
+  <div class="hp-field" aria-hidden="true">
+    <label for={HONEYPOT_FIELD}>Fax number (leave blank)</label>
+    <input id={HONEYPOT_FIELD} name={HONEYPOT_FIELD} type="text" tabindex="-1" autocomplete="off" />
+  </div>
+
+  <button type="submit" class="btn btn--block" id="submitBtn">Send stand brief</button>
+  <p class="brief-form__assurance">
+    <span>Free enquiry</span><span>No obligation</span><span>Reply from Brijnco</span>
+  </p>
+  <p id="formStatus" class="notice" hidden role="status"></p>
+</form>
+
+<style>
+  .hp-field {
+    position: absolute !important;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .form-error {
+    margin: 0 0 1.5rem;
+    padding: 0.9rem 1rem;
+    border-left: 3px solid var(--ochre);
+    background: color-mix(in srgb, var(--ochre) 7%, var(--sheet));
+    color: var(--ochre-deep);
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .form-error:focus {
+    outline: none;
+  }
+
+  .form-error a {
+    color: inherit;
+  }
+
+  .brief-form {
+    position: relative;
+    background: var(--sheet);
+    border: 1px solid var(--rule);
+    border-top: 3px solid var(--ochre);
+    padding: 1.5rem 1.25rem 1.75rem;
+  }
+
+  @media (min-width: 640px) {
+    .brief-form {
+      padding: 2.5rem 2.5rem 2.25rem;
+    }
+  }
+
+  .brief-form .checkbox-row {
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--rule);
+    margin-top: 1rem;
+  }
+
+  .brief-form__assurance {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.25rem 1.1rem;
+    margin: 1rem 0 0;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .brief-form__assurance span + span::before {
+    content: '·';
+    margin-right: 1.1rem;
+    color: var(--ochre);
+  }
+
+  .brief-form #formStatus {
+    margin-bottom: 0;
+  }
+</style>
+
+<script type="application/json" id="stand-brief-data" set:html={JSON.stringify({ showsJson, leadsConfig })} />
+
+<script is:inline>
+  (function () {
+    const raw = document.getElementById('stand-brief-data');
+    if (!raw) return;
+    const { showsJson, leadsConfig } = JSON.parse(raw.textContent || '{}');
+    const form = document.getElementById('stand-brief-form');
+    if (!form) return;
+
+    const showSelect = form.querySelector('#targetShow');
+    const otherWrap = form.querySelector('#otherShowWrap');
+    const otherInput = form.querySelector('#otherShow');
+    const cityInput = form.querySelector('#showCity');
+    const statusEl = form.querySelector('#formStatus');
+    const submitBtn = form.querySelector('#submitBtn');
+
+    // Capture UTMs
+    try {
+      const params = new URLSearchParams(window.location.search);
+      ['utm_source', 'utm_medium', 'utm_campaign'].forEach((k) => {
+        const el = form.querySelector('#' + k);
+        if (el && params.get(k)) el.value = params.get(k);
+      });
+      const showParam = params.get('show');
+      if (showParam && showSelect) {
+        showSelect.value = showParam;
+      }
+    } catch (_) {}
+
+    function findShow(slug) {
+      return showsJson.find((s) => s.slug === slug);
+    }
+
+    function syncShowFields() {
+      const val = showSelect.value;
+      if (val === 'other') {
+        otherWrap.hidden = false;
+        otherInput.required = true;
+      } else {
+        otherWrap.hidden = true;
+        otherInput.required = false;
+        otherInput.value = '';
+        const show = findShow(val);
+        if (show) {
+          cityInput.value = show.city + ' · ' + show.venue;
+        }
+      }
+    }
+
+    showSelect.addEventListener('change', syncShowFields);
+    syncShowFields();
+
+    function clearErrors() {
+      form.querySelectorAll('[data-error-for]').forEach((el) => {
+        el.hidden = true;
+        el.textContent = '';
+      });
+      form.querySelectorAll('.field--invalid').forEach((el) =>
+        el.classList.remove('field--invalid')
+      );
+    }
+
+    function setError(name, message) {
+      const err = form.querySelector('[data-error-for="' + name + '"]');
+      const field = form.querySelector('[name="' + name + '"]');
+      if (err) {
+        err.textContent = message;
+        err.hidden = false;
+      }
+      if (field) {
+        const wrap = field.closest('.field');
+        if (wrap) wrap.classList.add('field--invalid');
+      }
+    }
+
+    function validate() {
+      clearErrors();
+      let ok = true;
+      const required = [
+        ['fullName', 'Enter your full name'],
+        ['email', 'Enter a work email'],
+        ['phone', 'Enter a phone number'],
+        ['company', 'Enter your company name'],
+        ['targetShow', 'Select a target show'],
+        ['standSize', 'Select stand size'],
+        ['standType', 'Select stand type'],
+        ['budget', 'Select a budget range'],
+        ['timeline', 'Select a timeline'],
+      ];
+      for (const [name, msg] of required) {
+        const el = form.querySelector('[name="' + name + '"]');
+        if (!el || !String(el.value || '').trim()) {
+          setError(name, msg);
+          ok = false;
+        }
+      }
+      const email = form.querySelector('[name="email"]').value.trim();
+      if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        setError('email', 'Enter a valid email address');
+        ok = false;
+      }
+      if (showSelect.value === 'other' && !otherInput.value.trim()) {
+        setError('otherShow', 'Name the show or event');
+        ok = false;
+      }
+      const website = form.querySelector('[name="website"]').value.trim();
+      if (website && !/^https?:\/\//i.test(website)) {
+        setError('website', 'Include http:// or https://');
+        ok = false;
+      }
+      const consent = form.querySelector('#consent');
+      if (!consent.checked) {
+        setError('consent', 'Consent is required to send your brief');
+        ok = false;
+      }
+      return ok;
+    }
+
+    /** Mirrors src/lib/qualify.ts for client payload */
+    function qualify(budget, timeline, standSize, showStartDate) {
+      let score = 0;
+      const reasons = [];
+      const budgetMap = {
+        '80k+': 40,
+        '40-80k': 30,
+        '15-40k': 18,
+        '<15k': 5,
+        'prefer-not': 8,
+      };
+      const timelineMap = { ready: 30, '1-3m': 24, '3-6m': 12, researching: 4 };
+      const sizeMap = { '54+': 15, '36-54': 12, '18-36': 8, '<18': 4 };
+      score += budgetMap[budget] || 0;
+      score += timelineMap[timeline] || 0;
+      score += sizeMap[standSize] || 0;
+      reasons.push('Budget ' + budget, 'Timeline ' + timeline, 'Size ' + standSize);
+
+      let months = null;
+      if (showStartDate) {
+        const start = new Date(showStartDate + 'T12:00:00');
+        months = (start - new Date()) / (1000 * 60 * 60 * 24 * 30.44);
+        if (months >= 0 && months <= 6) {
+          score += 15;
+          reasons.push('Show within 6 months');
+        } else if (months >= 0 && months <= 12) {
+          score += 8;
+          reasons.push('Show within 12 months');
+        }
+      }
+
+      const nearTimeline = timeline === 'ready' || timeline === '1-3m';
+      const midPlus = budget === '40-80k' || budget === '80k+';
+      const showSoon = months != null && months >= 0 && months <= 6;
+      let qualification = 'cold';
+      if (midPlus && nearTimeline && (showSoon || !showStartDate)) qualification = 'hot';
+      else if (score >= 40 || (budget !== '<15k' && nearTimeline)) qualification = 'warm';
+      if (midPlus && nearTimeline && showSoon) qualification = 'hot';
+      return { qualification, score, reasons };
+    }
+
+    function buildPayload() {
+      const fd = new FormData(form);
+      const data = Object.fromEntries(fd.entries());
+      data.consent = form.querySelector('#consent').checked;
+      data.pageUrl = window.location.href.slice(0, 500);
+      return data;
+    }
+
+    // Timing trap + page URL for the server
+    const startedEl = form.querySelector('#formStartedAt');
+    if (startedEl) startedEl.value = String(Date.now());
+
+    const errorBox = form.querySelector('#formError');
+    function showFormError(html) {
+      errorBox.innerHTML = html;
+      errorBox.hidden = false;
+      errorBox.focus();
+      errorBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    function hideFormError() {
+      errorBox.hidden = true;
+      errorBox.textContent = '';
+    }
+
+    // Server redirect for no-JS posts lands back here with ?error=
+    try {
+      const err = new URLSearchParams(window.location.search).get('error');
+      if (err) {
+        showFormError(
+          err === 'rate_limited'
+            ? 'Too many briefs from this connection — please wait a few minutes and try again.'
+            : 'Your brief could not be sent. Please check the fields and try again.'
+        );
+      }
+    } catch (_) {}
+
+    function trackLead(q) {
+      try {
+        if (leadsConfig.analytics === 'plausible' && window.plausible) {
+          window.plausible('Lead', { props: { qualification: q } });
+        } else if (leadsConfig.analytics === 'ga4' && window.gtag) {
+          window.gtag('event', 'generate_lead', { lead_quality: q });
+        }
+      } catch (_) {}
+    }
+
+    function mailtoAllowed() {
+      return (
+        leadsConfig.mailtoEnabled &&
+        leadsConfig.mailtoHosts.indexOf(window.location.hostname) !== -1
+      );
+    }
+
+    function openMailto(data) {
+      const show = findShow(data.targetShow);
+      const showName =
+        data.targetShow === 'other' ? data.otherShow || 'Other' : show ? show.name : data.targetShow;
+      const q = qualify(data.budget, data.timeline, data.standSize, show ? show.startDate : null);
+      const lines = [
+        'Stand brief (local mailto fallback — the /api/lead function was not reachable)',
+        'Qualification (client estimate): ' + q.qualification.toUpperCase() + ' (score ' + q.score + ')',
+        '',
+        'Name: ' + data.fullName,
+        'Email: ' + data.email,
+        'Phone: ' + data.phone,
+        'Company: ' + data.company,
+        'Website: ' + (data.website || '—'),
+        'Show: ' + showName,
+        'City/venue: ' + (data.showCity || '—'),
+        'Stand size: ' + data.standSize,
+        'Stand type: ' + data.standType,
+        'Budget: ' + data.budget,
+        'Timeline: ' + data.timeline,
+        'Design assets: ' + (data.designAssets || '—'),
+        'Heard about us: ' + (data.heardAbout || '—'),
+        '',
+        'Message:',
+        data.message || '—',
+      ];
+      const subject = encodeURIComponent(
+        '[Stand lead · ' + q.qualification.toUpperCase() + '] ' + data.company + ' — ' + showName
+      );
+      window.location.href =
+        'mailto:' + leadsConfig.mailtoEmail + '?subject=' + subject + '&body=' + encodeURIComponent(lines.join('\n'));
+      setTimeout(function () {
+        window.location.href = '/thanks?q=' + encodeURIComponent(q.qualification) + '&via=mailto';
+      }, 400);
+    }
+
+    function resetButton() {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Send stand brief';
+    }
+
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      hideFormError();
+      if (!validate()) {
+        statusEl.hidden = true;
+        const firstErr = form.querySelector('.field--invalid input, .field--invalid select, #consent');
+        if (firstErr) firstErr.focus();
+        return;
+      }
+
+      const data = buildPayload();
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending…';
+
+      let res;
+      try {
+        res = await fetch(leadsConfig.endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(data),
+        });
+      } catch (err) {
+        // Network failure / endpoint missing
+        if (mailtoAllowed()) return openMailto(data);
+        resetButton();
+        showFormError('We couldn’t reach the brief service. Check your connection and try again.');
+        return;
+      }
+
+      let out = {};
+      try {
+        out = await res.json();
+      } catch (_) {}
+
+      if (res.ok && out && out.ok) {
+        trackLead(out.qualification || '');
+        window.location.href = out.redirect || '/thanks?q=' + encodeURIComponent(out.qualification || '');
+        return;
+      }
+
+      // Endpoint not deployed (e.g. astro dev / preview without Functions)
+      if ((res.status === 404 || res.status === 405 || res.status === 501) && mailtoAllowed()) {
+        return openMailto(data);
+      }
+
+      resetButton();
+      if (res.status === 422 && out && out.fields) {
+        Object.keys(out.fields).forEach(function (name) {
+          setError(name, out.fields[name]);
+        });
+        showFormError(out.message || 'Please fix the highlighted fields.');
+        return;
+      }
+      showFormError(
+        (out && out.message) ||
+          'Something went wrong sending your brief (error ' + res.status + '). Please try again in a minute.'
+      );
+    });
+  })();
+</script>
