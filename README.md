@@ -45,16 +45,26 @@ lives in `src/data/taxonomy.ts`.
 
 ## Show data — `src/data/shows.ts`
 
-Last full verification was **6 Oct 2026**: **44 shows**, of which **40 are verified** and **4 are flagged**.
+There is no exhibition API. The calendar is edited by hand, about once a month.
+
+```bash
+npm run shows:review
+```
+
+The script prints four lists:
+
+- **PAST** — the edition has ended. Delete that object.
+- **RE-CHECK** — `verifiedOn` is older than 90 days. Open `officialSite` and correct dates, or bump `verifiedOn` if they still match.
+- **UNCONFIRMED** — `illustrative: true`. The page shows a Verify badge until the organiser confirms the detail in `flagNote`.
+- **WATCHLIST** — series in `src/data/watchlist.ts` whose next edition is not published yet. Open the official URL. When dates and a venue are on that page, copy a nearby object into `shows.ts`, set `verifiedOn` to today, and remove the watchlist row. Do not take dates from EventsEye, 10times or similar directories.
+
+`city` must be a city name from `taxonomy.ts` (`Sydney`, not `sydney`). `categories` must be industry slugs from `taxonomy.ts`. A new city or industry needs copy there first, otherwise the landing page will not build.
 
 Rules:
 1. Set `officialSite` **only** to a URL you have opened and checked. **Never invent URLs.**
 2. Set `verifiedOn: 'YYYY-MM-DD'` each time you check a show against its official site.
 3. If dates or venue are not confirmed, set `illustrative: true` and give a `flagNote` explaining why.
-   The UI then shows a “Verify dates” badge plus the note.
 4. Remove past editions. Add the next edition only once the organiser publishes it.
-5. `city` must be a slug in `taxonomy.ts`. `categories` must be industry slugs from `taxonomy.ts`.
-   A new city or industry needs copy there first (otherwise the landing page won't build).
 
 ## Lead delivery
 

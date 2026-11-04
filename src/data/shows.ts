@@ -1,5 +1,7 @@
 /**
  * Curated Australian trade / industry exhibitions, late 2026 – 2027.
+ * Run `npm run shows:review` before editing: it lists past editions, stale checks,
+ * and series on the watchlist whose next dates are not published yet.
  *
  * Rules:
  *  - Every entry was checked against the organiser's own website (or the
@@ -70,147 +72,6 @@ const PCEC = {
 } as const;
 
 export const shows: TradeShow[] = [
-  // ───────────── October 2026 ─────────────
-  {
-    name: 'ISSA Cleaning & Hygiene Expo',
-    slug: 'issa-cleaning-hygiene-expo-2026',
-    city: 'Melbourne',
-    ...MCEC,
-    startDate: '2026-10-08',
-    endDate: '2026-10-09',
-    industries: ['Cleaning', 'Facilities', 'Hygiene'],
-    categories: ['construction-building'],
-    officialSite: 'https://cleaninghygieneexpo.issa.com/',
-    organiser: 'ISSA',
-    audience: 'trade',
-    blurb:
-      'Australasian trade event for cleaning, hygiene and facility solutions, with the ISSA Healthcare Surfaces Forum the day before (7 October).',
-    verifiedOn: V,
-  },
-  {
-    name: 'Sydney Home Show',
-    slug: 'sydney-home-show-2026',
-    city: 'Sydney',
-    ...ICC,
-    startDate: '2026-10-09',
-    endDate: '2026-10-11',
-    industries: ['Home', 'Renovation', 'Design'],
-    categories: ['home-garden'],
-    officialSite: 'https://homeshows.com.au/sydney/',
-    audience: 'consumer',
-    blurb:
-      'Home improvement exhibition with 120+ exhibitors, renovation seminars and show specials for Sydney homeowners.',
-    verifiedOn: V,
-  },
-  {
-    name: 'Food & Hospitality Queensland',
-    slug: 'food-hospitality-queensland-2026',
-    city: 'Brisbane',
-    ...BCEC,
-    startDate: '2026-10-12',
-    endDate: '2026-10-13',
-    industries: ['Foodservice', 'Hospitality', 'Retail'],
-    categories: ['food-hospitality'],
-    officialSite: 'https://foodandhospitality.com.au/',
-    audience: 'trade',
-    blurb:
-      'Queensland’s foodservice, hospitality and retail trade show for operators, suppliers and buyers.',
-    verifiedOn: V,
-  },
-  {
-    name: 'Roads & Traffic AU (National Roads & Traffic Expo)',
-    slug: 'national-roads-traffic-expo-2026',
-    city: 'Sydney',
-    ...ICC,
-    startDate: '2026-10-14',
-    endDate: '2026-10-15',
-    industries: ['Infrastructure', 'Roads', 'Transport'],
-    categories: ['transport-mobility'],
-    officialSite: 'https://www.terrapinn.com/exhibition/roads-traffic-au/index.stm',
-    organiser: 'Terrapinn',
-    audience: 'trade',
-    blurb:
-      'Roads, traffic and construction conference with a free-to-attend expo — ITS, asset maintenance, local government and smart cities. Co-located with MOVE AU.',
-    verifiedOn: V,
-  },
-  {
-    name: 'MOVE AU (formerly Mobility Live)',
-    slug: 'mobility-live-australia-2026',
-    city: 'Sydney',
-    ...ICC,
-    startDate: '2026-10-14',
-    endDate: '2026-10-15',
-    industries: ['Mobility', 'EV', 'Fleet'],
-    categories: ['transport-mobility'],
-    officialSite: 'https://www.terrapinn.com/exhibition/move-au/index.stm',
-    organiser: 'Terrapinn',
-    audience: 'trade',
-    blurb:
-      'Next-generation transport and mobility event — EVs, fleet, autonomous systems and charging — co-located with Roads & Traffic AU on one registration.',
-    verifiedOn: V,
-  },
-  {
-    name: 'Adelaide 4WD & Adventure Show',
-    slug: 'adelaide-4wd-adventure-show-2026',
-    city: 'Adelaide',
-    venue: 'Adelaide Showground, Wayville',
-    venueAddress: 'Goodwood Road, Wayville',
-    postcode: '5034',
-    startDate: '2026-10-23',
-    endDate: '2026-10-25',
-    industries: ['4WD', 'Camping', 'Boating'],
-    categories: ['outdoor-marine'],
-    officialSite: 'https://adelaide.4wdshow.com.au/',
-    audience: 'consumer',
-    blurb:
-      'Outdoor-lifestyle show presented with the Club Marine SA Boat & Fishing Show — 4WD, caravans, camping, boats and fishing gear.',
-    verifiedOn: V,
-  },
-  {
-    name: 'Good Food & Wine Show Brisbane',
-    slug: 'good-food-wine-brisbane-2026',
-    city: 'Brisbane',
-    ...BCEC,
-    startDate: '2026-10-23',
-    endDate: '2026-10-25',
-    industries: ['Food', 'Wine', 'Consumer'],
-    categories: ['food-hospitality'],
-    officialSite: 'https://goodfoodshow.com.au/',
-    audience: 'consumer',
-    blurb:
-      'Consumer food and wine show with 200+ exhibitors, chef stages, wine pavilions and tasting experiences over three days.',
-    verifiedOn: V,
-  },
-  {
-    name: 'IMARC — International Mining and Resources Conference + Expo',
-    slug: 'imarc-2026',
-    city: 'Sydney',
-    ...ICC,
-    startDate: '2026-10-27',
-    endDate: '2026-10-29',
-    industries: ['Mining', 'Resources', 'Investment'],
-    categories: ['mining-energy'],
-    officialSite: 'https://imarcglobal.com/',
-    audience: 'trade',
-    blurb:
-      'Australia’s flagship mining week — conference, expo and investment forums connecting global resources leaders in Sydney.',
-    verifiedOn: V,
-  },
-  {
-    name: 'All-Energy Australia',
-    slug: 'all-energy-australia-2026',
-    city: 'Melbourne',
-    ...MCEC,
-    startDate: '2026-10-28',
-    endDate: '2026-10-29',
-    industries: ['Energy', 'Renewables', 'Cleantech'],
-    categories: ['mining-energy'],
-    officialSite: 'https://www.all-energy.com.au/',
-    audience: 'trade',
-    blurb:
-      'B2B clean-energy exhibition and conference — suppliers, grid technology, storage, EV infrastructure and industry sessions.',
-    verifiedOn: V,
-  },
   // ───────────── November – December 2026 ─────────────
   {
     name: 'Perth 4WD & Adventure Show',
@@ -387,6 +248,21 @@ export const shows: TradeShow[] = [
     blurb:
       'Industry-run caravan, camping and outdoor-lifestyle show — caravans, campers, hybrids and motorhomes from member exhibitors.',
     verifiedOn: V,
+  },
+  {
+    name: 'Sydney Home Show',
+    slug: 'sydney-home-show-2027',
+    city: 'Sydney',
+    ...ICC,
+    startDate: '2027-03-12',
+    endDate: '2027-03-14',
+    industries: ['Home', 'Renovation', 'Design'],
+    categories: ['home-garden'],
+    officialSite: 'https://homeshows.com.au/sydney/',
+    audience: 'consumer',
+    blurb:
+      'Home improvement exhibition at ICC Sydney — renovation, building and home products for Sydney homeowners. Next published edition after October 2026.',
+    verifiedOn: '2026-11-04',
   },
   {
     name: 'APPEX — Australasian Processing & Packaging Expo',
@@ -625,7 +501,7 @@ export const shows: TradeShow[] = [
     name: 'Good Food & Wine Show Sydney',
     slug: 'good-food-wine-sydney-2027',
     city: 'Sydney',
-    venue: 'Venue to be confirmed by organiser',
+    ...ICC,
     startDate: '2027-06-25',
     endDate: '2027-06-27',
     industries: ['Food', 'Wine', 'Consumer'],
@@ -634,10 +510,7 @@ export const shows: TradeShow[] = [
     audience: 'consumer',
     blurb:
       'Sydney’s main Good Food & Wine Show — producers, wineries, chef stages and masterclasses.',
-    verifiedOn: V,
-    illustrative: true,
-    flagNote:
-      'Dates are published by the organiser; the Sydney 2027 venue was not stated on the official site when checked.',
+    verifiedOn: '2026-11-04',
   },
   // ───────────── July – November 2027 ─────────────
   {
@@ -694,7 +567,7 @@ export const shows: TradeShow[] = [
     name: 'Good Food & Wine Show Perth',
     slug: 'good-food-wine-perth-2027',
     city: 'Perth',
-    venue: 'Venue to be confirmed by organiser',
+    ...PCEC,
     startDate: '2027-08-20',
     endDate: '2027-08-22',
     industries: ['Food', 'Wine', 'Consumer'],
@@ -702,10 +575,7 @@ export const shows: TradeShow[] = [
     officialSite: 'https://goodfoodshow.com.au/',
     audience: 'consumer',
     blurb: 'Perth edition of the Good Food & Wine Show — producers, wineries and chef stages.',
-    verifiedOn: V,
-    illustrative: true,
-    flagNote:
-      'Dates are published by the organiser; the Perth 2027 venue was not stated on the official site when checked.',
+    verifiedOn: '2026-11-04',
   },
   {
     name: 'Security Exhibition & Conference',
@@ -755,6 +625,83 @@ export const shows: TradeShow[] = [
     blurb:
       'National food and beverage trade show returning to ICC Sydney — retail, foodservice and hospitality buyers.',
     verifiedOn: V,
+  },
+  {
+    name: 'ISSA Cleaning & Hygiene Expo',
+    slug: 'issa-cleaning-hygiene-expo-2027',
+    city: 'Sydney',
+    ...ICC,
+    startDate: '2027-09-22',
+    endDate: '2027-09-23',
+    industries: ['Cleaning', 'Facilities', 'Hygiene'],
+    categories: ['construction-building'],
+    officialSite: 'https://cleaninghygieneexpo.issa.com/',
+    organiser: 'ISSA',
+    audience: 'trade',
+    blurb:
+      'Australasian trade event for cleaning, hygiene and facility solutions. The 2027 edition is at ICC Sydney; the show alternates with Melbourne.',
+    verifiedOn: '2026-11-04',
+  },
+  // ───────────── October 2027 ─────────────
+  {
+    name: 'Food & Hospitality Queensland',
+    slug: 'food-hospitality-queensland-2027',
+    city: 'Brisbane',
+    ...BCEC,
+    startDate: '2027-10-11',
+    endDate: '2027-10-12',
+    industries: ['Foodservice', 'Hospitality', 'Retail'],
+    categories: ['food-hospitality'],
+    officialSite: 'https://foodandhospitality.com.au/',
+    audience: 'trade',
+    blurb:
+      'Queensland’s foodservice, hospitality and retail trade show for operators, suppliers and buyers.',
+    verifiedOn: '2026-11-04',
+  },
+  {
+    name: 'IMARC — International Mining and Resources Conference + Expo',
+    slug: 'imarc-2027',
+    city: 'Sydney',
+    ...ICC,
+    startDate: '2027-10-12',
+    endDate: '2027-10-14',
+    industries: ['Mining', 'Resources', 'Investment'],
+    categories: ['mining-energy'],
+    officialSite: 'https://imarcglobal.com/',
+    audience: 'trade',
+    blurb:
+      'Australia’s flagship mining week — conference, expo and investment forums connecting global resources leaders in Sydney.',
+    verifiedOn: '2026-11-04',
+  },
+  {
+    name: 'Good Food & Wine Show Brisbane',
+    slug: 'good-food-wine-brisbane-2027',
+    city: 'Brisbane',
+    ...BCEC,
+    startDate: '2027-10-22',
+    endDate: '2027-10-24',
+    industries: ['Food', 'Wine', 'Consumer'],
+    categories: ['food-hospitality'],
+    officialSite: 'https://goodfoodshow.com.au/',
+    audience: 'consumer',
+    blurb:
+      'Consumer food and wine show with chef stages, wine pavilions and tasting experiences over three days at BCEC.',
+    verifiedOn: '2026-11-04',
+  },
+  {
+    name: 'All-Energy Australia',
+    slug: 'all-energy-australia-2027',
+    city: 'Melbourne',
+    ...MCEC,
+    startDate: '2027-10-27',
+    endDate: '2027-10-28',
+    industries: ['Energy', 'Renewables', 'Cleantech'],
+    categories: ['mining-energy'],
+    officialSite: 'https://www.all-energy.com.au/',
+    audience: 'trade',
+    blurb:
+      'B2B clean-energy exhibition and conference — suppliers, grid technology, storage, EV infrastructure and industry sessions.',
+    verifiedOn: '2026-11-04',
   },
   {
     name: 'Indo Pacific 2027 International Maritime Exposition',
