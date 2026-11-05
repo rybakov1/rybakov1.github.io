@@ -1,19 +1,9 @@
-# Cloudflare Pages project config — tradeshowstands.com.au
-# Used by `wrangler pages dev` and `wrangler pages deploy`.
-# Git-connected builds: Framework preset "Astro", build command `npm run build`,
-# output directory `dist`, env var NODE_VERSION=22 (see DEPLOY.md).
-name = "tradeshowstands"
-pages_build_output_dir = "./dist"
+# Git build on Cloudflare runs `npx wrangler deploy`.
+# The Worker name must match the connected project (rybakov1/rybakov1.github.io).
+name = "rybakov1-github-io"
 compatibility_date = "2025-09-01"
 
-# Non-secret defaults. Secrets (RESEND_API_KEY, LEAD_WEBHOOK_URL, LEAD_WEBHOOK_SECRET)
-# go in the dashboard or `wrangler pages secret put NAME --project-name tradeshowstands`.
-[vars]
-LEAD_FROM_EMAIL = "Trade Show Stands <leads@tradeshowstands.com.au>"
-# LEAD_TO_EMAIL = "set-in-dashboard@brijnco.example"   # sister's inbox — TBC
-# LEAD_CC_EMAIL = ""
-
-# Optional: cross-isolate rate limiting. Create a KV namespace and uncomment.
-# [[kv_namespaces]]
-# binding = "LEAD_RATE_LIMIT"
-# id = "<kv-namespace-id>"
+[assets]
+directory = "./dist"
+not_found_handling = "404-page"
+html_handling = "auto-trailing-slash"
