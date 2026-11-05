@@ -93,26 +93,26 @@ export const siteConfig = {
 
   nav: [
     { href: '/', label: 'Home' },
-    { href: '/shows', label: 'Shows' },
-    { href: '/exhibition-stand-builders', label: 'Guide' },
-    { href: '/stand-brief', label: 'Stand brief' },
+    { href: '/shows/', label: 'Shows' },
+    { href: '/exhibition-stand-builders/', label: 'Guide' },
+    { href: '/stand-brief/', label: 'Stand brief' },
   ],
 
   /** Internal "further reading" links shown on the home page */
   relatedTools: [
     {
       title: 'Exhibition stand builders — the guide',
-      href: '/exhibition-stand-builders',
+      href: '/exhibition-stand-builders/',
       description: 'Stand types, what drives cost, and how to brief a builder in Sydney, Melbourne and beyond.',
     },
     {
       title: 'Sydney trade shows',
-      href: '/shows/city/sydney',
+      href: '/shows/city/sydney/',
       description: 'ICC Sydney and Sydney Showground listings through 2027.',
     },
     {
       title: 'Melbourne trade shows',
-      href: '/shows/city/melbourne',
+      href: '/shows/city/melbourne/',
       description: 'MCEC, Melbourne Showgrounds and Royal Exhibition Building listings.',
     },
   ],

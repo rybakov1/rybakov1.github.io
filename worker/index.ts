@@ -1,16 +1,17 @@
 /**
- * Every request hits this script first so plain HTTP (and www) can redirect
- * before the static asset is served. See wrangler.toml → run_worker_first.
+ * Every request hits this script first so plain HTTP, www and a missing
+ * trailing slash can 301 before the static asset is served.
+ * See wrangler.toml → run_worker_first. html_handling is "none" so the
+ * asset layer does not add a 307; this script 301s and then reads index.html.
  */
 import { onRequest, type Env } from '../functions/api/lead';
-
-const APEX = 'autradeshows.com';
+import { permanentTarget } from './redirects';
 
 interface WorkerEnv extends Env {
   ASSETS: { fetch(input: Request): Promise<Response> };
 }
 
-function visitorScheme(request: Request): string {
+function visitorScheme(request: Request): 'http' | 'https' {
   const raw = request.headers.get('cf-visitor');
   if (raw) {
     try {
@@ -26,18 +27,32 @@ function visitorScheme(request: Request): string {
 export default {
   async fetch(request: Request, env: WorkerEnv, ctx: { waitUntil(promise: Promise<unknown>): void }): Promise<Response> {
     const url = new URL(request.url);
-    const host = url.hostname.toLowerCase();
-    const onSite = host === APEX || host === `www.${APEX}`;
-    if (onSite && (visitorScheme(request) === 'http' || host === `www.${APEX}`)) {
-      url.protocol = 'https:';
-      url.hostname = APEX;
-      return Response.redirect(url.toString(), 301);
+    const scheme = visitorScheme(request);
+    const target = permanentTarget(url, scheme);
+    if (target) {
+      return new Response(null, { status: 301, headers: { Location: target } });
+    }
+
+    if (url.pathname.endsWith('/index.html')) {
+      url.pathname = url.pathname.slice(0, -'index.html'.length) || '/';
+      return new Response(null, { status: 301, headers: { Location: url.toString() } });
     }
 
     const path = url.pathname.replace(/\/+$/, '') || '/';
     if (path === '/api/lead') {
       return onRequest({ request, env, waitUntil: (promise) => ctx.waitUntil(promise) });
     }
-    return env.ASSETS.fetch(request);
+
+    const assetUrl = new URL(request.url);
+    const last = assetUrl.pathname.split('/').pop() ?? '';
+    if (!last.includes('.') && assetUrl.pathname.endsWith('/')) {
+      assetUrl.pathname = `${assetUrl.pathname}index.html`;
+    }
+    const assetRequest = new Request(assetUrl.toString(), {
+      method: request.method,
+      headers: request.headers,
+      redirect: 'manual',
+    });
+    return env.ASSETS.fetch(assetRequest);
   },
 };

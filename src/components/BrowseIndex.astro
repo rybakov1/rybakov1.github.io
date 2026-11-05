@@ -27,7 +27,7 @@ const industryRows = industries
   <div class="section-head">
     <span class="section-head__num">{number}</span>
     <h2 id="browse-heading">{title}</h2>
-    <a class="section-head__aside text-link" href="/exhibition-stand-builders">Stand builder guide</a>
+    <a class="section-head__aside text-link" href="/exhibition-stand-builders/">Stand builder guide</a>
   </div>
   <div class="browse__grid">
     <div>
@@ -36,7 +36,7 @@ const industryRows = industries
         {
           cityRows.map((c) => (
             <li>
-              <a href={`/shows/city/${c.slug}`} aria-current={currentCity === c.slug ? 'page' : undefined}>
+              <a href={`/shows/city/${c.slug}/`} aria-current={currentCity === c.slug ? 'page' : undefined}>
                 <span class="browse__name">{c.name}</span>
                 <span class="browse__count">{String(c.count).padStart(2, '0')}</span>
               </a>
@@ -51,7 +51,7 @@ const industryRows = industries
         {
           industryRows.map((i) => (
             <li>
-              <a href={`/shows/industry/${i.slug}`} aria-current={currentIndustry === i.slug ? 'page' : undefined}>
+              <a href={`/shows/industry/${i.slug}/`} aria-current={currentIndustry === i.slug ? 'page' : undefined}>
                 <span class="browse__name">{i.short}</span>
                 <span class="browse__count">{String(i.count).padStart(2, '0')}</span>
               </a>

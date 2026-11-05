@@ -210,7 +210,7 @@ const articleLd = {
           <li><span>06</span><p><strong>Venue services</strong> — power, water, rigging points, internet; usually ordered through the organiser or venue.</p></li>
         </ol>
         <p class="small">
-          The budget bands on our <a href="/stand-brief">stand brief form</a> (under $15k through $80k+) are
+          The budget bands on our <a href="/stand-brief/">stand brief form</a> (under $15k through $80k+) are
           planning bands that help a builder respond sensibly — they are not price quotes.
         </p>
       </div>
@@ -233,7 +233,7 @@ const articleLd = {
             cityBlocks.map((c) => (
               <article class="guide-city" id={c.slug}>
                 <h3>
-                  <a href={`/shows/city/${c.slug}`}>Exhibition stand builders, {c.name}</a>
+                  <a href={`/shows/city/${c.slug}/`}>Exhibition stand builders, {c.name}</a>
                 </h3>
                 <p class="guide-city__venues">{c.venues.join(' · ')}</p>
                 <p>{c.planning[0]}</p>
@@ -242,12 +242,12 @@ const articleLd = {
                   {c.shows.slice(0, 3).map((s, i) => (
                     <>
                       {i > 0 && ', '}
-                      <a href={`/shows/${s.slug}`}>{s.name}</a>
+                      <a href={`/shows/${s.slug}/`}>{s.name}</a>
                     </>
                   ))}
                   {c.shows.length > 3 && (
                     <>
-                      {' '}and <a href={`/shows/city/${c.slug}`}>{c.shows.length - 3} more</a>
+                      {' '}and <a href={`/shows/city/${c.slug}/`}>{c.shows.length - 3} more</a>
                     </>
                   )}
                 </p>
@@ -323,8 +323,8 @@ const articleLd = {
           </p>
         </div>
         <div class="guide-brief__cta">
-          <a class="btn" href="/stand-brief">Start your stand brief</a>
-          <a class="text-link" href="/shows">Find your show first</a>
+          <a class="btn" href="/stand-brief/">Start your stand brief</a>
+          <a class="text-link" href="/shows/">Find your show first</a>
         </div>
       </div>
     </section>

@@ -1,4 +1,6 @@
 ---
+import { slashPath } from '../lib/seo';
+
 interface Props {
   items: { name: string; path?: string }[];
 }
@@ -10,7 +12,7 @@ const { items } = Astro.props;
     {
       items.map((it, i) => (
         <li>
-          {it.path && i < items.length - 1 ? <a href={it.path}>{it.name}</a> : <span aria-current="page">{it.name}</span>}
+          {it.path && i < items.length - 1 ? <a href={slashPath(it.path)}>{it.name}</a> : <span aria-current="page">{it.name}</span>}
         </li>
       ))
     }

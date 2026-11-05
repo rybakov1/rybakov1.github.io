@@ -1,7 +1,8 @@
-# Cloudflare Pages redirects (www → apex is better done with a Cloudflare Redirect Rule; see DEPLOY.md)
-# Do not redirect /shows/ → /shows. The calendar is shows/index.html, and
-# html_handling already redirects /shows → /shows/. The reverse rule loops.
-/builders        /exhibition-stand-builders  301
-/guide           /exhibition-stand-builders  301
-/contact         /about/#contact             301
-/contact/        /about/#contact             301
+# Legacy aliases. Trailing-slash 301s are sent by the Worker (301, not the
+# asset-layer 307). Do not add a rule that strips a trailing slash: that loops.
+/builders         /exhibition-stand-builders/  301
+/builders/        /exhibition-stand-builders/  301
+/guide            /exhibition-stand-builders/  301
+/guide/           /exhibition-stand-builders/  301
+/contact          /about/#contact              301
+/contact/         /about/#contact              301

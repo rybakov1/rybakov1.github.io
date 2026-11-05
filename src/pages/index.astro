@@ -39,14 +39,14 @@ const jsonLd = [organizationLd(), websiteLd()];
           gets your stand in front of a builder — without the middlemen.
         </p>
         <div class="actions">
-          <a class="btn" href="/stand-brief">Request a stand brief</a>
-          <a class="text-link" href="/shows">Browse the calendar</a>
+          <a class="btn" href="/stand-brief/">Request a stand brief</a>
+          <a class="text-link" href="/shows/">Browse the calendar</a>
         </div>
       </div>
 
       {
         next && nextDate && (
-          <a class="poster" href={`/shows/${next.slug}`} aria-label={`Next on the floor: ${next.name}, ${formatShowDates(next)}, ${next.city}`}>
+          <a class="poster" href={`/shows/${next.slug}/`} aria-label={`Next on the floor: ${next.name}, ${formatShowDates(next)}, ${next.city}`}>
             <span class="poster__label">Next on the floor</span>
             <span class="poster__days" aria-hidden="true">{nextDate.days}</span>
             <span class="poster__month" aria-hidden="true">{nextDate.month} {nextDate.year}</span>
@@ -85,7 +85,7 @@ const jsonLd = [organizationLd(), websiteLd()];
       <div class="section-head">
         <span class="section-head__num">01</span>
         <h2 id="upcoming-heading">Coming up</h2>
-        <a class="section-head__aside text-link" href="/shows">Full calendar</a>
+        <a class="section-head__aside text-link" href="/shows/">Full calendar</a>
       </div>
       {
         upcoming.length === 0 ? (
@@ -114,7 +114,7 @@ const jsonLd = [organizationLd(), websiteLd()];
           Tell Brijnco about size, budget and timeline. Your brief goes straight to the
           stand team — no marketplace, no fees on this form.
         </p>
-        <a class="btn btn--ink" href="/stand-brief">Start your stand brief</a>
+        <a class="btn btn--ink" href="/stand-brief/">Start your stand brief</a>
       </div>
       <ul class="brief-band__types">
         <li>

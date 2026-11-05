@@ -70,8 +70,8 @@ const pageTitle = nameHasYear
       </div>
       <div>
         <p class="eyebrow eyebrow--rule">
-          <a class="eyebrow-link" href={`/shows/city/${city.slug}`}>{show.city}</a> ·
-          <a class="eyebrow-link" href={`/shows/industry/${cats[0].slug}`}>{cats[0].short}</a>
+          <a class="eyebrow-link" href={`/shows/city/${city.slug}/`}>{show.city}</a> ·
+          <a class="eyebrow-link" href={`/shows/industry/${cats[0].slug}/`}>{cats[0].short}</a>
         </p>
         <h1>{show.name}</h1>
         {
@@ -100,7 +100,7 @@ const pageTitle = nameHasYear
       </div>
       <div>
         <dt>City</dt>
-        <dd><a class="dd-link" href={`/shows/city/${city.slug}`}>{show.city}</a>, {city.stateCode}</dd>
+        <dd><a class="dd-link" href={`/shows/city/${city.slug}/`}>{show.city}</a>, {city.stateCode}</dd>
       </div>
       <div>
         <dt>Venue</dt>
@@ -112,7 +112,7 @@ const pageTitle = nameHasYear
           {cats.map((c, i) => (
             <>
               {i > 0 && ', '}
-              <a class="dd-link" href={`/shows/industry/${c.slug}`}>{c.short}</a>
+              <a class="dd-link" href={`/shows/industry/${c.slug}/`}>{c.short}</a>
             </>
           ))}
           <div class="tags" style="margin:0.4rem 0 0;">
@@ -139,7 +139,7 @@ const pageTitle = nameHasYear
     }
 
     <div class="hero__actions">
-      <a class="btn" href={`/stand-brief?show=${show.slug}`}>Request a stand brief</a>
+      <a class="btn" href={`/stand-brief/?show=${show.slug}`}>Request a stand brief</a>
       {
         show.officialSite ? (
           <a
@@ -168,18 +168,18 @@ const pageTitle = nameHasYear
       <div class="section-head">
         <span class="section-head__num">01</span>
         <h2 id="plan-heading">Planning a stand here</h2>
-        <a class="section-head__aside text-link" href="/exhibition-stand-builders">Stand builder guide</a>
+        <a class="section-head__aside text-link" href="/exhibition-stand-builders/">Stand builder guide</a>
       </div>
       <div class="show-detail__plan-grid">
         <p>
           Exhibiting at {show.name}? Most exhibitors choose between the organiser’s shell scheme
           and a space-only site with a custom or modular stand. Read our
-          <a href="/exhibition-stand-builders">guide to exhibition stand builders</a> for what drives
+          <a href="/exhibition-stand-builders/">guide to exhibition stand builders</a> for what drives
           cost and what to put in a brief, or see what else is on in
-          <a href={`/shows/city/${city.slug}`}>{show.city}</a> and across
-          <a href={`/shows/industry/${cats[0].slug}`}>{cats[0].name.toLowerCase()}</a>.
+          <a href={`/shows/city/${city.slug}/`}>{show.city}</a> and across
+          <a href={`/shows/industry/${cats[0].slug}/`}>{cats[0].name.toLowerCase()}</a>.
         </p>
-        <a class="btn btn--ink" href={`/stand-brief?show=${show.slug}`}>Brief a stand for this show</a>
+        <a class="btn btn--ink" href={`/stand-brief/?show=${show.slug}`}>Brief a stand for this show</a>
       </div>
     </section>
 
@@ -189,7 +189,7 @@ const pageTitle = nameHasYear
           <div class="section-head">
             <span class="section-head__num">02</span>
             <h2 id="related-shows">Related shows</h2>
-            <a class="section-head__aside text-link" href="/shows">Full calendar</a>
+            <a class="section-head__aside text-link" href="/shows/">Full calendar</a>
           </div>
           <ul class="show-list">
             {related.map((r) => (

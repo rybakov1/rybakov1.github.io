@@ -1,6 +1,7 @@
 ---
 import { siteConfig } from '../../site.config';
 import { t } from '../i18n/en';
+import { slashPath } from '../lib/seo';
 
 interface RelatedTool {
   title: string;
@@ -23,7 +24,7 @@ const tools = Astro.props.tools ?? [...siteConfig.relatedTools];
       <ul class="related__list">
         {tools.map((tool) => (
           <li>
-            <a href={tool.href}>{tool.title}</a>
+            <a href={slashPath(tool.href)}>{tool.title}</a>
             <span>{tool.description}</span>
           </li>
         ))}

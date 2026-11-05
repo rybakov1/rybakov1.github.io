@@ -29,7 +29,7 @@ const cats = show.categories.map((c) => getIndustryBySlug(c)).filter(Boolean);
       <span class="show-row__month">{d.month} {d.year}</span>
     </span>
     <span class="show-row__body">
-      <a href={`/shows/${show.slug}`} class="show-row__name">
+      <a href={`/shows/${show.slug}/`} class="show-row__name">
         {show.name}
       </a>
       <span class="show-row__venue">
@@ -42,7 +42,7 @@ const cats = show.categories.map((c) => getIndustryBySlug(c)).filter(Boolean);
             {show.illustrative && <span class="badge badge--muted">Verify</span>}
             {variant === 'full' &&
               cats.map((c) => (
-                <a class="tag show-row__chip" href={`/shows/industry/${c!.slug}`}>
+                <a class="tag show-row__chip" href={`/shows/industry/${c!.slug}/`}>
                   {c!.short}
                 </a>
               ))}
@@ -54,7 +54,7 @@ const cats = show.categories.map((c) => getIndustryBySlug(c)).filter(Boolean);
       hideCity ? (
         <span class="show-row__city show-row__city--plain">{show.city}</span>
       ) : (
-        <a class="show-row__city" href={`/shows/city/${citySlug(show.city)}`} title={`More trade shows in ${show.city}`}>
+        <a class="show-row__city" href={`/shows/city/${citySlug(show.city)}/`} title={`More trade shows in ${show.city}`}>
           {show.city}
         </a>
       )

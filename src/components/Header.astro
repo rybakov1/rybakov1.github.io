@@ -1,7 +1,8 @@
 ---
 import { siteConfig } from '../../site.config';
+import { slashPath } from '../lib/seo';
 
-const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
 ---
 
 <header class="site-header">
@@ -13,21 +14,19 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
     <nav class="nav" aria-label="Primary">
       {
         siteConfig.nav.map((item) => {
-          const current =
-            item.href === '/'
-              ? path === '/'
-              : path === item.href || path.startsWith(item.href + '/');
-          const isCta = item.href === '/stand-brief';
+          const itemPath = item.href.replace(/\/+$/, '') || '/';
+          const current = itemPath === '/' ? path === '/' : path === itemPath || path.startsWith(itemPath + '/');
+          const isCta = itemPath === '/stand-brief';
           return (
             <a
-              href={item.href}
+              href={slashPath(item.href)}
               class:list={[
                 'nav__link',
                 {
                   'nav__link--cta': isCta,
                   'nav__link--home': item.href === '/',
-                  'nav__link--secondary': item.href === '/exhibition-stand-builders',
-                  'nav__link--shows': item.href === '/shows',
+                  'nav__link--secondary': itemPath === '/exhibition-stand-builders',
+                  'nav__link--shows': itemPath === '/shows',
                 },
               ]}
               aria-current={current ? 'page' : undefined}

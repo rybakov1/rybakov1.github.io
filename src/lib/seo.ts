@@ -3,7 +3,23 @@ import { siteConfig } from '../../site.config';
 import type { TradeShow } from '../data/shows';
 import { getCityByName } from '../data/taxonomy';
 
-export const abs = (path: string): string => new URL(path, siteConfig.domain).href;
+/** Page paths keep a trailing slash. Files, the root, queries and hashes stay put. */
+export function slashPath(path: string): string {
+  if (!path.startsWith('/') || path === '/') return path;
+  const query = path.indexOf('?');
+  const hash = path.indexOf('#');
+  let cut = path.length;
+  if (query >= 0) cut = Math.min(cut, query);
+  if (hash >= 0) cut = Math.min(cut, hash);
+  const base = path.slice(0, cut);
+  const rest = path.slice(cut);
+  if (base.endsWith('/')) return path;
+  const last = base.slice(base.lastIndexOf('/') + 1);
+  if (last.includes('.')) return path;
+  return `${base}/${rest}`;
+}
+
+export const abs = (path: string): string => new URL(slashPath(path), siteConfig.domain).href;
 
 export function organizationLd(): Record<string, unknown> {
   return {

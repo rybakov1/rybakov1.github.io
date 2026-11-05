@@ -1,4 +1,6 @@
 ---
+import { slashPath } from '../lib/seo';
+
 interface Props {
   heading: string;
   text: string;
@@ -14,8 +16,8 @@ const { heading, text, href = '/stand-brief', label = 'Request a stand brief' } 
     <p class="landing-cta__text">{text}</p>
   </div>
   <div class="landing-cta__actions">
-    <a class="btn" href={href}>{label}</a>
-    <a class="text-link" href="/exhibition-stand-builders">How to brief a stand builder</a>
+    <a class="btn" href={slashPath(href)}>{label}</a>
+    <a class="text-link" href="/exhibition-stand-builders/">How to brief a stand builder</a>
   </div>
 </aside>
 
