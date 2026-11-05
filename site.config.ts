@@ -9,11 +9,16 @@
  * See .env.example, README.md and DEPLOY.md.
  */
 export const siteConfig = {
-  name: 'Trade Show Stands',
-  /** Wordmark parts — keeps the elegant two-part header mark */
-  wordmark: { mark: 'AU', name: 'Trade Show Stands' },
+  name: 'AU Trade Shows',
+  /** Wordmark parts — the mark already says AU, so the name does not repeat it */
+  wordmark: { mark: 'AU', name: 'Trade Shows' },
   tagline: 'Australian trade shows & exhibition stand briefs',
-  domain: 'https://rybakov1.github.io',
+  domain: 'https://autradeshows.com',
+  /**
+   * Google Search Console HTML-tag verification.
+   * Paste only the content value, then rebuild. Leave '' until Search Console issues one.
+   */
+  googleSiteVerification: '',
   language: 'en',
   locale: 'en-AU',
   geo: 'AU',
@@ -25,7 +30,7 @@ export const siteConfig = {
    * Public contact address shown on Privacy page.
    * PLACEHOLDER until the domain + mailbox exist. Set to '' to hide.
    */
-  contactEmail: 'hello@tradeshowstands.com.au',
+  contactEmail: 'hello@autradeshows.com',
   contactEmailIsPlaceholder: true,
   /** Soft brand line in footer — do not oversell */
   poweredByNote:
@@ -58,7 +63,7 @@ export const siteConfig = {
   analytics: {
     provider: 'none' as 'none' | 'plausible' | 'ga4',
     plausible: {
-      domain: 'tradeshowstands.com.au',
+      domain: 'autradeshows.com',
       scriptSrc: 'https://plausible.io/js/script.js',
     },
     ga4: {
@@ -119,7 +124,7 @@ export const siteConfig = {
     {
       question: 'Are you an official trade show organiser?',
       answer:
-        '<strong>No.</strong> Trade Show Stands is an independent calendar and stand-brief tool. We are not affiliated with any show organiser or venue. Always confirm dates, booths and exhibitor rules on the show’s official website.',
+        '<strong>No.</strong> AU Trade Shows is an independent calendar and stand-brief tool. We are not affiliated with any show organiser or venue. Always confirm dates, booths and exhibitor rules on the show’s official website.',
     },
     {
       question: 'What happens when I submit a stand brief?',

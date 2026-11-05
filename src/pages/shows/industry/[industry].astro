@@ -8,6 +8,7 @@ import Crumbs from '../../../components/Crumbs.astro';
 import { industries, type IndustryInfo } from '../../../data/taxonomy';
 import { getShowsByIndustry, getUpcomingShows } from '../../../data/shows';
 import { breadcrumbLd, itemListLd } from '../../../lib/seo';
+import { siteConfig } from '../../../../site.config';
 
 export function getStaticPaths() {
   return industries
@@ -73,7 +74,7 @@ const h1Html =
       )
     }
     <p class="notice">
-      Independent listings, checked against each organiser’s website. Trade Show Stands is not
+      Independent listings, checked against each organiser’s website. {siteConfig.name} is not
       affiliated with any show or venue — confirm details with the organiser before booking.
     </p>
 

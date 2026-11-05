@@ -29,8 +29,8 @@ const {
 
 const imageUrl = new URL(image, siteConfig.domain).href;
 
-// Canonical: always the production domain, trailing slash normalised away (except root)
-const cleanPath = path === '/' ? '/' : path.replace(/\/+$/, '');
+// Live URLs use a trailing slash (Astro `trailingSlash: 'always'`).
+const cleanPath = !path || path === '/' ? '/' : `${path.replace(/\/+$/, '')}/`;
 const canonical = new URL(cleanPath, siteConfig.domain).href;
 const fullTitle = title.includes(siteConfig.name) ? title : `${title} | ${siteConfig.name}`;
 const schemas = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
@@ -38,6 +38,9 @@ const schemas = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
 
 <title>{fullTitle}</title>
 <meta name="description" content={description} />
+{siteConfig.googleSiteVerification && (
+  <meta name="google-site-verification" content={siteConfig.googleSiteVerification} />
+)}
 <link rel="canonical" href={canonical} />
 {noindex ? <meta name="robots" content="noindex,nofollow" /> : <meta name="robots" content="index,follow,max-image-preview:large" />}
 

@@ -1,7 +1,7 @@
 /*
  * AU Trade Stands — editorial trade-catalogue theme
  * Paper ground, ink type, one ochre accent. Fraunces (display) + Instrument Sans (text)
- * + IBM Plex Mono (labels, numerals in meta). Fonts are self-hosted via @fontsource.
+ * + IBM Plex Mono (labels, numerals in meta). Latin woff2 files live in /public/fonts.
  */
 :root {
   /* Palette */
