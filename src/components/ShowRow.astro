@@ -20,24 +20,10 @@ interface Props {
 const { show, variant = 'compact', hideCity = false, ...attrs } = Astro.props;
 const d = getShowDateParts(show);
 const cats = show.categories.map((c) => getIndustryBySlug(c)).filter(Boolean);
-const plate = cats[0];
 ---
 
 <li class:list={['show-list__item', 'show-row', `show-row--${variant}`]} {...attrs}>
   <div class="show-row__link">
-    {
-      plate && (
-        <img
-          class="show-row__plate"
-          src={`/images/industries/${plate.slug}.jpg`}
-          alt=""
-          width="1200"
-          height="675"
-          loading="lazy"
-          decoding="async"
-        />
-      )
-    }
     <span class="show-row__date" aria-hidden="true">
       <span class="show-row__days">{d.days}</span>
       <span class="show-row__month">{d.month} {d.year}</span>
@@ -81,24 +67,15 @@ const plate = cats[0];
   .show-row__link {
     position: relative;
     display: grid;
-    grid-template-columns: 4.5rem minmax(0, 1fr) auto;
+    grid-template-columns: 1fr auto;
     grid-template-areas:
-      'plate date city'
-      'plate body body';
+      'date city'
+      'body body';
     gap: 0.6rem 1rem;
     padding: 1.4rem 0;
     text-decoration: none;
     color: var(--ink);
     transition: background-color 0.25s var(--ease);
-  }
-
-  .show-row__plate {
-    grid-area: plate;
-    width: 4.5rem;
-    height: 3.4rem;
-    object-fit: cover;
-    align-self: start;
-    background: var(--paper-2);
   }
 
   .show-row__date {
@@ -217,8 +194,8 @@ const plate = cats[0];
 
   @media (min-width: 720px) {
     .show-row__link {
-      grid-template-columns: 6.5rem 8.5rem minmax(0, 1fr) 7.5rem 2rem;
-      grid-template-areas: 'plate date body city arrow';
+      grid-template-columns: 8.5rem minmax(0, 1fr) 7.5rem 2rem;
+      grid-template-areas: 'date body city arrow';
       align-items: start;
       gap: 0 1.75rem;
       padding: 1.6rem 0.75rem 1.6rem 0;
@@ -227,11 +204,6 @@ const plate = cats[0];
 
     .show-row--full .show-row__link {
       padding-block: 2rem;
-    }
-
-    .show-row__plate {
-      width: 6.5rem;
-      height: 4.4rem;
     }
 
     .show-row__date {

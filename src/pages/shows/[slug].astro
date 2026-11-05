@@ -56,8 +56,10 @@ const pageTitle = nameHasYear
   description={`${show.name}: ${formatShowDates(show)}, ${show.venue}, ${show.city}. ${show.blurb}`.slice(0, 300)}
   path={`/shows/${show.slug}`}
   ogType="article"
-  image={`/images/industries/${cats[0].slug}.jpg`}
-  imageAlt={`Editorial still life for ${cats[0].short.toLowerCase()} shows`}
+  image={`/images/industries/${cats[0].slug}.webp`}
+  imageAlt={`Exhibition floor for ${cats[0].short.toLowerCase()} shows`}
+  imageWidth={960}
+  imageHeight={540}
   jsonLd={jsonLd}
 >
   <article class="wrap show-detail">
@@ -97,14 +99,14 @@ const pageTitle = nameHasYear
 
     <figure class="show-plate">
       <img
-        src={`/images/industries/${cats[0].slug}.jpg`}
-        alt={`Editorial still life for ${cats[0].short.toLowerCase()} shows`}
-        width="1200"
-        height="675"
-        loading="eager"
+        src={`/images/industries/${cats[0].slug}.webp`}
+        alt={`Exhibition floor for ${cats[0].short.toLowerCase()} shows`}
+        width="960"
+        height="540"
+        loading="lazy"
         decoding="async"
       />
-      <figcaption>Editorial still life for {cats[0].short.toLowerCase()}. Made for this calendar.</figcaption>
+      <figcaption>Exhibition floor for {cats[0].short.toLowerCase()}. Made for this calendar.</figcaption>
     </figure>
 
     <dl class="meta-grid">
@@ -306,7 +308,7 @@ const pageTitle = nameHasYear
     display: block;
     width: 100%;
     height: auto;
-    max-height: 28rem;
+    max-height: 22rem;
     object-fit: cover;
     background: var(--paper-2);
   }

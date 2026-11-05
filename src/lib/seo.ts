@@ -106,7 +106,7 @@ export function eventLd(show: TradeShow): Record<string, unknown> {
       name: show.venue,
       address,
     },
-    image: [abs(`/images/industries/${show.categories[0]}.jpg`)],
+    image: [abs(`/images/industries/${show.categories[0]}.webp`)],
     // This page is an independent listing; the official site is the event's own URL.
     url: show.officialSite ?? abs(`/shows/${show.slug}`),
     mainEntityOfPage: abs(`/shows/${show.slug}`),

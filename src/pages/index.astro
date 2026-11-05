@@ -5,7 +5,6 @@ import RelatedTools from '../components/RelatedTools.astro';
 import ShowRow from '../components/ShowRow.astro';
 import BrowseIndex from '../components/BrowseIndex.astro';
 import { organizationLd, websiteLd } from '../lib/seo';
-import { getIndustryBySlug } from '../data/taxonomy';
 import { siteConfig } from '../../site.config';
 import {
   shows,
@@ -19,7 +18,6 @@ import {
 const featured = getFeaturedShows(7);
 const [next, ...upcoming] = featured;
 const nextDate = next ? getShowDateParts(next) : null;
-const nextIndustry = next ? getIndustryBySlug(next.categories[0]) : undefined;
 const cityCount = getAllCities().length;
 
 const jsonLd = [organizationLd(), websiteLd()];
@@ -49,19 +47,6 @@ const jsonLd = [organizationLd(), websiteLd()];
       {
         next && nextDate && (
           <a class="poster" href={`/shows/${next.slug}/`} aria-label={`Next on the floor: ${next.name}, ${formatShowDates(next)}, ${next.city}`}>
-            {
-              nextIndustry && (
-                <img
-                  class="poster__plate"
-                  src={`/images/industries/${nextIndustry.slug}.jpg`}
-                  alt=""
-                  width="1200"
-                  height="675"
-                  loading="eager"
-                  decoding="async"
-                />
-              )
-            }
             <span class="poster__label">Next on the floor</span>
             <span class="poster__days" aria-hidden="true">{nextDate.days}</span>
             <span class="poster__month" aria-hidden="true">{nextDate.month} {nextDate.year}</span>
@@ -206,8 +191,7 @@ const jsonLd = [organizationLd(), websiteLd()];
   .poster {
     display: grid;
     gap: 0.35rem;
-    padding: 0 1.5rem 1.35rem;
-    overflow: hidden;
+    padding: 1.5rem 1.5rem 1.35rem;
     background: var(--sheet);
     border: 1px solid var(--rule);
     border-top: 3px solid var(--ochre);
@@ -234,15 +218,6 @@ const jsonLd = [organizationLd(), websiteLd()];
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--muted);
-  }
-
-  .poster__plate {
-    width: calc(100% + 3rem);
-    margin: 0 -1.5rem 1.15rem;
-    height: 11rem;
-    object-fit: cover;
-    display: block;
-    background: var(--paper-2);
   }
 
   .poster__label {

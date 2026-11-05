@@ -46,8 +46,10 @@ const h1Html =
   description={industry.description}
   path={path}
   jsonLd={jsonLd}
-  image={`/images/industries/${industry.slug}.jpg`}
-  imageAlt={`Editorial still life for ${industry.short.toLowerCase()} shows`}
+  image={`/images/industries/${industry.slug}.webp`}
+  imageAlt={`Exhibition floor for ${industry.short.toLowerCase()} shows`}
+  imageWidth={960}
+  imageHeight={540}
 >
   <div class="wrap">
     <Crumbs items={crumbs} />
@@ -60,11 +62,11 @@ const h1Html =
       <p class="lead">{industry.standfirst}</p>
       <img
         class="ind-plate"
-        src={`/images/industries/${industry.slug}.jpg`}
-        alt={`Editorial still life for ${industry.short.toLowerCase()} shows`}
-        width="1200"
-        height="675"
-        loading="eager"
+        src={`/images/industries/${industry.slug}.webp`}
+        alt={`Exhibition floor for ${industry.short.toLowerCase()} shows`}
+        width="960"
+        height="540"
+        loading="lazy"
         decoding="async"
       />
     </header>

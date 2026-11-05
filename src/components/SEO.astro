@@ -14,6 +14,8 @@ interface Props {
   /** Absolute or site-relative social image */
   image?: string;
   imageAlt?: string;
+  imageWidth?: number;
+  imageHeight?: number;
 }
 
 const {
@@ -25,6 +27,8 @@ const {
   noindex = false,
   image = '/og-default.png',
   imageAlt = `${siteConfig.name} — Australian trade show calendar and exhibition stand briefs`,
+  imageWidth = 1200,
+  imageHeight = 630,
 } = Astro.props;
 
 const imageUrl = new URL(image, siteConfig.domain).href;
@@ -51,8 +55,8 @@ const schemas = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
 <meta property="og:locale" content={siteConfig.language === 'en' ? 'en_AU' : siteConfig.language} />
 <meta property="og:site_name" content={siteConfig.name} />
 <meta property="og:image" content={imageUrl} />
-<meta property="og:image:width" content="1200" />
-<meta property="og:image:height" content="630" />
+<meta property="og:image:width" content={imageWidth} />
+<meta property="og:image:height" content={imageHeight} />
 <meta property="og:image:alt" content={imageAlt} />
 
 <meta name="twitter:card" content="summary_large_image" />

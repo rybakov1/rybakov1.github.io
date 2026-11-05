@@ -17,10 +17,12 @@ interface Props {
   ogType?: string;
   image?: string;
   imageAlt?: string;
+  imageWidth?: number;
+  imageHeight?: number;
 }
 
 const strings = t();
-const { title, description, path, jsonLd, noindex, ogType, image, imageAlt } = Astro.props;
+const { title, description, path, jsonLd, noindex, ogType, image, imageAlt, imageWidth, imageHeight } = Astro.props;
 ---
 
 <!doctype html>
@@ -34,7 +36,7 @@ const { title, description, path, jsonLd, noindex, ogType, image, imageAlt } = A
     <link rel="preload" href="/fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/instrument-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="sitemap" href="/sitemap-index.xml" />
-    <SEO title={title} description={description} path={path} jsonLd={jsonLd} noindex={noindex} ogType={ogType} image={image} imageAlt={imageAlt} />
+    <SEO title={title} description={description} path={path} jsonLd={jsonLd} noindex={noindex} ogType={ogType} image={image} imageAlt={imageAlt} imageWidth={imageWidth} imageHeight={imageHeight} />
     <Analytics />
   </head>
   <body>
