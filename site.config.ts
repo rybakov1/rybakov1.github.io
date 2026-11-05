@@ -61,13 +61,13 @@ export const siteConfig = {
    * Fires a "Lead" event on successful brief submission.
    */
   analytics: {
-    provider: 'none' as 'none' | 'plausible' | 'ga4',
+    provider: 'ga4' as 'none' | 'plausible' | 'ga4',
     plausible: {
       domain: 'autradeshows.com',
       scriptSrc: 'https://plausible.io/js/script.js',
     },
     ga4: {
-      measurementId: '', // e.g. 'G-XXXXXXXXXX'
+      measurementId: 'G-ZL6D5YZ24S',
     },
   },
 
