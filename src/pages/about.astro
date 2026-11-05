@@ -1,0 +1,115 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { siteConfig } from '../../site.config';
+import { abs, breadcrumbLd } from '../lib/seo';
+
+const email = siteConfig.contactEmail;
+const description =
+  'AU Trade Shows is an independent Australian trade show calendar. Dates are checked on organiser sites; stand briefs go to Brijnco.';
+const crumbs = [
+  { name: 'Home', path: '/' },
+  { name: 'About', path: '/about' },
+];
+const aboutLd = {
+  '@context': 'https://schema.org',
+  '@type': 'AboutPage',
+  '@id': abs('/about/#page'),
+  name: 'About this calendar',
+  url: abs('/about/'),
+  description,
+  inLanguage: siteConfig.locale,
+  isPartOf: { '@id': abs('/#website') },
+  about: { '@id': abs('/#organization') },
+  mainEntity: { '@id': abs('/#organization') },
+};
+---
+
+<BaseLayout
+  title="About this calendar"
+  description={description}
+  path="/about"
+  jsonLd={[aboutLd, breadcrumbLd(crumbs)]}
+>
+  <article class="container section prose about-page">
+    <h1>About this calendar</h1>
+    <p class="lead">
+      {siteConfig.name} lists upcoming Australian trade shows and offers a free stand brief for
+      exhibitors. This page says who publishes it, how a date gets onto the calendar, and how to
+      reach {siteConfig.author}.
+    </p>
+
+    <h2>Who publishes it</h2>
+    <p>
+      {siteConfig.name} is an independent calendar. It is not a show organiser, and it is not
+      affiliated with the organisers or venues of the shows listed here. We do not sell floor
+      space, tickets or booths.
+    </p>
+    <p>
+      The calendar is published in connection with <a href="https://brijnco.com.au">{siteConfig.author}</a>,
+      an Australian exhibition stand builder. That is why the footer names {siteConfig.author}, and
+      why a stand brief is emailed to {siteConfig.author} rather than kept on this domain. {siteConfig.author} builds stands for exhibitors. It does not organise the shows on this calendar.
+    </p>
+
+    <h2 id="how-we-check">How dates are checked</h2>
+    <p>
+      There is no public feed of Australian trade shows. Each listing is kept by hand and checked
+      against the organiser’s own website.
+    </p>
+    <ul>
+      <li>
+        Dates, city, venue and the official website are taken from that organiser page. The show
+        page prints the day of the check (“Checked against official source …”).
+      </li>
+      <li>
+        The official website is linked only when that organiser page was opened for the check.
+        Addresses are not copied from directory sites.
+      </li>
+      <li>
+        If a detail is still unconfirmed — often the venue for a later edition — the row is marked
+        “Partly confirmed” and the show page says what still needs confirming.
+      </li>
+      <li>
+        A longer description appears only when the organiser published one, and it is labelled as
+        coming from their site. If they did not publish one, that block is left off.
+      </li>
+      <li>Editions whose dates have passed are removed, rather than left up with old dates.</li>
+    </ul>
+    <p>
+      Confirm dates, booth rules and floorplans on the organiser’s site before you book. A listing
+      here is a starting point, not the organiser’s notice.
+    </p>
+
+    <h2>Stand briefs</h2>
+    <p>
+      The <a href="/stand-brief">stand brief</a> is optional and free to submit. It asks for the
+      show, stand size, timing and a few practical details so {siteConfig.author} can reply with a
+      relevant quote. The enquiry is emailed to <a href={`mailto:${email}`}>{email}</a>. Any proposal
+      comes from {siteConfig.author}, not from this calendar. The <a href="/privacy">privacy notice</a> lists what the form stores.
+    </p>
+
+    <h2 id="contact">Contact</h2>
+    <p>
+      For a stand, or to correct a listing, email <a href={`mailto:${email}`}>{email}</a>. If a date
+      looks wrong, include the show name and the organiser page you are looking at.
+    </p>
+    <ul>
+      <li>
+        {siteConfig.author}: <a href="https://brijnco.com.au">brijnco.com.au</a>
+      </li>
+      <li>
+        This calendar: <a href={siteConfig.domain}>{siteConfig.domain.replace('https://', '')}</a>
+      </li>
+    </ul>
+  </article>
+</BaseLayout>
+
+<style>
+  .about-page :global(h2) {
+    scroll-margin-top: 5.5rem;
+  }
+
+  .about-page :global(.lead) {
+    font-size: 1.125rem;
+    max-width: 40rem;
+  }
+</style>

@@ -29,13 +29,15 @@ const year = new Date().getFullYear();
         </div>
         <div>
           <p class="footer-nav__label">Legal</p>
+          <a href="/about">About</a>
+          <a href="/about/#contact">Contact</a>
           <a href="/privacy">{strings.privacy}</a>
           <a href="/cookies">{strings.cookies}</a>
         </div>
       </nav>
     </div>
     <div class="site-footer__base">
-      <p>© {year} {siteConfig.author}</p>
+      <p>© {year} <a href="/about">{siteConfig.author}</a></p>
       <p>Independent calendar · Not an official organiser · Not affiliated with listed shows or venues</p>
     </div>
   </div>
@@ -120,6 +122,16 @@ const year = new Date().getFullYear();
 
   .site-footer__base p {
     margin: 0;
+  }
+
+  .site-footer__base a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+
+  .site-footer__base a:hover {
+    color: var(--ochre-deep);
   }
 
   @media (min-width: 720px) {

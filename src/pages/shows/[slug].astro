@@ -43,9 +43,12 @@ const verified = new Date(show.verifiedOn + 'T12:00:00').toLocaleDateString('en-
 });
 const jsonLd = [eventLd(show), breadcrumbLd(crumbs)];
 const year = show.startDate.slice(0, 4);
-const pageTitle = show.name.includes(year)
-  ? `${show.name} — ${show.city} dates & venue`
-  : `${show.name} ${year} — ${show.city} dates & venue`;
+const shortYear = year.slice(2);
+const nameHasYear =
+  show.name.includes(year) || new RegExp(`(?:^|[^0-9])${shortYear}(?:[^0-9]|$)`).test(show.name);
+const pageTitle = nameHasYear
+  ? `${show.name} — dates, venue & stand brief`
+  : `${show.name} ${year} — dates, venue & stand brief`;
 ---
 
 <BaseLayout
@@ -124,7 +127,7 @@ const pageTitle = show.name.includes(year)
     <p class="show-detail__facts">
       {show.audience && <span>{audienceLabel[show.audience]}</span>}
       {show.organiser && <span>Organiser: {show.organiser}</span>}
-      <span>Checked against official source {verified}</span>
+      <span>Checked against <a href="/about/#how-we-check">official source</a> {verified}</span>
     </p>
 
     {
@@ -224,6 +227,12 @@ const pageTitle = show.name.includes(year)
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--muted);
+  }
+
+  .show-detail__facts a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
   }
 
   .show-detail__facts span + span::before {

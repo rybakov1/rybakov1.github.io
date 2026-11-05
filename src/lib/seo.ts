@@ -15,7 +15,20 @@ export function organizationLd(): Record<string, unknown> {
     logo: abs('/favicon.svg'),
     description: siteConfig.niche,
     areaServed: { '@type': 'Country', name: 'Australia' },
-    parentOrganization: { '@type': 'Organization', name: siteConfig.author },
+    email: siteConfig.contactEmail,
+    parentOrganization: {
+      '@type': 'Organization',
+      name: siteConfig.author,
+      url: 'https://brijnco.com.au',
+    },
+    contactPoint: {
+      '@type': 'ContactPoint',
+      contactType: 'customer support',
+      email: siteConfig.contactEmail,
+      url: abs('/about/#contact'),
+      areaServed: 'AU',
+      availableLanguage: 'English',
+    },
   };
 }
 

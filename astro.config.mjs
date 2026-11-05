@@ -11,7 +11,7 @@ export default defineConfig({
   build: { format: 'directory' },
   integrations: [
     sitemap({
-      filter: (page) => !/\/(thanks)(\/|$)/.test(page),
+      filter: (page) => !/\/(thanks|contact)(\/|$)/.test(page),
       changefreq: 'weekly',
       lastmod: new Date(),
     }),
