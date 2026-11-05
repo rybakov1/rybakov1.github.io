@@ -10,7 +10,7 @@
  *   RESEND_API_KEY      secret  — Resend API key (required for email)
  *   LEAD_TO_EMAIL       text    — lead inbox; comma-separate for several (required for email)
  *   LEAD_CC_EMAIL       text    — optional CC (comma-separated)
- *   LEAD_FROM_EMAIL     text    — optional; default "Trade Show Stands <leads@tradeshowstands.com.au>"
+ *   LEAD_FROM_EMAIL     text    — optional; default "AU Trade Shows <briefs@autradeshows.com>"
  *                                 (domain must be verified in Resend)
  *   LEAD_WEBHOOK_URL    secret  — optional; JSON POST of every lead (Slack/Make/n8n/CRM)
  *   LEAD_WEBHOOK_SECRET secret  — optional; sent as X-Lead-Secret header
@@ -52,14 +52,14 @@ interface Ctx {
   waitUntil?: (p: Promise<unknown>) => void;
 }
 
-const DEFAULT_FROM = 'Trade Show Stands <leads@tradeshowstands.com.au>';
+const DEFAULT_FROM = 'AU Trade Shows <briefs@autradeshows.com>';
 const MAX_BODY_BYTES = 32 * 1024;
 const RATE_WINDOW_S = 10 * 60;
 const RATE_MAX = 5;
 
 const SITE_ORIGINS = [
-  'https://tradeshowstands.com.au',
-  'https://www.tradeshowstands.com.au',
+  'https://autradeshows.com',
+  'https://www.autradeshows.com',
 ];
 
 // Best-effort per-isolate memory limiter (backed by KV when bound).
@@ -104,7 +104,7 @@ function originAllowed(origin: string | null, requestUrl: string, env: Env): boo
   try {
     const u = new URL(origin);
     if (u.hostname === 'localhost' || u.hostname === '127.0.0.1') return true;
-    if (u.hostname.endsWith('.pages.dev')) return true; // CF preview deployments
+    if (u.hostname.endsWith('.pages.dev') || u.hostname.endsWith('.workers.dev')) return true;
   } catch {
     return false;
   }

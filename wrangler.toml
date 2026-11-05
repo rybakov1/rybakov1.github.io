@@ -1,9 +1,18 @@
 # Git build on Cloudflare runs `npx wrangler deploy`.
 # The Worker name must match the connected project (rybakov1/rybakov1.github.io).
 name = "rybakov1-github-io"
+main = "worker/index.ts"
 compatibility_date = "2025-09-01"
 
 [assets]
 directory = "./dist"
+binding = "ASSETS"
 not_found_handling = "404-page"
 html_handling = "auto-trailing-slash"
+# Pages are served as files. Only the brief API is handled by the Worker.
+run_worker_first = ["/api/*"]
+
+[vars]
+LEAD_TO_EMAIL = "info@brijnco.com"
+LEAD_CC_EMAIL = "support.inuapps@gmail.com"
+LEAD_FROM_EMAIL = "AU Trade Shows <briefs@autradeshows.com>"

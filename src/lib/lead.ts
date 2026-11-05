@@ -245,7 +245,7 @@ function leadRows(lead: Lead): [string, string][] {
 export function leadText(lead: Lead): string {
   const rows = leadRows(lead).map(([k, v]) => `${k}: ${v}`);
   return [
-    'New exhibition stand brief — tradeshowstands.com.au',
+    'New exhibition stand brief — autradeshows.com',
     '',
     ...rows,
     '',
@@ -278,7 +278,7 @@ export function leadHtml(lead: Lead): string {
 <p style="margin:0;font:15px/1.5 Georgia,serif;color:#1b1a17;white-space:pre-wrap">${esc(lead.message || '—')}</p>
 <p style="margin:20px 0 0;font:12px/1.4 sans-serif;color:#6b6458">Reply to this email to contact ${esc(
     lead.fullName
-  )} directly. Sent from the stand brief form on tradeshowstands.com.au.</p>
+  )} directly. Sent from the stand brief form on autradeshows.com.</p>
 </div></body></html>`;
 }
 
@@ -287,7 +287,7 @@ export function webhookPayload(lead: Lead): Record<string, unknown> {
   const { ip: _ip, userAgent: _ua, ...rest } = lead;
   return {
     type: 'stand_brief',
-    source: 'tradeshowstands.com.au',
+    source: 'autradeshows.com',
     text: leadSubject(lead), // Slack-compatible summary line
     lead: rest,
   };

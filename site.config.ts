@@ -26,12 +26,9 @@ export const siteConfig = {
     'Independent calendar of Australian trade shows and a free exhibition stand brief for exhibitors',
   /** Operator / publisher (soft brand) */
   author: 'Brijnco',
-  /**
-   * Public contact address shown on Privacy page.
-   * PLACEHOLDER until the domain + mailbox exist. Set to '' to hide.
-   */
-  contactEmail: 'hello@autradeshows.com',
-  contactEmailIsPlaceholder: true,
+  /** Public contact. Stand briefs are emailed here (and copied to LEAD_CC_EMAIL). */
+  contactEmail: 'info@brijnco.com',
+  contactEmailIsPlaceholder: false,
   /** Soft brand line in footer — do not oversell */
   poweredByNote:
     'An independent show calendar. Stand enquiries are handled by Brijnco, an Australian exhibition stand builder.',
@@ -46,10 +43,10 @@ export const siteConfig = {
     endpoint: '/api/lead',
     /**
      * mailto fallback — used ONLY when the endpoint is unreachable (404/network),
-     * e.g. `astro dev` / `astro preview` without Functions. Placeholder address:
-     * replace once the sister's lead inbox is known (also set LEAD_TO_EMAIL env).
+     * e.g. `astro dev` / `astro preview` without the Worker. Production always
+     * posts to /api/lead so the copy to LEAD_CC_EMAIL is included.
      */
-    mailtoFallbackEmail: 'LEADS-INBOX-TBC@brijnco.example',
+    mailtoFallbackEmail: 'info@brijnco.com',
     mailtoFallbackEnabled: true,
     /** Only allow the mailto fallback on these hosts (local dev / preview) */
     mailtoFallbackHosts: ['localhost', '127.0.0.1'],
