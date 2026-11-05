@@ -41,7 +41,14 @@ const h1Html =
     : `<em>${escHtml(industry.name)}</em>`;
 ---
 
-<BaseLayout title={industry.title} description={industry.description} path={path} jsonLd={jsonLd}>
+<BaseLayout
+  title={industry.title}
+  description={industry.description}
+  path={path}
+  jsonLd={jsonLd}
+  image={`/images/industries/${industry.slug}.jpg`}
+  imageAlt={`Editorial still life for ${industry.short.toLowerCase()} shows`}
+>
   <div class="wrap">
     <Crumbs items={crumbs} />
     <header class="page-head ind-head">
@@ -51,6 +58,15 @@ const h1Html =
       </p>
       <h1 set:html={h1Html} />
       <p class="lead">{industry.standfirst}</p>
+      <img
+        class="ind-plate"
+        src={`/images/industries/${industry.slug}.jpg`}
+        alt={`Editorial still life for ${industry.short.toLowerCase()} shows`}
+        width="1200"
+        height="675"
+        loading="eager"
+        decoding="async"
+      />
     </header>
 
     <LandingIntro
@@ -89,6 +105,16 @@ const h1Html =
 </BaseLayout>
 
 <style>
+  .ind-plate {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 22rem;
+    object-fit: cover;
+    margin-top: 1.5rem;
+    background: var(--paper-2);
+  }
+
   .ind-head h1 {
     font-size: clamp(2.5rem, 7vw, 4.5rem);
     max-width: 16ch;
