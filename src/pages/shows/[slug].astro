@@ -79,6 +79,14 @@ const pageTitle = show.name.includes(year)
           )
         }
         <p class="lead" style="margin-bottom: 0;">{show.blurb}</p>
+        {
+          show.officialDescription && (
+            <div class="show-detail__official">
+              <p>{show.officialDescription}</p>
+              <p class="show-detail__source">From the organiser’s website</p>
+            </div>
+          )
+        }
       </div>
     </header>
 
@@ -265,6 +273,24 @@ const pageTitle = show.name.includes(year)
     display: grid;
     gap: 1.5rem;
     padding-bottom: clamp(2rem, 5vw, 3rem);
+  }
+
+  .show-detail__official {
+    max-width: 42rem;
+    margin-top: 1.25rem;
+  }
+
+  .show-detail__official p {
+    margin: 0;
+  }
+
+  .show-detail__source {
+    margin-top: 0.45rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-2);
   }
 
   .show-detail__head h1 {

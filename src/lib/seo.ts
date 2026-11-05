@@ -67,7 +67,7 @@ export function eventLd(show: TradeShow): Record<string, unknown> {
     '@context': 'https://schema.org',
     '@type': 'Event',
     name: show.name,
-    description: show.blurb,
+    description: show.officialDescription || show.blurb,
     startDate: show.startDate,
     endDate: show.endDate,
     eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',

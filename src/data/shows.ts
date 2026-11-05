@@ -38,6 +38,11 @@ export interface TradeShow {
   /** Who runs it, as stated by the official site (optional) */
   organiser?: string;
   blurb: string;
+  /**
+   * Short description taken from the organiser’s own page.
+   * Leave unset when that page has no real description — the show page then omits it.
+   */
+  officialDescription?: string;
   /** Trade-only / consumer / mixed — helps exhibitors judge the audience */
   audience?: 'trade' | 'consumer' | 'mixed';
   eventStatus?: EventStatus;
@@ -87,6 +92,8 @@ export const shows: TradeShow[] = [
     audience: 'consumer',
     blurb:
       'Outdoor 4WD, caravan, camping and boating show on the Swan River foreshore at McCallum Park.',
+    officialDescription:
+      "The 4WD and Adventure Shows have all the latest releases in camper trailers and caravans, new model SUVs and 4WDs, camping gear, 4WD accessories, boats and fishing gear, travel info and so much more. With entertainment and attractions, special guests, technical information and know-how, expert demonstrations and plenty of tips and tricks, the 4WD and Adventure Show is your starting point before your next adventure.",
     verifiedOn: V,
   },
   {
@@ -103,6 +110,8 @@ export const shows: TradeShow[] = [
     audience: 'trade',
     blurb:
       'International sourcing show connecting Australian buyers with manufacturers across apparel, textiles, footwear and homewares.',
+    officialDescription:
+      "Global Sourcing Expo Melbourne 2026 brings together leading international manufacturers, suppliers, wholesalers and sourcing partners from around the world. Hosted at the Melbourne Convention and Exhibition Centre, the event provides Australian businesses with direct access to global supply chains across apparel, textiles, footwear, homewares and consumer products.",
     verifiedOn: V,
   },
   {
@@ -121,6 +130,8 @@ export const shows: TradeShow[] = [
     audience: 'trade',
     blurb:
       'Military Communications and Information Systems conference with a three-day expo for defence, government and industry.',
+    officialDescription:
+      "The annual Military Communications and Information Systems (MilCIS) Conference welcomes military and government organisations, academia, and defence industries to contribute to the future direction of military communications and information systems.",
     verifiedOn: V,
   },
   {
@@ -136,6 +147,8 @@ export const shows: TradeShow[] = [
     audience: 'consumer',
     blurb:
       'Festive consumer edition of the Good Food & Wine Show, featuring The Great Australian Bake Off.',
+    officialDescription:
+      "Explore the Good Food & Wine Show — live demos, tastings, top chefs, and premium exhibitors across Australia’s biggest foodie events.",
     verifiedOn: V,
   },
   {
@@ -152,6 +165,8 @@ export const shows: TradeShow[] = [
     audience: 'trade',
     blurb:
       'National rail conference and exhibition for passenger and freight operators, rollingstock manufacturers, contractors and suppliers.',
+    officialDescription:
+      "The rail industry’s leading conference and exhibition. AusRAIL attracts key industry leaders and decision makers from across Australia, New Zealand and beyond.",
     verifiedOn: V,
   },
   {
@@ -167,6 +182,8 @@ export const shows: TradeShow[] = [
     audience: 'trade',
     blurb:
       'Victoria’s large construction and design expo — contractors, architects, developers, suppliers and CPD summits.',
+    officialDescription:
+      "VIC’s largest construction and design show. Connecting the entire construction industry under one roof.",
     verifiedOn: V,
   },
   {
@@ -182,6 +199,8 @@ export const shows: TradeShow[] = [
     audience: 'consumer',
     blurb:
       'Festive Melbourne consumer edition of the Good Food & Wine Show, featuring The Great Australian Bake Off.',
+    officialDescription:
+      "Explore the Good Food & Wine Show — live demos, tastings, top chefs, and premium exhibitors across Australia’s biggest foodie events.",
     verifiedOn: V,
   },
   // ───────────── February – March 2027 ─────────────
@@ -198,6 +217,8 @@ export const shows: TradeShow[] = [
     audience: 'trade',
     blurb:
       'Asia-Pacific business-events marketplace. Knowledge Monday on 15 February; trade show and pre-scheduled meetings on 16–17 February.',
+    officialDescription:
+      "Asia Pacific’s largest and longest running business events trade show. AIME is the leading event for the meetings, incentives and events industry in the Asia Pacific region.",
     verifiedOn: V,
   },
   {
@@ -213,6 +234,8 @@ export const shows: TradeShow[] = [
     audience: 'trade',
     blurb:
       'NSW wholesale buying fair — 350+ exhibitors across gift, home, fashion, kids, beauty and garden, co-located with Life Instyle.',
+    officialDescription:
+      "Reed Retail Fairs Sydney is NSW’s biggest week in retail, in the heart of Darling Harbour. See, touch and feel the latest season releases at a trade buying event that showcases hundreds of premium and emerging wholesale brands across seven curated categories.",
     verifiedOn: V,
   },
   {
@@ -229,6 +252,8 @@ export const shows: TradeShow[] = [
     audience: 'trade',
     blurb:
       'Australia’s upstream oil and gas exhibition — operators, contractors and suppliers, plus decommissioning, offshore wind, CCS and hydrogen.',
+    officialDescription:
+      "Energy Exchange Australia, the evolution of AOG, is Australia’s upstream oil and gas event. It connects operators, suppliers and technology providers from across Australia and the wider Asia-Pacific region.",
     verifiedOn: V,
   },
   {
@@ -247,6 +272,8 @@ export const shows: TradeShow[] = [
     audience: 'consumer',
     blurb:
       'Industry-run caravan, camping and outdoor-lifestyle show — caravans, campers, hybrids and motorhomes from member exhibitors.',
+    officialDescription:
+      "The Supershow is where the adventure truly begins. Explore thousands of products, compare Australia’s top brands side-by-side, and get inspired to plan your next journey, all in one outdoor event.",
     verifiedOn: V,
   },
   {
@@ -262,6 +289,8 @@ export const shows: TradeShow[] = [
     audience: 'consumer',
     blurb:
       'Home improvement exhibition at ICC Sydney — renovation, building and home products for Sydney homeowners. Next published edition after October 2026.',
+    officialDescription:
+      "Discover endless possibilities for your dream home at Australia’s premier home improvement exhibition. Step into the Sydney Home Show and explore hundreds of home products, exclusive show specials, free seminars, and expert advice from Australia’s top renovators and builders.",
     verifiedOn: '2026-11-04',
   },
   {
@@ -277,6 +306,8 @@ export const shows: TradeShow[] = [
     audience: 'trade',
     blurb:
       'Large processing and packaging expo — machinery, materials, food processing and logistics across MCEC.',
+    officialDescription:
+      "Australia’s largest processing and packaging expo. APPEX 2027 takes over all 20 bays of the MCEC, creating a 30,000m² showcase of the latest technology, innovation, expertise and ideas shaping the future of the processing and packaging industry.",
     verifiedOn: V,
   },
   {
@@ -329,6 +360,8 @@ export const shows: TradeShow[] = [
     audience: 'consumer',
     blurb:
       'WA’s industry caravan and camping show, run by the state’s peak caravan and camping body.',
+    officialDescription:
+      "Join us at WA’s biggest and best caravan show, from 18–21 March 2027.",
     verifiedOn: V,
     illustrative: true,
     flagNote:
@@ -349,6 +382,8 @@ export const shows: TradeShow[] = [
     audience: 'trade',
     blurb:
       'Tenth edition of the construction festival — 700+ exhibitors across six halls, 16 conference stages and a new HVACR Zone for 2027.',
+    officialDescription:
+      "Australia’s largest construction and design show features 28,000+ attendees, 750+ speakers across 16 stages, CPD workshops, 700+ exhibitors, live demos, networking parties, entertainment and so much more.",
     verifiedOn: V,
   },
   {
@@ -366,6 +401,8 @@ export const shows: TradeShow[] = [
     audience: 'trade',
     blurb:
       'Hotel industry conference and exhibition for owners, operators, investors, designers and technology suppliers.',
+    officialDescription:
+      "The Asia Pacific Hotel Industry Conference & Exhibition (AHICE APAC) brings together the region’s leading hotel owners, operators, investors and innovators in Adelaide for the Asia Pacific’s largest hotel industry conference.",
     verifiedOn: V,
   },
   {
@@ -382,6 +419,8 @@ export const shows: TradeShow[] = [
     audience: 'trade',
     blurb:
       'Precision and advanced manufacturing exhibition — machine tools, additive manufacturing, robotics and automation, weld and air solutions.',
+    officialDescription:
+      "Australian Manufacturing Week serves as the centrepiece of a week-long celebration of manufacturing in Australia. 11–14 May 2027 in Melbourne.",
     verifiedOn: V,
   },
   {
@@ -399,6 +438,8 @@ export const shows: TradeShow[] = [
     audience: 'trade',
     blurb:
       'Australia’s largest tourism tradeshow, connecting Australian tourism businesses with international travel buyers through scheduled appointments.',
+    officialDescription:
+      "ATE will return to Sydney in 2027 for the first time in five years. ATE27 will showcase everything Sydney and regional New South Wales has to offer.",
     verifiedOn: V,
   },
   {
@@ -433,6 +474,8 @@ export const shows: TradeShow[] = [
     audience: 'trade',
     blurb:
       'The ADA’s national dental congress — scientific program, hands-on workshops and an exhibition hall for dental suppliers.',
+    officialDescription:
+      "Australian Dental Congress is the region’s premier event for the dental profession, organised by the Australian Dental Association, with more than 200 hours of presentations, workshops, informal learning and networking.",
     verifiedOn: V,
   },
   {
@@ -449,6 +492,8 @@ export const shows: TradeShow[] = [
     audience: 'mixed',
     blurb:
       'Biennial heavy-vehicle show marking its 60th anniversary in 2027 — trucks, trailers, parts and technology across all levels of BCEC.',
+    officialDescription:
+      "The Brisbane Truck Show is your premier destination to discover the latest innovations, trends, and stories shaping the industry.",
     verifiedOn: V,
   },
   {
@@ -465,6 +510,8 @@ export const shows: TradeShow[] = [
     audience: 'mixed',
     blurb:
       'The 38th Sanctuary Cove International Boat Show — four days of on-water and land displays from global and local marine brands.',
+    officialDescription:
+      "Join us from 20–23 May 2027 on Queensland’s Gold Coast for Australia’s largest boating showcase, the Sanctuary Cove International Boat Show.",
     verifiedOn: V,
   },
   {
@@ -480,6 +527,8 @@ export const shows: TradeShow[] = [
     audience: 'consumer',
     blurb:
       'Melbourne’s main Good Food & Wine Show — producers, wineries, chef stages and masterclasses at MCEC.',
+    officialDescription:
+      "Explore the Good Food & Wine Show — live demos, tastings, top chefs, and premium exhibitors across Australia’s biggest foodie events.",
     verifiedOn: V,
   },
   {
@@ -510,6 +559,8 @@ export const shows: TradeShow[] = [
     audience: 'consumer',
     blurb:
       'Sydney’s main Good Food & Wine Show — producers, wineries, chef stages and masterclasses.',
+    officialDescription:
+      "Explore the Good Food & Wine Show — live demos, tastings, top chefs, and premium exhibitors across Australia’s biggest foodie events.",
     verifiedOn: '2026-11-04',
   },
   // ───────────── July – November 2027 ─────────────
@@ -528,6 +579,8 @@ export const shows: TradeShow[] = [
     audience: 'trade',
     blurb:
       'Intralogistics, robotics, automation and materials-handling trade show for warehousing and supply-chain professionals. Free to attend.',
+    officialDescription:
+      "CeMAT Australia is the leading event for intralogistics, robotics and automation, supply chain management and materials handling in the Asia-Pacific, with the latest warehousing and logistics technology in one hands-on environment.",
     verifiedOn: V,
   },
   {
@@ -546,6 +599,8 @@ export const shows: TradeShow[] = [
     audience: 'mixed',
     blurb:
       'New international boat show launching in 2027 — indoor halls at ICC Sydney plus an on-water display in Cockle Bay.',
+    officialDescription:
+      "Discover the city’s largest in-water boat show. Experience luxury yachts, marine innovation, and waterfront events at Australian International Boat Show, Sydney.",
     verifiedOn: V,
   },
   {
@@ -561,6 +616,8 @@ export const shows: TradeShow[] = [
     audience: 'trade',
     blurb:
       'Five-day wholesale buying fair — 450+ exhibitors for Christmas and Spring/Summer buying, with access to sister event Life Instyle.',
+    officialDescription:
+      "Reed Retail Fairs Melbourne is a destination for Australian retailers, with premium wholesalers across gift and lifestyle, home and décor, fashion and accessories, kids and family, and beauty and wellness.",
     verifiedOn: V,
   },
   {
@@ -575,6 +632,8 @@ export const shows: TradeShow[] = [
     officialSite: 'https://goodfoodshow.com.au/',
     audience: 'consumer',
     blurb: 'Perth edition of the Good Food & Wine Show — producers, wineries and chef stages.',
+    officialDescription:
+      "Explore the Good Food & Wine Show — live demos, tastings, top chefs, and premium exhibitors across Australia’s biggest foodie events.",
     verifiedOn: '2026-11-04',
   },
   {
@@ -591,6 +650,8 @@ export const shows: TradeShow[] = [
     audience: 'trade',
     blurb:
       'Australia’s security industry exhibition — electronic security, integration and technology — in Halls 6 & 7, free to attend.',
+    officialDescription:
+      "The Security Exhibition & Conference is the most established and respected trade event for the security industry in Australia, bringing together suppliers, industry professionals and end users.",
     verifiedOn: V,
   },
   {
@@ -609,6 +670,8 @@ export const shows: TradeShow[] = [
     audience: 'trade',
     blurb:
       'Northern Australia’s resources and construction event — three conferences plus a trade exhibition on the Darwin Waterfront.',
+    officialDescription:
+      "Northern Australia’s largest resources and construction industry conferences and exhibition.",
     verifiedOn: V,
   },
   {
@@ -624,6 +687,8 @@ export const shows: TradeShow[] = [
     audience: 'trade',
     blurb:
       'National food and beverage trade show returning to ICC Sydney — retail, foodservice and hospitality buyers.',
+    officialDescription:
+      "Fine Food Australia is the country’s leading trade event for the foodservice and hospitality industry. For over 40 years, it has been where the industry gathers to discover the latest products, uncover new trends, connect with suppliers, and hear from experts shaping the future of food.",
     verifiedOn: V,
   },
   {
@@ -656,6 +721,8 @@ export const shows: TradeShow[] = [
     audience: 'trade',
     blurb:
       'Queensland’s foodservice, hospitality and retail trade show for operators, suppliers and buyers.',
+    officialDescription:
+      "Food & Hospitality Queensland is the definitive trade event for the foodservice, hospitality, retail and convenience sectors. It connects hospitality business owners, retail buyers, distributors, foodservice operators and chefs looking to discover new products, innovations and solutions.",
     verifiedOn: '2026-11-04',
   },
   {
@@ -671,6 +738,8 @@ export const shows: TradeShow[] = [
     audience: 'trade',
     blurb:
       'Australia’s flagship mining week — conference, expo and investment forums connecting global resources leaders in Sydney.',
+    officialDescription:
+      "The International Mining and Resources Conference + Expo (IMARC) brings together the global mining industry in Sydney, a meeting point for ideas, investment and collaboration. IMARC connects leaders, mine site personnel, investors and decision-makers across the mining value chain, through a multi-stream conference and an exhibition of 500+ solution providers.",
     verifiedOn: '2026-11-04',
   },
   {
@@ -686,6 +755,8 @@ export const shows: TradeShow[] = [
     audience: 'consumer',
     blurb:
       'Consumer food and wine show with chef stages, wine pavilions and tasting experiences over three days at BCEC.',
+    officialDescription:
+      "Explore the Good Food & Wine Show — live demos, tastings, top chefs, and premium exhibitors across Australia’s biggest foodie events.",
     verifiedOn: '2026-11-04',
   },
   {
@@ -701,6 +772,8 @@ export const shows: TradeShow[] = [
     audience: 'trade',
     blurb:
       'B2B clean-energy exhibition and conference — suppliers, grid technology, storage, EV infrastructure and industry sessions.',
+    officialDescription:
+      "All Energy Australia is the largest B2B renewable energy conference and exhibition in APAC.",
     verifiedOn: '2026-11-04',
   },
   {
@@ -717,6 +790,8 @@ export const shows: TradeShow[] = [
     audience: 'trade',
     blurb:
       'Biennial maritime and naval defence exposition for defence, industry and government — the fifteenth in the series.',
+    officialDescription:
+      "The region’s premier commercial maritime and naval defence exposition, connecting defence, industry, government and academia.",
     verifiedOn: V,
   },
   {
@@ -735,6 +810,8 @@ export const shows: TradeShow[] = [
     audience: 'trade',
     blurb:
       'Military communications and information systems conference and expo — 2027 dates as published in the organiser’s future-dates list.',
+    officialDescription:
+      "The annual Military Communications and Information Systems (MilCIS) Conference welcomes military and government organisations, academia, and defence industries to contribute to the future direction of military communications and information systems.",
     verifiedOn: V,
     illustrative: true,
     flagNote:
