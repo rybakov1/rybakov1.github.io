@@ -24,8 +24,8 @@ const jsonLd = [organizationLd(), websiteLd()];
 ---
 
 <BaseLayout
-  title="AU Trade Shows — Australian exhibition calendar and stand briefs"
-  description="Upcoming Australian trade shows for 2026–2027 in Sydney, Melbourne, Brisbane, Perth and more — then send a free exhibition stand brief. Independent calendar; stand enquiries handled by Brijnco."
+  title="Australian trade shows calendar 2027 | AU Trade Shows"
+  description="Upcoming Australian trade shows for 2026–2027 in Sydney, Melbourne, Brisbane and Perth. Free exhibition stand brief for exhibitors."
   path="/"
   jsonLd={jsonLd}
 >
@@ -59,20 +59,21 @@ const jsonLd = [organizationLd(), websiteLd()];
     </div>
 
     <div class="wrap">
+      <h2 class="steps__heading">How it works</h2>
       <ol class="steps" aria-label="How it works">
         <li>
           <span class="steps__num">01</span>
-          <h2 class="steps__title">Pick a show</h2>
+          <h3 class="steps__title">Pick a show</h3>
           <p>{shows.length} curated exhibitions across {cityCount} cities, filterable by industry.</p>
         </li>
         <li>
           <span class="steps__num">02</span>
-          <h2 class="steps__title">Brief the stand</h2>
+          <h3 class="steps__title">Brief the stand</h3>
           <p>Size, type, budget and timing in one tidy form. About three minutes.</p>
         </li>
         <li>
           <span class="steps__num">03</span>
-          <h2 class="steps__title">Hear from a builder</h2>
+          <h3 class="steps__title">Hear from a builder</h3>
           <p>Brijnco, an Australian stand builder, replies to you directly.</p>
         </li>
       </ol>
@@ -115,20 +116,20 @@ const jsonLd = [organizationLd(), websiteLd()];
         </p>
         <a class="btn btn--ink" href="/stand-brief">Start your stand brief</a>
       </div>
-      <dl class="brief-band__types">
-        <div>
-          <dt>Shell scheme</dt>
-          <dd>Organiser walls, upgraded with graphics, lighting and furniture.</dd>
-        </div>
-        <div>
-          <dt>Space only</dt>
-          <dd>Raw floor space, designed and built to your footprint.</dd>
-        </div>
-        <div>
-          <dt>Custom build</dt>
-          <dd>Bespoke joinery and structures for flagship presence.</dd>
-        </div>
-      </dl>
+      <ul class="brief-band__types">
+        <li>
+          <h3>Shell scheme</h3>
+          <p>Organiser walls, upgraded with graphics, lighting and furniture.</p>
+        </li>
+        <li>
+          <h3>Space only</h3>
+          <p>Raw floor space, designed and built to your footprint.</p>
+        </li>
+        <li>
+          <h3>Custom build</h3>
+          <p>Bespoke joinery and structures for flagship presence.</p>
+        </li>
+      </ul>
     </div>
   </section>
 
@@ -277,10 +278,20 @@ const jsonLd = [organizationLd(), websiteLd()];
   /* Steps: numbered ruled row */
   .steps {
     list-style: none;
-    margin: clamp(3rem, 7vw, 5rem) 0 0;
+    margin: 0;
     padding: 0;
     display: grid;
     border-top: 1px solid var(--ink);
+  }
+
+  .steps__heading {
+    margin: clamp(3rem, 7vw, 5rem) 0 0.85rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ochre);
   }
 
   .steps li {
@@ -362,25 +373,28 @@ const jsonLd = [organizationLd(), websiteLd()];
 
   .brief-band__types {
     margin: 0;
+    padding: 0;
+    list-style: none;
     display: grid;
     border-top: 1px solid var(--ink);
   }
 
-  .brief-band__types div {
+  .brief-band__types li {
     display: grid;
     gap: 0.2rem;
     padding: 1.1rem 0;
     border-bottom: 1px solid var(--rule);
   }
 
-  .brief-band__types dt {
+  .brief-band__types h3 {
+    margin: 0;
     font-family: var(--font-display);
     font-size: 1.2rem;
     font-weight: 420;
     color: var(--ink);
   }
 
-  .brief-band__types dd {
+  .brief-band__types p {
     margin: 0;
     font-size: 0.925rem;
     color: var(--muted);
