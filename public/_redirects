@@ -1,4 +1,5 @@
 # Cloudflare Pages redirects (www → apex is better done with a Cloudflare Redirect Rule; see DEPLOY.md)
-/shows/          /shows          301
+# Do not redirect /shows/ → /shows. The calendar is shows/index.html, and
+# html_handling already redirects /shows → /shows/. The reverse rule loops.
 /builders        /exhibition-stand-builders  301
 /guide           /exhibition-stand-builders  301
