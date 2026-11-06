@@ -22,7 +22,7 @@ jobs:
       run:
         working-directory: autodiag
     env:
-      NEXT_PUBLIC_SITE_URL: https://rybakov1.github.io
+      NEXT_PUBLIC_SITE_URL: https://diagdoc.ru
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -60,5 +60,6 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
 
 
