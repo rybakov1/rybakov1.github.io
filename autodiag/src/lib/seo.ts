@@ -18,8 +18,8 @@ export function pageMetadata({ title, description, path, noindex = false }: {
     title,
     description,
     alternates: { canonical: url },
-    robots: { index: false, follow: true },
-    openGraph: { title, description, url, siteName: "AutoDiag", locale: "ru_RU", type: "website" },
+    robots: noindex ? { index: false, follow: true } : { index: true, follow: true },
+    openGraph: { title, description, url, siteName: "DiagDoc", locale: "ru_RU", type: "website" },
     twitter: { card: "summary", title, description },
   };
 }
@@ -49,7 +49,7 @@ export function articleJsonLd({ title, description, path, updatedAt }: {
     headline: title,
     description,
     mainEntityOfPage: absoluteUrl(path),
-    publisher: { "@type": "Organization", name: "AutoDiag" },
+    publisher: { "@type": "Organization", name: "DiagDoc" },
     ...(updatedAt ? { dateModified: updatedAt } : {}),
   };
 }
@@ -58,4 +58,5 @@ export function articleJsonLd({ title, description, path, updatedAt }: {
 export function jsonLd(value: unknown): string {
   return JSON.stringify(value).replace(/</g, "\\u003c");
 }
+
 

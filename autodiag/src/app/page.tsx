@@ -3,7 +3,7 @@ import { ArrowDown, ArrowRight, ArrowUpRight, Activity, BookOpen, CircleGauge, C
 import { codes, symptoms, indicators, guides } from "@/data/content";
 import { SearchBox } from "@/components/search";
 import { pageMetadata } from "@/lib/seo";
-export const metadata = pageMetadata({ title: "AutoDiag — понятный справочник автомобильной диагностики", description: "Найдите значение кода OBD-II, разберитесь в симптомах и сигналах приборной панели.", path: "/" });
+export const metadata = pageMetadata({ title: "DiagDoc — понятный справочник автомобильной диагностики", description: "Найдите значение кода OBD-II, разберитесь в симптомах и сигналах приборной панели.", path: "/" });
 const live = <T extends { status: string }>(items: T[]) => items.filter(i => i.status !== "draft");
 export default function Home() {
  const popular=live(codes).slice(0,4), symptomsList=live(symptoms), lights=live(indicators), articles=live(guides);

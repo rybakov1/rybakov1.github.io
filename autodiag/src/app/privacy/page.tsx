@@ -1,1 +1,4 @@
+import { pageMetadata } from "@/lib/seo";
+export const metadata = pageMetadata({ title: "Политика конфиденциальности", description: "Как работает поиск и какие данные используются на сайте DiagDoc.", path: "/privacy/" });
 export default function Privacy(){return <div className="shell simple-page"><span className="kicker">ИНФОРМАЦИЯ</span><h1>Конфиденциальность<span className="orange">.</span></h1><p>В демонстрационной версии поиск и фильтры работают в вашем браузере. Сайт не содержит форм отправки персональных данных, рекламных блоков или подключённой аналитики.</p><p>Перед подключением аналитики, рекламы или других внешних сервисов необходимо обновить эту страницу и при необходимости настроить получение согласия пользователя.</p></div>}
+
