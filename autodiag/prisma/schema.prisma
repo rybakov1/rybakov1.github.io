@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum ContentType {
+  CODE
+  SYMPTOM
+  INDICATOR
+  GUIDE
+}
+
+enum PublicationStatus {
+  DRAFT
+  NEEDS_REVIEW
+  PUBLISHED
+}
+
+// Structured editorial content is independent of its page presentation.
+model ContentItem {
+  id                 String            @id @default(cuid())
+  type               ContentType
+  slug               String
+  title              String
+  summary            String
+  category           String
+  status             PublicationStatus @default(DRAFT)
+  sections           Json
+  related            Json
+  sources            Json
+  verificationStatus String            @default("unverified")
+  verifiedAt         DateTime?
+  updatedAt          DateTime
+  code               String?           @unique
+  system             String?
+  group              String?
+  severity           String?
+  createdAt          DateTime          @default(now())
+  importedAt         DateTime          @updatedAt
+
+  @@unique([type, slug])
+  @@index([status, type])
+  @@index([status, system])
+}
