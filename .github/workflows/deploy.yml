@@ -1,5 +1,5 @@
-# Build Astro and deploy to GitHub Pages
-name: Deploy to GitHub Pages
+# Build AutoDiag and deploy the static export to GitHub Pages.
+name: Deploy AutoDiag to GitHub Pages
 
 on:
   push:
@@ -18,29 +18,34 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: autodiag
+    env:
+      NEXT_PUBLIC_SITE_URL: https://rybakov1.github.io
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: "22"
+          node-version: '22'
           cache: npm
-
+          cache-dependency-path: autodiag/package-lock.json
       - name: Install dependencies
         run: npm ci
-
+      - name: Generate Prisma client
+        run: npm run db:generate
+      - name: Validate content
+        run: npm run content:check
       - name: Build
         run: npm run build
-
       - name: Setup Pages
         uses: actions/configure-pages@v4
-
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
-          path: dist
+          path: autodiag/out
 
   deploy:
     environment:
