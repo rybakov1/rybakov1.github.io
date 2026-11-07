@@ -9,7 +9,7 @@ export interface Algorithm { id: string; title: string; system: string; summary:
 export interface Check { id: string; title: string; system: string; goal: string; tools: string[]; steps: string[]; inputs: string[]; interpretation: string[]; warning: string; algorithmIds: string[] }
 export interface Dtc { id: string; code: string; title: string; system: string; summary: string; symptomIds: string[]; algorithmIds: string[]; checkIds: string[] }
 export interface Symptom { id: string; title: string; system: string; summary: string; algorithmIds: string[]; dtcIds: string[] }
-export interface Article { id: string; title: string; summary: string; body: string[]; tags: string[]; algorithmIds: string[]; checkIds: string[] }
+export interface Article { id: string; title: string; summary: string; body: string[]; tags: string[]; algorithmIds: string[]; checkIds: string[]; sources?: { title: string; url: string }[] }
 export interface Case { id: string; title: string; vehicleId: string; symptomIds: string[]; dtcIds: string[]; checkIds: string[]; algorithmIds: string[]; story: string[]; outcome: string }
 export interface Vehicle { id: string; make: string; model: string; generation: string; engine: string; transmission: string }
 
