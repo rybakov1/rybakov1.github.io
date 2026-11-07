@@ -1,7 +1,8 @@
+import { nextCodes4 } from './next-codes-4';
 import { nextCodes3 } from './next-codes-3';
 import { nextCodes2 } from './next-codes-2';
 /** Editorial drafts: examples and links must be reviewed for the specific vehicle. */
-export type NextCode = { code:string; title:string; group:'misfire'|'mixture'|'maf'|'crank'|'oxygen'|'catalyst'|'evap'|'map'|'temperature'|'egr'|'throttle'|'injector'|'fuel-pressure'|'boost'; finding:string; checks:string; source:string; sourceTitle:string };
+export type NextCode = { code:string; title:string; group:'misfire'|'mixture'|'maf'|'crank'|'oxygen'|'catalyst'|'evap'|'map'|'temperature'|'egr'|'throttle'|'injector'|'fuel-pressure'|'boost'|'voltage'|'transmission'|'network'; finding:string; checks:string; source:string; sourceTitle:string };
 const audi='https://static.nhtsa.gov/odi/tsbs/2013/MC-10243913-9999.pdf';
 const ford='https://static.nhtsa.gov/odi/inv/2004/INRD-EA04006-18709P.pdf';
 const trim='https://static.nhtsa.gov/odi/tsbs/2014/MC-10074004-2280.pdf';
@@ -27,4 +28,4 @@ const rows: [string,string,NextCode['group'],string,string,string,string][] = [
  ['P0141','Цепь нагревателя датчика кислорода, банк 1, датчик 2','oxygen','Обнаружено отклонение в цепи нагревателя второго датчика кислорода первого ряда.','Уточните расположение датчика и исследуйте питание и соединения цепи нагревателя по схеме автомобиля.',landrover,'Land Rover: примеры обозначения датчиков для определённых моделей'],
  ['P0441','Неправильный поток продувки системы EVAP','evap','Система обнаружила условие неправильного потока продувки паров топлива.','Зафиксируйте условия и коды; специалист проверяет клапан, соединения и управление по процедуре конкретного автомобиля.',audi,'Audi: пример расшифровки P0441 для конкретных двигателей'],
 ];
-export const nextCodes:NextCode[]=[...rows.map(([code,title,group,finding,checks,source,sourceTitle])=>({code,title,group,finding,checks,source,sourceTitle})),...nextCodes2,...nextCodes3];
+export const nextCodes:NextCode[]=[...rows.map(([code,title,group,finding,checks,source,sourceTitle])=>({code,title,group,finding,checks,source,sourceTitle})),...nextCodes2,...nextCodes3,...nextCodes4];
