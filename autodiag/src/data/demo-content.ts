@@ -1,3 +1,4 @@
+import { nextCodes } from './next-codes';
 // Краткая демонстрационная подборка. Она помогает проверить работу сайта и не
 // заменяет сервисную документацию конкретного автомобиля или проверку редактора.
 export type Source = { title: string; url: string };
@@ -29,6 +30,13 @@ const link = (label: string, href: string) => ({ label, href });
 const sec = (heading: string, ...paragraphs: string[]) => ({ heading, paragraphs });
 
 export const codes: CodeItem[] = [
+  ...nextCodes.map((item): CodeItem => ({
+    ...common, slug:item.code.toLowerCase(), code:item.code, title:item.title, summary:item.finding, category:item.group==='evap'?'Топливная система':item.group==='oxygen'||item.group==='catalyst'?'Выхлопная система':'Двигатель', system:item.group==='evap'?'Топливная система':item.group==='oxygen'||item.group==='catalyst'?'Выхлопная система':'Двигатель', group:'P', severity:'Нужна диагностика',
+    sections:[sec('Что означает код',item.finding,'Точные условия записи кода и применимость зависят от автомобиля. Сам код не определяет неисправную деталь.'),sec('Что сохранить','Запишите все коды и их статусы, стоп-кадр и обстоятельства появления неисправности. Не стирайте данные до их сохранения.'),sec('Направления проверки',item.checks),sec('Когда обратиться за помощью',item.group==='evap'?'При запахе топлива прекратите поездку в безопасном месте и обратитесь за помощью; не разбирайте топливную систему.':'При мигающем Check Engine, сильной вибрации, резкой потере мощности или другом серьёзном предупреждении безопасно остановитесь и обратитесь за помощью. В остальных случаях следуйте руководству автомобиля.'),sec('Что важно учитывать','Источник ниже описывает определённые автомобили и приведён как пример. Его нормы и процедуры нельзя переносить на другой двигатель без проверки.')],
+    related:[link('Как считать ошибки','/guides/read-codes/'),...(item.group==='misfire'?[link('Алгоритм пропусков','/algorithms/misfire-p0301/')]:item.group==='mixture'?[link('Топливные коррекции','/knowledge/fuel-trims/')]:item.group==='maf'?[link('Датчики MAF и MAP','/knowledge/maf-map-basics/')]:item.group==='crank'?[link('Двигатель не запускается','/algorithms/no-start/')]:item.group==='catalyst'?[link('Эффективность катализатора P0420','/codes/p0420/')]:item.group==='evap'?[link('Небольшая утечка EVAP P0442','/codes/p0442/')]:[link('Ошибка катализатора P0420','/codes/p0420/')])],
+    sources:[{title:item.sourceTitle,url:item.source}]
+  })),
+
   ...[1, 2, 3, 4].map((cylinder): CodeItem => ({
     ...common, slug: `p030${cylinder}`, code: `P030${cylinder}`, title: `Пропуски воспламенения в цилиндре ${cylinder}`,
     summary: `Контроллер зарегистрировал пропуски в цилиндре ${cylinder}; код не определяет неисправную деталь.`, category: 'Двигатель', system: 'Двигатель', group: 'P', severity: 'Проверьте в первую очередь',
