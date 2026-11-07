@@ -1,0 +1,6 @@
+import Link from 'next/link';
+import { ArrowUpRight, CarFront } from 'lucide-react';
+import { modelGuides } from '@/data/model-guides';
+import { pageMetadata } from '@/lib/seo';
+export const metadata=pageMetadata({title:'Автомобили и руководства',description:'Руководства и диагностические справочные материалы по моделям автомобилей.',path:'/vehicles/'});
+export default function VehiclesPage(){return <div className="workspace"><div className="work-page-head"><div><div className="work-kicker">МАРКИ И МОДЕЛИ</div><h1 className="work-heading">Автомобили<span className="orange">.</span></h1><p className="work-subtitle">Выберите модель и редакцию руководства. Комплектация и год автомобиля важны для применимости материала.</p></div></div><div className="work-demo">Карточки ожидают редакционной проверки. Руководство владельца не заменяет заводскую диагностическую документацию.</div><div className="work-section"><div className="work-grid">{modelGuides.map(item=><Link className="work-card" href={`/vehicles/${item.slug}/`} key={item.slug}><div className="work-card-header"><span className="work-icon"><CarFront size={19}/></span><ArrowUpRight size={17}/></div><h3>{item.make} {item.model}</h3><p>{item.edition}</p><div className="work-card-footer"><span>Руководство и материалы</span><ArrowUpRight size={15}/></div></Link>)}</div></div></div>}

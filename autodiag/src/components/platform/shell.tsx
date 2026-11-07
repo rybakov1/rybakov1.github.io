@@ -1,11 +1,11 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Activity, BookOpen, BookMarked, Boxes, ClipboardList, FileText, GitBranch, Home, LogIn, Menu, Search, Settings, Stethoscope, Wrench, X } from "lucide-react";
+import { Activity, BookOpen, BookMarked, Boxes, CarFront, ClipboardList, FileText, GitBranch, Home, LogIn, Menu, Search, Settings, Stethoscope, Wrench, X } from "lucide-react";
 import { useState } from "react";
 import { useWorkspace } from "@/platform/store";
 const navigation = [
- {href:"/",label:"Обзор",icon:Home}, {href:"/codes/",label:"Коды ошибок",icon:Boxes}, {href:"/symptoms/",label:"Симптомы",icon:Activity}, {href:"/algorithms/",label:"Алгоритмы",icon:GitBranch}, {href:"/checks/",label:"Проверки",icon:Wrench}, {href:"/knowledge/",label:"База знаний",icon:BookOpen}, {href:"/cases/",label:"Практические случаи",icon:BookMarked}, {href:"/editor/",label:"Редактор",icon:FileText}, {href:"/diagnosis/",label:"Диагностика",icon:Stethoscope}, {href:"/settings/",label:"Настройки",icon:Settings},
+ {href:"/",label:"Обзор",icon:Home}, {href:"/codes/",label:"Коды ошибок",icon:Boxes}, {href:"/symptoms/",label:"Симптомы",icon:Activity}, {href:"/algorithms/",label:"Алгоритмы",icon:GitBranch}, {href:"/checks/",label:"Проверки",icon:Wrench}, {href:"/knowledge/",label:"База знаний",icon:BookOpen}, {href:"/cases/",label:"Практические случаи",icon:BookMarked}, {href:"/vehicles/",label:"Автомобили",icon:CarFront}, {href:"/editor/",label:"Редактор",icon:FileText}, {href:"/diagnosis/",label:"Диагностика",icon:Stethoscope}, {href:"/settings/",label:"Настройки",icon:Settings},
 ];
 export function PlatformShell({children}:{children:React.ReactNode}) {
  const pathname=usePathname(); const {user,ready}=useWorkspace(); const [open,setOpen]=useState(false);
