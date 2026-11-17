@@ -18,12 +18,13 @@ export function getCategories(items: Product[] = products): Category[] {
 
 type ApiResult<T> = {kind:'ok';data:T}|{kind:'demo'|'not_found'|'error'};
 async function apiFetch<T>(path: string): Promise<ApiResult<T>> {
-  // A static export is deliberately self-contained and never claims its fixture is live data.
-  if (import.meta.env.STATIC_DEMO === '1' || (typeof process !== 'undefined' && process.env.EXPORT_STATIC === '1')) return {kind:'demo'};
+  // A static export without an API stays on the fixture. A configured API stays authoritative, including for GitHub Pages.
+  const staticExport = import.meta.env.STATIC_DEMO === '1' || (typeof process !== 'undefined' && process.env.EXPORT_STATIC === '1');
+  if (staticExport && !HAS_CONFIGURED_API) return {kind:'demo'};
   let response: Response;
   try {
     const base = import.meta.env.SSR ? API_BASE_URL : PUBLIC_API_URL;
-    response = await fetch(`${base}${path}`, { signal: AbortSignal.timeout(1500) });
+    response = await fetch(`${base}${path}`, { signal: AbortSignal.timeout(8000) });
   } catch { return {kind:ALLOW_DEMO_FALLBACK&&!HAS_CONFIGURED_API?'demo':'error'}; }
   if (response.status === 404) return {kind:'not_found'};
   if (!response.ok) return {kind:'error'};

@@ -4,7 +4,15 @@ import ProductDetail from '../../components/ProductDetail';
 import BrowserListing from '../../components/BrowserListing';
 import '../../styles/detail.css';
 import { getProductResult, getAppConfig, products } from '../../../lib/data';
-export function getStaticPaths(){return products.map(product=>({params:{slug:product.slug}}));}
+export async function getStaticPaths(){
+  const configured = Boolean(process.env.PUBLIC_API_URL || process.env.API_BASE_URL);
+  if (process.env.EXPORT_STATIC === '1' && configured) {
+    const result = await getProductsResult();
+    if (!result.available) throw new Error('Каталог API недоступен во время сборки');
+    return result.items.map(product => ({params:{slug:product.slug}}));
+  }
+  return products.map(product => ({params:{slug:product.slug}}));
+}
 const result=await getProductResult(Astro.params.slug!);
 if(!result.available) Astro.response.status=503;
 if(result.available&&!result.product) return Astro.redirect('/404/');

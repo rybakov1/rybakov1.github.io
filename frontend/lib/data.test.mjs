@@ -63,6 +63,12 @@ test('a missing API without demo opt-in cannot invent an offline catalogue', asy
   try {assert.deepEqual(await module.getProductsResult(),{items:[],available:false});assert.equal((await module.getAppConfig()).data_mode,'unavailable');} finally {restore();}
 });
 
+test('a static export with a configured API reads the service instead of the fixture', async () => {
+  const {module,restore}=await adapter(true,async()=>Response.json({items:[],total:0,page:1,page_size:100}));
+  process.env.EXPORT_STATIC='1';
+  try {assert.deepEqual(await module.getProductsResult(),{items:[],available:true});} finally {restore();}
+});
+
 test('an available but empty catalogue stays distinct from an unavailable service', async () => {
   const {module,restore}=await adapter(true,async()=>Response.json({items:[],total:0,page:1,page_size:100}));
   try {assert.deepEqual(await module.getProductsResult(),{items:[],available:true});} finally {restore();}
