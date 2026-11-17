@@ -1,0 +1,147 @@
+{
+  "schema_version": "cenoskop.browser-export.v1",
+  "job": {
+    "run_id": "recorded-observations-example",
+    "status": "completed",
+    "partial": false,
+    "started_at": "2026-11-15T08:24:35Z",
+    "updated_at": "2026-11-15T08:24:35Z",
+    "exported_at": "2026-11-15T08:24:35Z",
+    "settings": {
+      "delaySeconds": 12,
+      "renderWaitSeconds": 8,
+      "pageTimeoutSeconds": 45,
+      "maxPages": 50,
+      "autoExport": true
+    },
+    "queue": [
+      {
+        "url": "https://www.ozon.ru/product/2067659662/",
+        "kind": "product",
+        "status": "complete",
+        "attempts": 1
+      },
+      {
+        "url": "https://www.ozon.ru/product/2572917481/",
+        "kind": "product",
+        "status": "complete",
+        "attempts": 1
+      }
+    ],
+    "processed_pages": 2,
+    "discovered_count": 0,
+    "truncated_count": 0
+  },
+  "observations": [
+    {
+      "source": {
+        "marketplace": "ozon",
+        "url": "https://www.ozon.ru/product/2067659662/",
+        "extraction_method": "jsonld",
+        "extractor_version": "recorded-observation-example-0.2",
+        "captured_at": "2026-11-15T08:24:35Z",
+        "requested_url": "https://www.ozon.ru/product/2067659662/"
+      },
+      "product": {
+        "title": "MSI GeForce RTX 5080 VENTUS 3X OC 16 ГБ",
+        "brand": "MSI",
+        "model": null,
+        "mpn": "MSI RTX5080 VENTUS 3X OC",
+        "sku": "2067659662",
+        "capacity": "16 ГБ",
+        "bundle": "видеокарта, документация",
+        "condition": "unknown"
+      },
+      "offer": {
+        "price": 367583,
+        "currency": "RUB",
+        "region": "RU-SPE",
+        "price_type": "regular",
+        "payment_condition": "other_bank_card",
+        "availability": true,
+        "seller": {
+          "id": "topcomputer",
+          "name": "TopComputer"
+        },
+        "warranty_months": 12,
+        "evidence": {
+          "region": "Санкт-Петербург",
+          "payment_condition": "367 583 ₽ — С другими банками"
+        }
+      },
+      "candidates": [
+        {
+          "price": 367583,
+          "currency": "RUB",
+          "method": "jsonld",
+          "raw": "367583",
+          "label": "Recorded JSON-LD Offer",
+          "matches_page": true,
+          "seller_id": "topcomputer",
+          "seller_name": "TopComputer"
+        }
+      ],
+      "needs_review": true,
+      "review_reasons": [
+        "condition_unconfirmed"
+      ],
+      "identity_confirmed": false
+    },
+    {
+      "source": {
+        "marketplace": "ozon",
+        "url": "https://www.ozon.ru/product/2572917481/",
+        "extraction_method": "jsonld",
+        "extractor_version": "recorded-observation-example-0.2",
+        "captured_at": "2026-11-15T08:24:35Z",
+        "requested_url": "https://www.ozon.ru/product/2572917481/"
+      },
+      "product": {
+        "title": "Palit GeForce RTX 5050 Dual 8 ГБ",
+        "brand": "Palit",
+        "model": null,
+        "mpn": "NE65050019P1-GB2070D",
+        "sku": "2572917481",
+        "capacity": "8 ГБ",
+        "bundle": "документация",
+        "condition": "unknown"
+      },
+      "offer": {
+        "price": 47999,
+        "currency": "RUB",
+        "region": "RU-SPE",
+        "price_type": "regular",
+        "payment_condition": "other_bank_card",
+        "availability": true,
+        "seller": {
+          "id": null,
+          "name": null
+        },
+        "warranty_months": null,
+        "evidence": {
+          "region": "Санкт-Петербург",
+          "payment_condition": "47 999 ₽ — С другими банками"
+        }
+      },
+      "candidates": [
+        {
+          "price": 47999,
+          "currency": "RUB",
+          "method": "jsonld",
+          "raw": "47999",
+          "label": "Recorded JSON-LD Offer",
+          "matches_page": true,
+          "seller_id": null,
+          "seller_name": null
+        }
+      ],
+      "needs_review": true,
+      "review_reasons": [
+        "condition_unconfirmed",
+        "seller_unavailable"
+      ],
+      "identity_confirmed": false
+    }
+  ],
+  "errors": []
+}

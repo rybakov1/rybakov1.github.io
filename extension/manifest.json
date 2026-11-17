@@ -1,0 +1,11 @@
+{
+  "manifest_version": 3,
+  "name": "Ценоскоп: сбор карточек",
+  "version": "1.0.0",
+  "description": "Сохраняет видимые карточки товаров с открытой страницы Ozon или Wildberries в один файл.",
+  "permissions": ["activeTab", "storage", "scripting"],
+  "action": {
+    "default_title": "Собрать карточки в один файл",
+    "default_popup": "popup.html"
+  }
+}

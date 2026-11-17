@@ -1,0 +1,99 @@
+name: cenoscope
+
+x-backend-environment: &backend-environment
+  DATABASE_URL: postgresql+psycopg://cenoscope:${POSTGRES_PASSWORD:-local-demo-change-me}@db:5432/cenoscope
+  ADMIN_TOKEN: ${ADMIN_TOKEN:-}
+  APP_NAME: ${APP_NAME:-Ценоскоп}
+  DEMO_MODE: ${DEMO_MODE:-true}
+  DEMO_REFERENCE_DATE: ${DEMO_REFERENCE_DATE:-2026-11-14}
+  PUBLIC_BASE_URL: ${PUBLIC_BASE_URL:-http://localhost:3000}
+  CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3000}
+  ALLOWED_OUTBOUND_HOSTS: ${ALLOWED_OUTBOUND_HOSTS:-ozon.ru,www.ozon.ru,wildberries.ru,www.wildberries.ru}
+  DATA_RETENTION_DAYS: ${DATA_RETENTION_DAYS:-90}
+  COLLECTOR_ENABLED: ${COLLECTOR_ENABLED:-false}
+  COLLECTOR_TOKEN: ${COLLECTOR_TOKEN:-}
+  COLLECTOR_PERMISSION_REFERENCE: ${COLLECTOR_PERMISSION_REFERENCE:-}
+  COLLECTOR_LEASE_SECONDS: ${COLLECTOR_LEASE_SECONDS:-300}
+  TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN:-}
+  TELEGRAM_BOT_USERNAME: ${TELEGRAM_BOT_USERNAME:-}
+  TELEGRAM_ID_ENCRYPTION_KEY: ${TELEGRAM_ID_ENCRYPTION_KEY:-}
+
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: cenoscope
+      POSTGRES_USER: cenoscope
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-local-demo-change-me}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cenoscope -d cenoscope"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  backend:
+    build:
+      context: .
+      dockerfile: infra/backend.Dockerfile
+    restart: unless-stopped
+    environment: *backend-environment
+    ports:
+      - "127.0.0.1:8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health', timeout=3)"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+
+  frontend:
+    build:
+      context: .
+      dockerfile: infra/frontend.Dockerfile
+      args:
+        PUBLIC_API_URL: ${PUBLIC_API_URL:-http://localhost:8000}
+        PUBLIC_SITE_URL: ${PUBLIC_SITE_URL:-http://localhost:3000}
+        PUBLIC_SITE_NAME: ${PUBLIC_SITE_NAME:-Ценоскоп}
+    restart: unless-stopped
+    environment:
+      API_BASE_URL: ${API_BASE_URL:-http://backend:8000}
+      PUBLIC_API_URL: ${PUBLIC_API_URL:-http://localhost:8000}
+      PUBLIC_SITE_URL: ${PUBLIC_SITE_URL:-http://localhost:3000}
+      PUBLIC_SITE_NAME: ${PUBLIC_SITE_NAME:-Ценоскоп}
+    ports:
+      - "127.0.0.1:3000:3000"
+    depends_on:
+      backend:
+        condition: service_healthy
+
+  worker:
+    build:
+      context: .
+      dockerfile: infra/backend.Dockerfile
+    restart: unless-stopped
+    environment: *backend-environment
+    command: ["python", "-m", "app.worker"]
+    depends_on:
+      backend:
+        condition: service_healthy
+
+  bot:
+    profiles: ["telegram"]
+    build:
+      context: .
+      dockerfile: infra/backend.Dockerfile
+    restart: unless-stopped
+    environment: *backend-environment
+    command: ["python", "-m", "app.bot"]
+    depends_on:
+      backend:
+        condition: service_healthy
+
+volumes:
+  postgres-data:

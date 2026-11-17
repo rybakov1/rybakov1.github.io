@@ -1,0 +1,23 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Catalog from '../components/Catalog';
+import { getProductsResult } from '../../lib/data';
+const result = await getProductsResult();
+const products = result.items;
+const mode = !result.available ? 'unavailable' : products.length ? (products.every(p => p.is_demo) ? 'demo' : products.some(p => p.is_demo) ? 'mixed' : 'import') : undefined;
+const categories = [
+  ['Видеокарты', '/category/gpu/'], ['Процессоры', '/catalog/?q=процессор'],
+  ['Материнские платы', '/catalog/?q=материнская'], ['Оперативная память', '/category/ram/'],
+  ['SSD-накопители', '/category/ssd/'], ['Жёсткие диски', '/catalog/?q=диск'],
+  ['Ноутбуки', '/catalog/?q=ноутбук'], ['Мониторы', '/catalog/?q=монитор'],
+  ['Смартфоны', '/catalog/?q=смартфон'], ['Планшеты', '/catalog/?q=планшет'],
+  ['Наушники', '/catalog/?q=наушник'], ['Клавиатуры', '/catalog/?q=клавиатур'],
+  ['Компьютерные мыши', '/catalog/?q=мыш'], ['Блоки питания', '/catalog/?q=блок+питания'],
+  ['Корпуса', '/catalog/?q=корпус'], ['Охлаждение', '/catalog/?q=охлаждение'],
+];
+---
+<Layout dataMode={mode} title="Каталог товаров" noindex={Astro.url.searchParams.has('q')}>
+  <section class="home-categories" aria-labelledby="categories-title"><h1 id="categories-title">Категории</h1><p>Выберите категорию или воспользуйтесь поиском</p><nav aria-label="Категории каталога"><ul>{categories.map(([label,href]) => <li><a href={href}>{label}</a></li>)}</ul></nav></section>
+  <div class="home-catalog-heading"><div><h2>Все товары</h2><p>Выберите категорию или найдите нужную модель.</p></div><a href="/import/">Загрузить товары</a></div>
+  <Catalog client:load products={products} unavailable={!result.available}/>
+</Layout>

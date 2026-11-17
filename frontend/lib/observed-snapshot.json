@@ -1,0 +1,317 @@
+[
+  {
+    "name": "MSI GeForce RTX 5080 VENTUS 3X OC 16 ГБ",
+    "brand": "MSI",
+    "model": "GeForce RTX 5080 VENTUS 3X OC",
+    "mpn": "MSI RTX5080 VENTUS 3X OC",
+    "category": "gpu",
+    "capacity": "16 ГБ",
+    "bundle": "видеокарта, документация",
+    "condition": "unknown",
+    "gtin": null,
+    "specs": {
+      "Объём памяти": "16 ГБ",
+      "Память": "GDDR7",
+      "Партномер на странице": "MSI RTX5080 VENTUS 3X OC",
+      "Состояние": "Не указано в прочитанной разметке"
+    },
+    "id": "import-6f9a5a2959ae7ec235e271517ae8",
+    "slug": "msi-geforce-rtx-5080-ventus-3x-oc-msi-rtx5080-ventus-3x-oc-517ae8",
+    "category_name": "Видеокарты",
+    "image_kind": "gpu",
+    "is_demo": false,
+    "price": 367583.0,
+    "median_30": null,
+    "median_90": null,
+    "min_price": 367583.0,
+    "max_price": 367583.0,
+    "discount_percent": null,
+    "history": [
+      {
+        "date": "2026-11-15",
+        "price": 367583.0
+      }
+    ],
+    "first_observed": "2026-11-15",
+    "last_updated": "2026-11-15",
+    "days_observed": 1,
+    "status": "insufficient_data",
+    "offers": [
+      {
+        "id": "browser-ozon-78843a3b203732562468262e5da7",
+        "marketplace": "ozon",
+        "seller": {
+          "id": "seller-8f79771c192a21a3943bccebdaf2",
+          "name": "TopComputer",
+          "rating": null,
+          "reviews_count": null
+        },
+        "price": 367583.0,
+        "currency": "RUB",
+        "region": "RU-SPE",
+        "price_type": "regular",
+        "payment_condition": "other_bank_card",
+        "availability": true,
+        "condition": "unknown",
+        "warranty_months": 12,
+        "history": [
+          {
+            "date": "2026-11-15",
+            "price": 367583.0
+          }
+        ],
+        "url": "https://www.ozon.ru/product/2067659662/",
+        "is_demo": false,
+        "source_id": "browser-ozon",
+        "observed_at": "2026-11-15T08:24:35+00:00",
+        "reliability": {
+          "score": null,
+          "factors": [
+            {
+              "name": "Рейтинг продавца",
+              "weight": 0.4,
+              "value": null
+            },
+            {
+              "name": "Гарантия от 12 месяцев",
+              "weight": 0.25,
+              "value": 100
+            },
+            {
+              "name": "Стабильность наблюдений",
+              "weight": 0.2,
+              "value": null
+            },
+            {
+              "name": "Новое состояние",
+              "weight": 0.15,
+              "value": null
+            }
+          ],
+          "coverage": 0.25,
+          "label": "Расчётная оценка предложения; не подтверждает оригинальность"
+        },
+        "price_confirmed": true,
+        "data_provenance": {
+          "source_id": "browser-ozon",
+          "type": "browser_capture",
+          "permission_reference": "Owner request and two Ozon URLs supplied in this Codex chat on 2026-11-15; factual browser observation; marketplace terms unreviewed",
+          "rights": {
+            "facts": "asserted_by_operator",
+            "images": "not_imported",
+            "review_text": "not_imported"
+          },
+          "extraction_method": "jsonld",
+          "captured_at": "2026-11-15T08:24:35+00:00",
+          "page_url": "https://www.ozon.ru/product/2067659662/",
+          "selected_canonical_product_id": "import-6f9a5a2959ae7ec235e271517ae8",
+          "server_permission_reference": "Owner request and two Ozon URLs supplied in Codex 2026-11-15; factual browser observation; marketplace terms unreviewed",
+          "identity_confirmation": "operator_confirmed",
+          "seller_availability": "provided",
+          "seller_identifier": "source_provided",
+          "extractor_version": "browser-dom-inspection-1",
+          "extracted_price_text": "367 583 ₽ — С другими банками"
+        }
+      }
+    ],
+    "offers_count": 1,
+    "rating": null,
+    "reviews_count": 0,
+    "review_trend": "unavailable",
+    "reviews": {
+      "slices": {},
+      "individual_available": false,
+      "availability": "unavailable",
+      "coverage": "Детальные отзывы недоступны",
+      "source": "manual_catalog",
+      "last_review_at": null
+    },
+    "data_provenance": {
+      "source_id": "browser-ozon",
+      "type": "browser_capture",
+      "permission_reference": "Owner request and two Ozon URLs supplied in this Codex chat on 2026-11-15; factual browser observation; marketplace terms unreviewed",
+      "rights": {
+        "facts": "asserted_by_operator",
+        "images": "not_imported",
+        "review_text": "not_imported"
+      },
+      "extraction_method": "jsonld",
+      "captured_at": "2026-11-15T08:24:35+00:00",
+      "page_url": "https://www.ozon.ru/product/2067659662/",
+      "selected_canonical_product_id": "import-6f9a5a2959ae7ec235e271517ae8",
+      "server_permission_reference": "Owner request and two Ozon URLs supplied in Codex 2026-11-15; factual browser observation; marketplace terms unreviewed",
+      "identity_confirmation": "operator_confirmed",
+      "seller_availability": "provided",
+      "seller_identifier": "source_provided",
+      "extractor_version": "browser-dom-inspection-1",
+      "extracted_price_text": "367 583 ₽ — С другими банками",
+      "notice": "Однократный снимок открытой карточки от 15 ноября 2026. Для актуальной цены откройте источник. История не синтезирована."
+    },
+    "price_context": {
+      "currency": "RUB",
+      "region": "RU-SPE",
+      "price_type": "regular",
+      "payment_condition": "other_bank_card"
+    },
+    "median_deviation_percent": null,
+    "baseline_stable": true,
+    "price_confirmed": true
+  },
+  {
+    "name": "Palit GeForce RTX 5050 Dual 8 ГБ",
+    "brand": "Palit",
+    "model": "GeForce RTX 5050 Dual",
+    "mpn": "NE65050019P1-GB2070D",
+    "category": "gpu",
+    "capacity": "8 ГБ",
+    "bundle": "документация",
+    "condition": "unknown",
+    "gtin": null,
+    "specs": {
+      "Объём памяти": "8 ГБ",
+      "Память": "GDDR6",
+      "Состояние": "Не указано в прочитанной разметке"
+    },
+    "id": "import-7a6f31824c93d59a8812be056ed8",
+    "slug": "palit-geforce-rtx-5050-dual-ne65050019p1-gb2070d-056ed8",
+    "category_name": "Видеокарты",
+    "image_kind": "gpu",
+    "is_demo": false,
+    "price": 47999.0,
+    "median_30": null,
+    "median_90": null,
+    "min_price": 47999.0,
+    "max_price": 47999.0,
+    "discount_percent": null,
+    "history": [
+      {
+        "date": "2026-11-15",
+        "price": 47999.0
+      }
+    ],
+    "first_observed": "2026-11-15",
+    "last_updated": "2026-11-15",
+    "days_observed": 1,
+    "status": "insufficient_data",
+    "offers": [
+      {
+        "id": "browser-ozon-074eb08ed43be74073aa182a7a44",
+        "marketplace": "ozon",
+        "seller": {
+          "id": "seller-e5c0d5301564ca53ccbc47a2709d",
+          "name": "Продавец не указан",
+          "rating": null,
+          "reviews_count": null
+        },
+        "price": 47999.0,
+        "currency": "RUB",
+        "region": "RU-SPE",
+        "price_type": "regular",
+        "payment_condition": "other_bank_card",
+        "availability": true,
+        "condition": "unknown",
+        "warranty_months": null,
+        "history": [
+          {
+            "date": "2026-11-15",
+            "price": 47999.0
+          }
+        ],
+        "url": "https://www.ozon.ru/product/2572917481/",
+        "is_demo": false,
+        "source_id": "browser-ozon",
+        "observed_at": "2026-11-15T08:24:35+00:00",
+        "reliability": {
+          "score": null,
+          "factors": [
+            {
+              "name": "Рейтинг продавца",
+              "weight": 0.4,
+              "value": null
+            },
+            {
+              "name": "Гарантия от 12 месяцев",
+              "weight": 0.25,
+              "value": null
+            },
+            {
+              "name": "Стабильность наблюдений",
+              "weight": 0.2,
+              "value": null
+            },
+            {
+              "name": "Новое состояние",
+              "weight": 0.15,
+              "value": null
+            }
+          ],
+          "coverage": 0,
+          "label": "Расчётная оценка предложения; не подтверждает оригинальность"
+        },
+        "price_confirmed": true,
+        "data_provenance": {
+          "source_id": "browser-ozon",
+          "type": "browser_capture",
+          "permission_reference": "Owner request and two Ozon URLs supplied in this Codex chat on 2026-11-15; factual browser observation; marketplace terms unreviewed",
+          "rights": {
+            "facts": "asserted_by_operator",
+            "images": "not_imported",
+            "review_text": "not_imported"
+          },
+          "extraction_method": "jsonld",
+          "captured_at": "2026-11-15T08:24:35+00:00",
+          "page_url": "https://www.ozon.ru/product/2572917481/",
+          "selected_canonical_product_id": "import-7a6f31824c93d59a8812be056ed8",
+          "server_permission_reference": "Owner request and two Ozon URLs supplied in Codex 2026-11-15; factual browser observation; marketplace terms unreviewed",
+          "identity_confirmation": "operator_confirmed",
+          "seller_availability": "unavailable",
+          "seller_identifier": "unknown_page_scoped",
+          "extractor_version": "browser-dom-inspection-1",
+          "extracted_price_text": "47 999 ₽ — С другими банками"
+        }
+      }
+    ],
+    "offers_count": 1,
+    "rating": null,
+    "reviews_count": 0,
+    "review_trend": "unavailable",
+    "reviews": {
+      "slices": {},
+      "individual_available": false,
+      "availability": "unavailable",
+      "coverage": "Детальные отзывы недоступны",
+      "source": "manual_catalog",
+      "last_review_at": null
+    },
+    "data_provenance": {
+      "source_id": "browser-ozon",
+      "type": "browser_capture",
+      "permission_reference": "Owner request and two Ozon URLs supplied in this Codex chat on 2026-11-15; factual browser observation; marketplace terms unreviewed",
+      "rights": {
+        "facts": "asserted_by_operator",
+        "images": "not_imported",
+        "review_text": "not_imported"
+      },
+      "extraction_method": "jsonld",
+      "captured_at": "2026-11-15T08:24:35+00:00",
+      "page_url": "https://www.ozon.ru/product/2572917481/",
+      "selected_canonical_product_id": "import-7a6f31824c93d59a8812be056ed8",
+      "server_permission_reference": "Owner request and two Ozon URLs supplied in Codex 2026-11-15; factual browser observation; marketplace terms unreviewed",
+      "identity_confirmation": "operator_confirmed",
+      "seller_availability": "unavailable",
+      "seller_identifier": "unknown_page_scoped",
+      "extractor_version": "browser-dom-inspection-1",
+      "extracted_price_text": "47 999 ₽ — С другими банками",
+      "notice": "Однократный снимок открытой карточки от 15 ноября 2026. Для актуальной цены откройте источник. История не синтезирована."
+    },
+    "price_context": {
+      "currency": "RUB",
+      "region": "RU-SPE",
+      "price_type": "regular",
+      "payment_condition": "other_bank_card"
+    },
+    "median_deviation_percent": null,
+    "baseline_stable": true,
+    "price_confirmed": true
+  }
+]

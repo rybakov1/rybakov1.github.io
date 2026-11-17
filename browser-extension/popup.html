@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Ценоскоп · автоматический сбор</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-inner">
+      <span class="brand-mark" aria-hidden="true">ц.</span>
+      <div><h1>Ценоскоп <span>COLLECTOR</span></h1><p>Наблюдения с открытых страниц</p></div>
+      <span class="local-badge"><i></i>JSON на вашем устройстве</span>
+      <span class="version">v0.6</span>
+    </div>
+  </header>
+  <main>
+    <section class="intro">
+      <p class="eyebrow">ЛОКАЛЬНЫЙ СБОРЩИК</p>
+      <h2>Ссылки → наблюдения → <em>один файл.</em></h2>
+      <p>Добавьте карточки или категорию. Расширение подгрузит товары, обработает очередь в одной вкладке и сохранит результат в JSON.</p>
+    </section>
+    <div id="notification" class="notification" role="status" aria-live="polite" hidden></div>
+
+    <div class="workspace-grid">
+      <form id="collectorForm" class="configuration-panel">
+        <fieldset id="sourceFields">
+          <div class="section-heading"><label for="sourceUrls">Откуда собирать</label><button id="addCategory" type="button" class="text-button">+ Категория видеокарт</button></div>
+          <textarea id="sourceUrls" rows="5" spellcheck="false" required aria-describedby="sourceHint" placeholder="Вставьте ссылки, по одной на строке">https://www.ozon.ru/product/2067659662/
+https://www.ozon.ru/product/2572917481/</textarea>
+          <p id="sourceHint" class="hint">Карточки Ozon/Wildberries и категории Ozon. Категория прокручивается постепенно, чтобы подгрузить больше ссылок на товары.</p>
+          <details class="settings" open>
+            <summary><span>Темп и лимиты</span><span id="settingsSummary">12 сек · до 50 страниц</span><span class="summary-chevron" aria-hidden="true">⌄</span></summary>
+            <div class="settings-grid">
+              <p class="settings-heading">Обработка очереди</p>
+              <label for="delaySeconds">Пауза между страницами, сек<input id="delaySeconds" type="number" min="5" max="300" step="1" value="12" required></label>
+              <label for="renderWaitSeconds">Ожидание содержимого, сек<input id="renderWaitSeconds" type="number" min="3" max="30" step="1" value="8" required></label>
+              <label for="pageTimeoutSeconds">Тайм-аут загрузки страницы, сек<input id="pageTimeoutSeconds" type="number" min="15" max="90" step="1" value="45" required></label>
+              <label for="maxPages">Всего страниц в очереди<input id="maxPages" type="number" min="1" max="200" step="1" value="50" required></label>
+              <p class="settings-heading category-heading">Подгрузка категории</p>
+              <label for="categoryMaxProducts">Товаров из одной категории<input id="categoryMaxProducts" type="number" min="1" max="200" step="1" value="100" required></label>
+              <label for="categoryMaxPages">Страниц категории<input id="categoryMaxPages" type="number" min="1" max="10" step="1" value="3" required></label>
+              <label for="categoryScrollRounds">Прокруток на страницу<input id="categoryScrollRounds" type="number" min="0" max="50" step="1" value="12" required></label>
+              <label for="categoryScrollPauseSeconds">Ожидание после прокрутки, сек<input id="categoryScrollPauseSeconds" type="number" min="1" max="10" step="1" value="2" required></label>
+              <p class="settings-heading category-heading">Несколько браузеров</p>
+              <label for="partitionCount">Всего экземпляров<input id="partitionCount" type="number" min="1" max="32" step="1" value="1" required></label>
+              <label for="partitionIndex">Номер этого экземпляра<input id="partitionIndex" type="number" min="1" max="32" step="1" value="1" required></label>
+            </div>
+            <p class="hint">Общий лимит включает карточки и страницы категории. Чтобы обработать 100 товаров, увеличьте его хотя бы до 103. Если новых ссылок больше нет, сбор категории завершится раньше.</p>
+            <p class="hint">Интервалы минимальные: фоновые таймеры браузера могут сработать позже. Переходы между страницами категории выполняются по найденной ссылке «Дальше».</p>
+            <p class="hint">Для параллельного сбора используйте отдельные профили браузера с установленным расширением. В каждом укажите одинаковые ссылки, настройки и общее число экземпляров, а номер — свой (например, от 1 до 10). Каждый профиль сохраняет свой JSON. Категории читаются в каждом профиле, карточки товаров распределяются между ними; разная выдача может повлиять на полноту сбора.</p>
+          </details>
+          <label class="checkbox"><input id="autoExport" type="checkbox" checked><span>Скачать JSON после завершения<small>Файл сохранится в обычную папку загрузок браузера.</small></span></label>
+          <div class="permission-note"><span aria-hidden="true">↗</span><p><strong id="permissionSummary">При старте потребуется доступ к Ozon.</strong> Он нужен для открытия и чтения указанных страниц. Другие сайты не запрашиваются.</p></div>
+        </fieldset>
+        <section class="config-panel" aria-labelledby="configTitle">
+          <div class="section-heading"><h3 id="configTitle">Конфигурация JSON</h3></div>
+          <p class="hint">Скопируйте настройки, чтобы отправить в чат. Чтобы изменить сбор, вставьте JSON, нажмите «Применить JSON», затем «Начать сбор».</p>
+          <label for="configJson" class="json-label">Настройки сбора в JSON</label>
+          <textarea id="configJson" class="json-text config-json" rows="13" spellcheck="false" aria-describedby="configStatus"></textarea>
+          <div class="config-actions"><button id="configGenerateButton" type="button">Сформировать из настроек</button><button id="configApplyButton" type="button">Применить JSON</button><button id="configCopyButton" type="button">Скопировать конфигурацию</button></div>
+          <p id="configStatus" class="config-status" role="status" aria-live="polite"></p>
+        </section>
+        <p id="replaceWarning" class="replacement-note" hidden>Новый запуск заменит текущие результаты. Сначала скачайте или скопируйте JSON, если хотите их сохранить.</p>
+        <div class="controls"><button id="startButton" type="submit" class="button-primary"><span aria-hidden="true">▶</span>Начать сбор</button><button id="pauseButton" type="button" disabled>Пауза</button><button id="resumeButton" type="button" disabled>Продолжить</button><button id="stopButton" type="button" class="button-stop" disabled><span aria-hidden="true">■</span>Стоп</button></div>
+      </form>
+      <aside class="collection-panel" aria-label="Результат и ход сбора">
+        <section class="run-panel" aria-label="Ход сбора">
+          <div class="panel-heading"><h3>Ход сбора</h3><span class="single-tab-note">Одна рабочая вкладка</span></div>
+          <div class="run-heading"><span id="statusBadge" class="status-badge idle"><i></i><span id="statusLabel">Готов к старту</span></span><span id="queueProgress">0 из 0 страниц</span></div>
+          <div class="progress-track" role="progressbar" aria-label="Выполнено страниц" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progressBar"><div id="progressFill"></div></div>
+          <div class="metrics"><div><strong id="collectedCount">0</strong><span>Наблюдений</span></div><div><strong id="reviewCount">0</strong><span>Нужна проверка</span></div><div><strong id="errorCount">0</strong><span>Ошибок</span></div></div>
+          <div id="currentTask" class="current-task" hidden><div><span class="task-dot"></span><strong id="phaseLabel">Ожидаем страницу</strong><span id="nextAction"></span></div><p id="currentUrl"></p></div>
+          <div id="discoveryProgress" class="discovery-progress" hidden><strong>Подгружаем товары категории</strong><p id="discoverySummary"></p></div>
+          <p id="discoveryTotals" class="discovery-totals" hidden></p>
+          <div id="blockedNotice" class="blocked-notice" role="alert" hidden>На странице обнаружено ограничение доступа или CAPTCHA. Сбор остановлен, обход не выполняется. Уже собранные наблюдения можно скачать в JSON.</div>
+          <p id="exportNotice" class="export-notice" hidden></p>
+        </section>
+        <div class="export-actions"><button id="exportButton" type="button" class="button-export" disabled><span aria-hidden="true">↓</span>Скачать JSON<span id="exportCount">0</span></button><button id="showJsonButton" type="button" class="button-json" disabled>Показать JSON</button><button id="clearButton" type="button" class="button-clear" disabled>Очистить</button></div>
+        <section id="jsonPanel" class="json-panel" aria-labelledby="jsonTitle" hidden>
+          <div class="section-heading"><h3 id="jsonTitle">JSON для копирования</h3><button id="copyJsonButton" type="button" class="button-json-copy">Скопировать JSON</button></div>
+          <p class="hint">Скопируйте текст и вставьте в сообщение. Чтобы получить новые результаты во время сбора, нажмите «Обновить JSON».</p>
+          <label for="jsonText" class="json-label">Данные наблюдений</label>
+          <textarea id="jsonText" class="json-text" rows="12" readonly spellcheck="false" aria-describedby="jsonState jsonCopyStatus"></textarea>
+          <p id="jsonState" class="hint"></p><p id="jsonCopyStatus" class="json-copy-status" role="status" aria-live="polite"></p>
+        </section>
+        <details id="queueDetails" class="queue-details" open><summary><span>Очередь страниц</span><span id="queueCount">0</span><span class="summary-chevron" aria-hidden="true">⌄</span></summary><ol id="queueList"></ol><p id="queueEmpty" class="empty-message">Очередь появится после запуска.</p></details>
+      </aside>
+    </div>
+    <section id="resultsSection" class="results-section" hidden><div class="section-heading"><h3>Последние наблюдения</h3><span>Предпросмотр · до 3 записей</span></div><div id="resultList"></div><p class="results-note">Автоматическое извлечение не подтверждает совпадение вариантов. Неизвестные условия остаются неизвестными; записи с пометкой нужно проверить перед импортом.</p></section>
+    <footer><p><span class="privacy-dot" aria-hidden="true"></span>Данные остаются в браузере до скачивания JSON.</p><p>Cookies, пароли, история браузера, полный HTML, файлы фотографий и тексты отзывов не собираются. Эту вкладку можно закрыть — прогресс сохраняется. Браузер должен оставаться открытым.</p></footer>
+  </main>
+  <script src="extractor.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

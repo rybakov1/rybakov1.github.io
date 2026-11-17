@@ -1,0 +1,12 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Catalog from '../../components/Catalog';
+import { getProductsResult } from '../../../lib/data';
+export function getStaticPaths(){ return ['ssd','gpu','ram'].map(category=>({params:{category}})); }
+const category=Astro.params.category!;
+const titles:Record<string,string>={ssd:'SSD-накопители',gpu:'Видеокарты',ram:'Оперативная память'};
+if(!titles[category]) return Astro.redirect('/404/');
+const result=await getProductsResult();
+const products=result.items;
+---
+<Layout dataMode={!result.available?'unavailable':products.length?(products.every(p=>p.is_demo)?'demo':products.some(p=>p.is_demo)?'mixed':'import'):undefined} title={`${titles[category]} — сравнение предложений и история цен`}><div class="breadcrumbs"><a href="/">Главная</a><span>/</span><a href="/catalog/">Каталог</a><span>/</span>{titles[category]}</div><div class="page-heading"><h1>{titles[category]}</h1><p>Сравните цены, предложения и свежие оценки конкретной модели.</p></div><div class="inline-demo">{!result.available ? 'Данные каталога временно недоступны' : products.some(p=>p.is_demo) ? 'Демоданные помечены отдельно' : 'Данные загружены из подключённых источников'}</div><Catalog client:load products={products} initialCategory={category} unavailable={!result.available}/></Layout>

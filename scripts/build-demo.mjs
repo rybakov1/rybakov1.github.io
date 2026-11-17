@@ -1,0 +1,13 @@
+import { spawnSync } from 'node:child_process';
+import { cpSync, existsSync, mkdirSync, rmSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+const root=resolve(dirname(fileURLToPath(import.meta.url)),'..');
+const target=resolve(root,'dist');
+if(dirname(target)!==root||!target.endsWith('dist'))throw new Error('Unsafe build target');
+const result=spawnSync(process.execPath,[resolve(root,'frontend/node_modules/astro/astro.js'),'build'],{cwd:resolve(root,'frontend'),env:{...process.env,EXPORT_STATIC:'1',PUBLIC_API_ENABLED:'false',PUBLIC_INDEXABLE:'false',PUBLIC_SITE_URL:'https://cenoskop-price-lab.stablehatch4.chatgpt.site'},stdio:'inherit'});
+if(result.status!==0)process.exit(result.status||1);
+if(existsSync(target))rmSync(target,{recursive:true});
+mkdirSync(target,{recursive:true});
+cpSync(resolve(root,'frontend/dist'),target,{recursive:true});
+console.log('Static demo packaged in dist. API features stay disabled.');

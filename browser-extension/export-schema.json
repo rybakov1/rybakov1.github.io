@@ -1,0 +1,704 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "urn:cenoskop:browser-export:v1",
+  "title": "Ценоскоп: локальный экспорт наблюдений",
+  "description": "Наблюдаемые факты открытых карточек, ограниченная очередь и диагностика. Не подтверждает каноническую идентичность модели.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "cenoskop.browser-export.v1"
+    },
+    "job": {
+      "$ref": "#/definitions/job"
+    },
+    "observations": {
+      "type": "array",
+      "maxItems": 200,
+      "items": {
+        "$ref": "#/definitions/observation"
+      }
+    },
+    "errors": {
+      "type": "array",
+      "maxItems": 500,
+      "items": {
+        "$ref": "#/definitions/error"
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "job",
+    "observations",
+    "errors"
+  ],
+  "definitions": {
+    "job": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "run_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 100
+        },
+        "status": {
+          "enum": [
+            "idle",
+            "running",
+            "paused",
+            "completed",
+            "stopped",
+            "blocked"
+          ]
+        },
+        "partial": {
+          "type": "boolean"
+        },
+        "started_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "exported_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "settings": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "delaySeconds": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 3600
+            },
+            "renderWaitSeconds": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 300
+            },
+            "pageTimeoutSeconds": {
+              "type": "number",
+              "minimum": 1,
+              "maximum": 600
+            },
+            "maxPages": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 200
+            },
+            "autoExport": {
+              "type": "boolean"
+            },
+            "categoryScrollRounds": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 50
+            },
+            "categoryScrollPauseSeconds": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 10
+            },
+            "categoryMaxProducts": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 200
+            },
+            "categoryMaxPages": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 10
+            }
+          },
+          "required": [
+            "delaySeconds",
+            "renderWaitSeconds",
+            "pageTimeoutSeconds",
+            "maxPages",
+            "autoExport"
+          ]
+        },
+        "queue": {
+          "type": "array",
+          "maxItems": 200,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "url": {
+                "type": "string",
+                "maxLength": 2000,
+                "pattern": "^https://www\\.(?:ozon\\.ru/(?:product/[0-9]{1,20}/|category/[a-zA-Z0-9_-]+-[0-9]+/?(?:\\?page=(?:[2-9]|[1-9][0-9]{1,2}|1000))?)|wildberries\\.ru/catalog/[0-9]{1,20}/detail\\.aspx)$"
+              },
+              "kind": {
+                "enum": [
+                  "product",
+                  "discovery"
+                ]
+              },
+              "status": {
+                "enum": [
+                  "pending",
+                  "loading",
+                  "waiting",
+                  "complete",
+                  "error"
+                ]
+              },
+              "attempts": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 100
+              },
+              "discovery": {
+                "$ref": "#/definitions/discovery"
+              }
+            },
+            "required": [
+              "url",
+              "kind",
+              "status",
+              "attempts"
+            ]
+          }
+        },
+        "processed_pages": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 200
+        },
+        "discovered_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100000
+        },
+        "truncated_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100000
+        }
+      },
+      "required": [
+        "run_id",
+        "status",
+        "partial",
+        "started_at",
+        "updated_at",
+        "exported_at",
+        "settings",
+        "queue",
+        "processed_pages",
+        "discovered_count",
+        "truncated_count"
+      ]
+    },
+    "error": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "url": {
+          "anyOf": [
+            {
+              "type": "string",
+              "maxLength": 2000,
+              "pattern": "^https://www\\.(?:ozon\\.ru/(?:product/[0-9]{1,20}/|category/[a-zA-Z0-9_-]+-[0-9]+/?(?:\\?page=(?:[2-9]|[1-9][0-9]{1,2}|1000))?)|wildberries\\.ru/catalog/[0-9]{1,20}/detail\\.aspx)$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "code": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "message": {
+          "type": "string",
+          "maxLength": 1000
+        },
+        "occurred_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "url",
+        "code",
+        "message",
+        "occurred_at"
+      ]
+    },
+    "discovery": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "rounds": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 51
+        },
+        "scrolls": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 50
+        },
+        "found_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100000
+        },
+        "stop_reason": {
+          "enum": [
+            "round_limit",
+            "product_limit",
+            "queue_limit",
+            "end",
+            "no_growth",
+            null
+          ]
+        },
+        "page_number": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10
+        }
+      },
+      "required": [
+        "rounds",
+        "scrolls",
+        "found_count",
+        "stop_reason",
+        "page_number"
+      ]
+    },
+    "observation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "source": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "marketplace": {
+              "enum": [
+                "ozon",
+                "wildberries"
+              ]
+            },
+            "url": {
+              "type": "string",
+              "maxLength": 2000,
+              "pattern": "^https://www\\.(?:ozon\\.ru/product/[0-9]{1,20}/|wildberries\\.ru/catalog/[0-9]{1,20}/detail\\.aspx)$"
+            },
+            "requested_url": {
+              "type": "string",
+              "maxLength": 2000,
+              "pattern": "^https://www\\.(?:ozon\\.ru/product/[0-9]{1,20}/|wildberries\\.ru/catalog/[0-9]{1,20}/detail\\.aspx)$"
+            },
+            "extraction_method": {
+              "enum": [
+                "jsonld",
+                "dom",
+                "none"
+              ]
+            },
+            "extractor_version": {
+              "type": "string",
+              "maxLength": 40
+            },
+            "captured_at": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date-time"
+            }
+          },
+          "required": [
+            "marketplace",
+            "url",
+            "extraction_method",
+            "extractor_version",
+            "captured_at"
+          ]
+        },
+        "product": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "title": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "maxLength": 300
+            },
+            "brand": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "maxLength": 80
+            },
+            "model": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "maxLength": 150
+            },
+            "mpn": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "maxLength": 120
+            },
+            "sku": {
+              "type": "string",
+              "pattern": "^[0-9]{1,20}$"
+            },
+            "capacity": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "maxLength": 80
+            },
+            "bundle": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "maxLength": 200
+            },
+            "condition": {
+              "enum": [
+                "unknown",
+                "new",
+                "used",
+                "refurbished"
+              ]
+            }
+          },
+          "required": [
+            "title",
+            "brand",
+            "model",
+            "mpn",
+            "sku",
+            "capacity",
+            "bundle",
+            "condition"
+          ]
+        },
+        "offer": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "price": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "exclusiveMinimum": 0,
+              "maximum": 100000000
+            },
+            "currency": {
+              "enum": [
+                "RUB",
+                null
+              ]
+            },
+            "region": {
+              "enum": [
+                "RU-MOW",
+                "RU-SPE",
+                null
+              ]
+            },
+            "price_type": {
+              "enum": [
+                "regular",
+                null
+              ]
+            },
+            "payment_condition": {
+              "enum": [
+                "other_bank_card",
+                "any_card",
+                null
+              ]
+            },
+            "availability": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "seller": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "maxLength": 100
+                },
+                "name": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "maxLength": 150
+                }
+              },
+              "required": [
+                "id",
+                "name"
+              ]
+            },
+            "warranty_months": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 0,
+              "maximum": 240
+            },
+            "evidence": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "region": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "maxLength": 120
+                },
+                "payment_condition": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "maxLength": 120
+                }
+              },
+              "required": [
+                "region",
+                "payment_condition"
+              ]
+            }
+          },
+          "required": [
+            "price",
+            "currency",
+            "region",
+            "price_type",
+            "payment_condition",
+            "availability",
+            "seller",
+            "warranty_months",
+            "evidence"
+          ]
+        },
+        "candidates": {
+          "type": "array",
+          "maxItems": 30,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "price": {
+                "type": [
+                  "number",
+                  "null"
+                ],
+                "exclusiveMinimum": 0,
+                "maximum": 100000000
+              },
+              "currency": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "maxLength": 8
+              },
+              "method": {
+                "enum": [
+                  "jsonld",
+                  "dom"
+                ]
+              },
+              "raw": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "maxLength": 120
+              },
+              "label": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "maxLength": 120
+              },
+              "matches_page": {
+                "type": [
+                  "boolean",
+                  "null"
+                ]
+              },
+              "seller_id": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "maxLength": 100
+              },
+              "seller_name": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "maxLength": 150
+              }
+            },
+            "required": [
+              "price",
+              "currency",
+              "method",
+              "raw",
+              "label",
+              "matches_page",
+              "seller_id",
+              "seller_name"
+            ]
+          }
+        },
+        "needs_review": {
+          "type": "boolean"
+        },
+        "review_reasons": {
+          "type": "array",
+          "maxItems": 20,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "maxLength": 80
+          }
+        },
+        "identity_confirmed": {
+          "const": false
+        },
+        "images": {
+          "type": "array",
+          "maxItems": 10,
+          "items": {
+            "type": "string",
+            "maxLength": 2000,
+            "pattern": "^https://(?:[a-zA-Z0-9-]+\\.)*(?:ozone\\.ru|ozon\\.ru|wbbasket\\.ru|wb\\.ru)/[^?#]*$"
+          }
+        },
+        "specifications": {
+          "type": "array",
+          "maxItems": 40,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100
+              },
+              "value": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 300
+              }
+            },
+            "required": [
+              "name",
+              "value"
+            ]
+          }
+        },
+        "rating": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "value": {
+                  "type": [
+                    "number",
+                    "null"
+                  ],
+                  "minimum": 0,
+                  "maximum": 5
+                },
+                "rating_count": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "minimum": 0,
+                  "maximum": 100000000
+                },
+                "review_count": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "minimum": 0,
+                  "maximum": 100000000
+                },
+                "scope": {
+                  "enum": [
+                    "product",
+                    "unknown"
+                  ]
+                }
+              },
+              "required": [
+                "value",
+                "rating_count",
+                "review_count",
+                "scope"
+              ]
+            }
+          ]
+        }
+      },
+      "required": [
+        "source",
+        "product",
+        "offer",
+        "candidates",
+        "needs_review",
+        "review_reasons",
+        "identity_confirmed"
+      ]
+    }
+  }
+}

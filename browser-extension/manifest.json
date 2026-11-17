@@ -1,0 +1,12 @@
+{
+  "manifest_version": 3,
+  "name": "Ценоскоп · автоматический сбор в JSON",
+  "version": "0.6.0",
+  "description": "Автоматически проходит заданную очередь карточек Ozon/Wildberries и сохраняет наблюдения в JSON. Работает локально, без API и токенов.",
+  "minimum_chrome_version": "120",
+  "permissions": ["activeTab", "scripting", "storage", "alarms", "downloads", "clipboardWrite"],
+  "optional_host_permissions": ["https://www.ozon.ru/*", "https://ozon.ru/*", "https://www.wildberries.ru/*", "https://wildberries.ru/*"],
+  "background": {"service_worker": "background.js"},
+  "action": {"default_title": "Открыть Ценоскоп · очередь и JSON"},
+  "content_security_policy": {"extension_pages": "script-src 'self'; object-src 'none'; base-uri 'none'"}
+}

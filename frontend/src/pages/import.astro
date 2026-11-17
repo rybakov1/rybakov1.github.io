@@ -1,0 +1,5 @@
+---
+import Layout from '../layouts/Layout.astro';
+import JsonImport from '../components/JsonImport';
+---
+<Layout title="Импорт JSON расширения" noindex={true} dataMode="local"><div class="page-heading"><h1>Импорт JSON</h1><p>Выберите JSON расширения и нажмите «Добавить в каталог сайта». Данные сохранятся на сервере и появятся в общем списке.</p></div><JsonImport client:load/></Layout>

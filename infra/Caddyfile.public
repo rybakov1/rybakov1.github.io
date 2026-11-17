@@ -1,0 +1,6 @@
+{$SITE_DOMAIN} {
+    encode zstd gzip
+    reverse_proxy gateway:8080 {
+        header_up X-Real-IP {remote_host}
+    }
+}

@@ -1,0 +1,16 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ProductDetail from '../../components/ProductDetail';
+import BrowserListing from '../../components/BrowserListing';
+import '../../styles/detail.css';
+import { getProductResult, getAppConfig, products } from '../../../lib/data';
+export function getStaticPaths(){return products.map(product=>({params:{slug:product.slug}}));}
+const result=await getProductResult(Astro.params.slug!);
+if(!result.available) Astro.response.status=503;
+if(result.available&&!result.product) return Astro.redirect('/404/');
+const product=result.product;
+const config=product?await getAppConfig():null;
+const raw=product?.record_type==='unverified_listing';
+const structured=product&&!product.is_demo&&!raw?{ '@context':'https://schema.org','@type':'Product',name:product.name,brand:{'@type':'Brand',name:product.brand},mpn:product.mpn }:null;
+---
+<Layout noindex={!product||raw} dataMode={!product?'unavailable':product.is_demo?'demo':'import'} title={product?`${product.name} — ${raw?'информация о товаре':'история цен и предложения'}`:'Карточка временно недоступна'} description={!product?'Информация о товаре временно недоступна.':raw?'Данные товара, цена последнего замера и ссылка на источник.':`Сравнение предложений ${product.name}, история цен, ежедневная медиана и срезы свежих оценок. ${product.is_demo?'Демонстрационные данные.':''}`}><Fragment slot="head">{structured&&<script type="application/ld+json" set:html={JSON.stringify(structured).replace(/</g,'\\u003c')}/>}</Fragment>{product&&config?<>{!raw&&<div class="breadcrumbs"><a href="/">Каталог</a><span>/</span><a href={raw?'/catalog/?source=uploaded':`/category/${product.category}/`}>{raw?'Импорт JSON':product.category_name}</a><span>/</span>{raw?'Карточка товара':`${product.brand} ${product.model}`}</div>}{raw?<BrowserListing client:load product={product}/>:<ProductDetail client:load product={product} config={config}/>}</>:<div class="empty-state" role="alert"><h1>Карточка временно недоступна</h1><p>Не удалось загрузить данные. Попробуйте обновить страницу позже.</p><a class="button button-light" href="/catalog/">Открыть каталог</a></div>}</Layout>

@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <title>Сбор карточек</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header>
+      <p class="eyebrow">Ценоскоп</p>
+      <h1>Один файл с карточками</h1>
+    </header>
+    <p id="status" class="status">Откройте категорию, продавца или товар.</p>
+    <button id="collect" type="button">Добавить с этой страницы</button>
+    <dl id="stats" hidden>
+      <div><dt>Всего</dt><dd id="total">0</dd></div>
+      <div><dt>Категории</dt><dd id="category">0</dd></div>
+      <div><dt>Продавец</dt><dd id="seller">0</dd></div>
+      <div><dt>Похожие</dt><dd id="similar">0</dd></div>
+      <div><dt>Товар</dt><dd id="product">0</dd></div>
+    </dl>
+    <div class="actions">
+      <button id="download" type="button" disabled>Скачать JSON</button>
+      <button id="clear" type="button" class="quiet" disabled>Очистить</button>
+    </div>
+    <p class="note">Собираются только карточки, уже видимые на открытой странице. Страницы нужно листать самим.</p>
+    <script src="popup.js"></script>
+  </body>
+</html>

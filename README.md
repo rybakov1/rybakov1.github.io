@@ -1,144 +1,133 @@
-# Trade Show Stands — tradeshowstands.com.au
+# Ценоскоп — MVP сравнения цен
 
-Australian **trade-show calendar** + **exhibition stand brief** lead-gen site, run with **Brijnco**
-(Australian exhibition stand builder).
+Русскоязычный сайт сравнивает предложения одной модели, показывает наблюдаемую историю цен, объясняет снижение относительно медианы и анализирует свежие отзывы. Astro + TypeScript на фронтенде, FastAPI + SQLAlchemy/Alembic на бэкенде, PostgreSQL в Docker Compose. Рабочее название и базовый URL задаются окружением.
 
-- **Public face:** an independent calendar of Australian trade shows (dates, venues, official links),
-  city and industry landing pages, and a stand-builder guide.
-- **Commercial:** one structured stand brief → qualified **hot / warm / cold** → emailed straight to
-  Brijnco, with no middleman. The site is **not** an official organiser of any show, and it never says it is.
+**По умолчанию это демо.** Каталог, цены, вымышленные продавцы, 90-дневная история и отзывы синтетические. Ozon/Wildberries не опрашиваются. SVG компонентов созданы для проекта. Не используйте демо как рекомендацию реальной покупки.
 
-Static Astro site + one Cloudflare Pages Function (`functions/api/lead.ts`). Deploy steps: **[DEPLOY.md](./DEPLOY.md)**.
+Для подготовки публичного MVP на собственном VPS предусмотрена отдельная конфигурация без демоданных: [инструкция развёртывания](docs/PUBLIC_DEPLOYMENT.md). Она не публикует сайт автоматически и не переносит локальную базу; после развёртывания данные загружаются через JSON-импорт.
 
-## Quick start
+## Запуск Docker Compose
 
-```bash
-export PATH=~/.local/bin:$PATH   # Node 22 (see .nvmrc)
-npm install
-npm run dev          # http://localhost:4321 (Astro only; /api/lead not running → mailto fallback)
-npm run build        # → dist/
-npm test             # vitest: lead handler unit tests
-npm run check:links  # every internal link in dist/ resolves
-npm run pages:dev    # build + wrangler pages dev on :8788 (static site + /api/lead together)
+Нужны Docker Engine/Desktop с Compose v2 и доступ к реестрам образов/npm/PyPI при первой сборке. В PowerShell из корня проекта:
+
+```powershell
+Copy-Item .env.example .env
+docker compose up --build
 ```
 
-For `pages:dev`, copy `.dev.vars.example` → `.dev.vars` and fill it in. Without it, the endpoint answers
-`503 not_configured`.
+На Linux/macOS первая команда — `cp .env.example .env`. Затем доступны:
 
-## Pages
+- сайт: <http://localhost:3000>;
+- API и интерактивная OpenAPI-документация: <http://localhost:8000/docs>;
+- проверка API: <http://localhost:8000/health>.
 
-| Path | Purpose |
-|------|---------|
-| `/` | Value prop, next show, featured shows, city + industry index. Organization + WebSite JSON-LD |
-| `/shows` | Full calendar with city / industry / upcoming filters. ItemList JSON-LD |
-| `/shows/[slug]` | 44 show pages: facts, official link, planning notes, related shows, Event JSON-LD |
-| `/shows/city/[city]` | 8 city pages (Sydney, Melbourne, Brisbane, Perth, Adelaide, Gold Coast, Canberra, Darwin) |
-| `/shows/industry/[industry]` | 11 industry pages |
-| `/exhibition-stand-builders` | Guide: stand types, sourced cost example, builders by city, checklist, timeline, FAQ |
-| `/stand-brief` | Lead form (the conversion page; no ads) |
-| `/thanks` | Confirmation (`noindex`, excluded from the sitemap) |
-| `/privacy`, `/cookies` | Policies (mention Brijnco, Cloudflare and Resend; review before launch) |
-| `/404` | Not-found page (Cloudflare Pages serves it for unknown paths) |
+Бэкенд ждёт готовности PostgreSQL, применяет миграции и заполняет демоданные. Повторный seed не должен создавать дубликаты. PostgreSQL хранится в named volume `postgres-data`; наружу порт БД не открыт. Порты сайта и API привязаны к `127.0.0.1` для локальной разработки.
 
-URLs are clean, with no trailing slash (`build.format: 'file'`, `trailingSlash: 'never'`). Landing-page copy
-lives in `src/data/taxonomy.ts`.
+В `.env` замените `ADMIN_TOKEN` случайным секретом минимум из 32 символов. Для локальной генерации без дополнительных пакетов: `python -c "import secrets; print(secrets.token_hex(32))"`. Этот токен предназначен только для администратора; не добавляйте его в переменные `PUBLIC_*`. Доступ к админке отключён при пустом токене. Пароль PostgreSQL также замените до публикации; для URL подключения удобно использовать случайную hex-строку.
 
-## Show data — `src/data/shows.ts`
+```powershell
+# Повторить миграции / заполнение вручную
+docker compose exec backend alembic upgrade head
+docker compose exec backend python -m app.seed
 
-There is no exhibition API. The calendar is edited by hand, about once a month.
+# Посмотреть ошибки
+docker compose logs --tail 100 backend frontend
 
-```bash
-npm run shows:review
+# Остановить с сохранением базы
+docker compose down
 ```
 
-The script prints four lists:
+Не удаляйте named volume при обычной остановке: он содержит данные. Для полной пересборки интерфейса после изменения `PUBLIC_*` требуется `docker compose up --build` — публичные переменные Astro встраиваются при сборке.
 
-- **PAST** — the edition has ended. Delete that object.
-- **RE-CHECK** — `verifiedOn` is older than 90 days. Open `officialSite` and correct dates, or bump `verifiedOn` if they still match.
-- **UNCONFIRMED** — `illustrative: true`. The page shows a Verify badge until the organiser confirms the detail in `flagNote`.
-- **WATCHLIST** — series in `src/data/watchlist.ts` whose next edition is not published yet. Open the official URL. When dates and a venue are on that page, copy a nearby object into `shows.ts`, set `verifiedOn` to today, and remove the watchlist row. Do not take dates from EventsEye, 10times or similar directories.
+## Запуск без Docker
 
-`city` must be a city name from `taxonomy.ts` (`Sydney`, not `sydney`). `categories` must be industry slugs from `taxonomy.ts`. A new city or industry needs copy there first, otherwise the landing page will not build.
+Нужны Python 3.12+, Node.js 22 и npm. SQLite подходит для локальной проверки; production использует PostgreSQL. Команды ниже выполняются из корня, каждый сервер — в отдельном терминале.
 
-Rules:
-1. Set `officialSite` **only** to a URL you have opened and checked. **Never invent URLs.**
-2. Set `verifiedOn: 'YYYY-MM-DD'` each time you check a show against its official site.
-3. If dates or venue are not confirmed, set `illustrative: true` and give a `flagNote` explaining why.
-4. Remove past editions. Add the next edition only once the organiser publishes it.
-
-## Lead delivery
-
-```
-form (/stand-brief) ──JSON──▶ POST /api/lead (Cloudflare Pages Function)
-                                 ├─ origin allowlist, 32 KB limit, rate limit (5 / 10 min / IP)
-                                 ├─ spam: honeypot `company_fax`, <2.5 s fill time, link/markup/keyword checks
-                                 ├─ validate (src/lib/lead.ts) → 422 with per-field errors
-                                 ├─ qualify hot/warm/cold server-side (src/lib/qualify.ts)
-                                 ├─ Resend email → LEAD_TO_EMAIL (+ LEAD_CC_EMAIL), reply-to = exhibitor
-                                 └─ optional webhook → LEAD_WEBHOOK_URL (JSON, X-Lead-Secret header)
-                              ◀── { ok, qualification, redirect: "/thanks?q=hot" }
+```powershell
+# Терминал 1: API
+python -m venv backend/.venv
+backend/.venv/Scripts/python -m pip install -r backend/requirements.txt
+Set-Location backend
+$env:DATABASE_URL = 'sqlite:///./cenoscope.db'
+$env:ADMIN_TOKEN = 'your-local-random-secret-at-least-32-characters'
+.venv/Scripts/alembic upgrade head
+.venv/Scripts/python -m app.seed
+.venv/Scripts/python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
 ```
 
-- **JS on:** the form posts JSON, then redirects to `/thanks` on success. Server field errors appear inline
-  next to the fields; delivery errors appear in an inline box above the submit button.
-- **JS off:** the plain `<form method="post" action="/api/lead">` gets a `303` to `/thanks` or back to
-  `/stand-brief?error=…`.
-- **Local dev without the function** (`astro dev`/`preview`): when the endpoint returns 404/405 or isn't
-  reachable *on localhost only*, the form opens a pre-filled `mailto:` to `leads.mailtoFallbackEmail`.
-  It never falls back like this in production.
-- The delivery works if **either** email or webhook succeeds. If neither is configured: `503`. If both fail: `502`.
-- Placeholder addresses (`*.example`, anything containing `TBC`) count as *not configured*, so a
-  half-finished deploy returns 503 instead of mailing a dead address.
-- Spam gets a fake `200`, so bots learn nothing.
+```powershell
+# Терминал 2: сайт
+Set-Location frontend
+npm ci
+$env:API_BASE_URL = 'http://127.0.0.1:8000'
+$env:PUBLIC_API_URL = 'http://localhost:8000'
+npm run dev
+```
 
-### Environment variables
+На Linux используйте `backend/.venv/bin/python`/`alembic` вместо `Scripts`, а переменные задавайте через `export`. Если API явно настроен, его пустой ответ или ошибка не подменяются синтетическим каталогом. Реальные импорты, сохранение алертов и админка требуют API.
 
-Set in Cloudflare Pages → Settings → Variables and Secrets. Locally, use `.dev.vars`. Full list with
-comments: [`.env.example`](./.env.example).
+На Windows после установки зависимостей можно запустить оба процесса одной командой из корня:
 
-| Variable | Required | Notes |
-|----------|----------|-------|
-| `RESEND_API_KEY` | yes (for email) | Secret. Resend API key |
-| `LEAD_TO_EMAIL` | yes (for email) | Sister’s lead inbox, **TBC**. Comma-separated for several |
-| `LEAD_CC_EMAIL` | no | e.g. Vladislav |
-| `LEAD_FROM_EMAIL` | no | Default `Trade Show Stands <leads@tradeshowstands.com.au>`. The domain must be verified in Resend |
-| `LEAD_WEBHOOK_URL` | no | Secret. Also POST each lead as JSON (Slack / Make / n8n / CRM) |
-| `LEAD_WEBHOOK_SECRET` | no | Secret. Sent as `X-Lead-Secret` |
-| `ALLOWED_ORIGINS` | no | Extra browser origins. The site domain, www, `*.pages.dev` and localhost are built in |
-| `LEAD_RATE_LIMIT` | no | **KV binding** (not a var) for rate limiting across isolates. Without it, rate limiting is per-isolate in memory |
-| `PUBLIC_ANALYTICS_PROVIDER` | no | Build-time: `plausible` / `ga4` / `none` (default none) |
-| `PUBLIC_PLAUSIBLE_DOMAIN`, `PUBLIC_GA4_ID` | no | Build-time analytics IDs |
+```powershell
+.\scripts\start-dev.ps1
+```
 
-## Config — `site.config.ts`
+Скрипт читает корневой `.env` как буквальные `KEY=VALUE`, применяет миграции и seed, использует локальную SQLite и API на localhost, запускает скрытые процессы и сохраняет логи/PID в игнорируемой папке `.local`. Уже отвечающие службы проекта на 3000/8000 используются повторно. Посторонние процессы скрипт не завершает. Для остановки своих процессов: `.\scripts\stop-dev.ps1`. После изменения `.env` сначала остановите свои службы и запустите снова. Если политика PowerShell блокирует запуск, используйте `powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\start-dev.ps1`.
 
-- `domain`, `name`, `wordmark`, `contactEmail` (`contactEmailIsPlaceholder: true` until a real mailbox exists).
-- `leads.endpoint` (`/api/lead`), `leads.mailtoFallbackEmail` (**placeholder** `LEADS-INBOX-TBC@brijnco.example`;
-  used only for the local fallback).
-- `analytics.provider`: `'none'` (default), `'plausible'` or `'ga4'`. When enabled, a `Lead` event fires
-  on successful submit. Env vars override this at build time. Update `/cookies` and `/privacy` when you switch analytics on.
-- `ads.enabled: false`.
+## Разрешённый импорт / парсер
 
-## Testing
+`ImportProvider` разбирает структурированный CSV/JSON, проверяет схему, нормализует поля, отбрасывает дубликаты и пишет происхождение/дату наблюдения. Для MVP выбран Python: он уже используется API, не требует второго runtime и подходит для пакетных фидов. Реальный HTTP-краулинг площадок не включён. Для начала работы не нужны ключи Ozon/Wildberries.
 
-- `npm test`: 18 vitest unit tests for the handler (validation, honeypot, timing trap, origin, rate limit,
-  Resend payload, webhook, 422/503/502, form-post redirects, placeholder guard).
-- `scripts/e2e/`: headless end-to-end run. Start `mock_resend.py` (fake Resend on :8799), then run
-  `wrangler pages dev dist --port 8788 --binding RESEND_API_KEY=re_test --binding LEAD_TO_EMAIL=you@test.local --binding RESEND_API_URL=http://127.0.0.1:8799/emails`.
-  After that, `python3 scripts/e2e/e2e.py` fills in the real form in Chrome, and `e2e_err.py` checks the inline-error and mailto paths.
-- `npm run check:links`.
+Пример формата находится в `backend/examples/`. В локальном окружении с активными backend-зависимостями:
 
-## Design (do not restyle)
+```powershell
+Set-Location backend
+.venv/Scripts/python -m app.import_feed examples/import.csv --source-id permitted-feed --permission 'Reference to the signed data agreement'
+```
 
-Editorial trade-catalogue look: light, paper-toned, one accent.
+Основание разрешения — обязательная запись происхождения, а не автоматическая юридическая проверка. Перед импортом реального файла проверьте [права и условия источника](docs/DATA_SOURCES_AND_COMPLIANCE.md). Не загружайте чужие фотографии/тексты отзывов без разрешения. Точный контракт и ошибки описаны в OpenAPI и [документации API](docs/API.md).
 
-- **Type:** Fraunces Variable (display + italics), Instrument Sans Variable (body/UI), IBM Plex Mono 500
-  (labels/meta). Self-hosted via `@fontsource`.
-- **Palette:** paper `#f3efe6`, sheet `#fbf9f4`, ink `#1b1a17`, rules `#d6cdbd`, accent **ochre** `#b4471f`.
-  Tokens are in `src/styles/global.css`.
-- `public/og-default.png` (1200×630) uses the same type and palette.
+## Автоматический сбор в JSON
 
-## Positioning checklist
+В `browser-extension/` находится самостоятельное расширение Chrome/Edge **0.6**. Значок открывает полноразмерную вкладку управления. Укажите ссылки и настройки или вставьте конфигурационный JSON, затем нажмите «Начать»: одна фоновая вкладка последовательно откроет карточки, извлечёт доступные поля и сохранит JSON. Результат также можно скопировать текстом без файла. Подключение к API, токены, запуск сайта и подтверждение каждой отдельной карточки не требуются.
 
-- Never claim to be an official organiser. Always link out to the official show site.
-- Brijnco is credited softly as the stand partner that receives briefs.
-- The privacy policy must name the real entity and ABN, and the retention period, before launch.
+Поддержаны пауза, продолжение, сохранение прогресса, предел очереди и сбор категорий Ozon с прокруткой, подгрузкой, дедупликацией и переходом по явной ссылке «Далее». Лимиты товаров, прокруток и страниц настраиваются. Неоднозначные поля помечаются для проверки; CAPTCHA/блокировка останавливает обход. Файл сам по себе не импортируется в сайт.
+
+Установите новую версию через «Загрузить распакованное» в Chrome/Edge. [Инструкция](browser-extension/README.md), [поток и совместимость](docs/BROWSER_COLLECTOR.md). Прежние серверные маршруты сохранены для отдельной интеграции, но версия 0.4 ими не пользуется.
+
+## Telegram
+
+Сайт работает с пустым `TELEGRAM_BOT_TOKEN`. В этом состоянии интерфейс сообщает, что бот не настроен. Чтобы включить личные уведомления:
+
+1. Создайте своего бота, сохраните его токен в `.env` как `TELEGRAM_BOT_TOKEN`, имя без `@` — в `TELEGRAM_BOT_USERNAME`.
+2. Сгенерируйте ключ шифрования Telegram ID из backend-окружения: `python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"`. Сохраните как `TELEGRAM_ID_ENCRYPTION_KEY` и отдельно защитите резервную копию ключа.
+3. Запустите `docker compose --profile telegram up --build -d`.
+4. Создайте целевую цену в карточке, откройте deep link и явно подтвердите подписку в личном боте. Без согласия пользователя уведомления не активируются.
+
+Worker запускается по умолчанию для очистки служебных данных; без токена он не отправляет сообщения. При настроенном боте он повторно проверяет цену перед отправкой, применяет дедупликацию и cooldown. Запускайте один worker: при аварии между успешной отправкой в Telegram и сохранением результата возможен повтор сообщения. Бот умеет показать подписки и отменить их. Он не пишет в канал и не отправляет рассылку. Для локальных автоматических тестов используется подставной Bot API; тесты не должны обращаться к настоящим пользователям.
+
+## Проверки
+
+```powershell
+# Backend, из backend с установленными зависимостями
+.venv/Scripts/python -m pytest
+
+# Frontend, из frontend
+npm run lint
+npm run typecheck
+npm run build
+```
+
+Тесты проверяют расчёты медианы по дням, аномалии, совместимость моделей, срезы отзывов, импорт, API и доставку алертов без реальной отправки. Фактически выполненные проверки и ограничения окружения сообщаются в результате работы агента; наличие команд здесь само по себе не означает успешный прогон Docker или внешних интеграций.
+
+## Документация и границы
+
+- [Архитектура и данные](docs/ARCHITECTURE.md)
+- [Методика цен и отзывов](docs/METHODOLOGY.md)
+- [API, импорт и администрирование](docs/API.md)
+- [Расширение и очередь сборщиков](docs/BROWSER_COLLECTOR.md)
+- [Источники, права и персональные данные](docs/DATA_SOURCES_AND_COMPLIANCE.md)
+- [Развёртывание, резервные копии и диагностика](docs/OPERATIONS.md)
+- [После MVP](docs/ROADMAP_POST_MVP.md)
+
+Реальные адаптеры Ozon/Wildberries требуют разрешённых API/фидов и проверки условий. Домен и товарный знак не проверены. Перед публичным запуском нужны действительные источники, секреты, HTTPS, тексты политики/условий, наблюдение за обновлениями и проверка резервного восстановления. Демо-страницы не должны выдавать синтетические цены/рейтинги за подтверждённые данные в поисковой разметке.

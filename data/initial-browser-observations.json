@@ -1,0 +1,65 @@
+{
+  "notice": "Factual fields observed in the two user-supplied Ozon pages. No descriptions, images or reviews copied. Source terms have not been verified. This file is a one-time observation, not a current price feed.",
+  "captured_at": "2026-11-15T08:24:35Z",
+  "permission_reference": "Owner request and two Ozon URLs supplied in this Codex chat on 2026-11-15; factual browser observation; marketplace terms unreviewed",
+  "items": [
+    {
+      "canonical": {
+        "name": "MSI GeForce RTX 5080 VENTUS 3X OC 16 ГБ",
+        "brand": "MSI",
+        "model": "GeForce RTX 5080 VENTUS 3X OC",
+        "mpn": "MSI RTX5080 VENTUS 3X OC",
+        "category": "gpu",
+        "capacity": "16 ГБ",
+        "bundle": "видеокарта, документация",
+        "condition": "unknown",
+        "specs": {"Объём памяти": "16 ГБ", "Память": "GDDR7", "Партномер на странице": "MSI RTX5080 VENTUS 3X OC", "Состояние": "Не указано в прочитанной разметке"}
+      },
+      "observation": {
+        "page_url": "https://www.ozon.ru/product/2067659662/",
+        "price": 367583,
+        "currency": "RUB",
+        "region": "RU-SPE",
+        "price_type": "regular",
+        "payment_condition": "other_bank_card",
+        "availability": true,
+        "condition": "unknown",
+        "seller_id": "topcomputer",
+        "seller_name": "TopComputer",
+        "warranty_months": 12,
+        "extraction_method": "jsonld",
+        "extracted_price_text": "367 583 ₽ — С другими банками",
+        "extractor_version": "browser-dom-inspection-1"
+      }
+    },
+    {
+      "canonical": {
+        "name": "Palit GeForce RTX 5050 Dual 8 ГБ",
+        "brand": "Palit",
+        "model": "GeForce RTX 5050 Dual",
+        "mpn": "NE65050019P1-GB2070D",
+        "category": "gpu",
+        "capacity": "8 ГБ",
+        "bundle": "документация",
+        "condition": "unknown",
+        "specs": {"Объём памяти": "8 ГБ", "Память": "GDDR6", "Состояние": "Не указано в прочитанной разметке"}
+      },
+      "observation": {
+        "page_url": "https://www.ozon.ru/product/2572917481/",
+        "price": 47999,
+        "currency": "RUB",
+        "region": "RU-SPE",
+        "price_type": "regular",
+        "payment_condition": "other_bank_card",
+        "availability": true,
+        "condition": "unknown",
+        "seller_id": null,
+        "seller_name": null,
+        "warranty_months": null,
+        "extraction_method": "jsonld",
+        "extracted_price_text": "47 999 ₽ — С другими банками",
+        "extractor_version": "browser-dom-inspection-1"
+      }
+    }
+  ]
+}

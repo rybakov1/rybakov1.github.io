@@ -1,0 +1,40 @@
+---
+import '../styles/global.css';
+import '../styles/simple.css';
+import '../styles/market.css';
+import Shell from '../components/Shell';
+import {getAppConfig} from '../../lib/data';
+const appConfig=Astro.props.dataMode?null:await getAppConfig();
+const dataMode=Astro.props.dataMode||appConfig?.data_mode||'demo';
+const { title = 'Покупайте в нужный момент', description = 'Сравнивайте предложения, изучайте историю цен и свежие отзывы. Ценоскоп помогает принимать взвешенные решения о покупке.', noindex = false } = Astro.props;
+const brand = import.meta.env.PUBLIC_SITE_NAME || 'Ценоскоп';
+const indexable = import.meta.env.PUBLIC_INDEXABLE === 'true';
+const canonical = new URL(Astro.url.pathname, import.meta.env.PUBLIC_SITE_URL || 'http://localhost:3000').href;
+---
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#faf9f6" />
+    <title>{title} — {brand}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content={noindex || !indexable ? 'noindex,follow' : 'index,follow'} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:title" content={`${title} — ${brand}`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="ru_RU" />
+    <meta property="og:url" content={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <slot name="head" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">К содержимому</a>
+    <Shell client:load pathname={Astro.url.pathname} brand={brand} dataMode={dataMode} />
+    <div class="page-shell">
+      <main id="main">{dataMode==='unavailable'&&<div class="api-error-banner" role="status"><strong>Каталог временно недоступен</strong><span>Попробуйте обновить страницу позже.</span></div>}<slot /></main>
+      <footer class="footer"><div><span class="footer-brand">{brand}</span><span>У каждой цены есть история.</span></div><p>MVP · Происхождение данных указано в карточке</p><a href="/methodology/">Как мы считаем</a></footer>
+    </div>
+  </body>
+</html>

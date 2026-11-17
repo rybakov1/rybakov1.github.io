@@ -1,0 +1,2 @@
+external_id,brand,model,mpn,category,capacity,bundle,condition,seller_id,seller_name,marketplace,price,currency,region,price_type,payment_condition,availability,observed_at,url,warranty_months
+authorized-001,Example,Example SSD,EX-SSD-1T,ssd,1 ТБ,retail,new,authorized-shop,Пример продавца,authorized_feed,7990,RUB,RU-MOW,regular,any_card,true,2026-11-14T12:00:00+03:00,https://www.ozon.ru/,12
