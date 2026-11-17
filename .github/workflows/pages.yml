@@ -30,7 +30,7 @@ jobs:
         run: npm install --global npm@11.2.0
       - name: Install frontend
         working-directory: frontend
-        run: npm ci
+        run: npm install --no-audit --no-fund
       - name: Build static site
         working-directory: frontend
         env:
