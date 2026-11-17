@@ -5,6 +5,7 @@ import BrowserListing from '../../components/BrowserListing';
 import '../../styles/detail.css';
 import { getProductResult, getProductsResult, getAppConfig, products } from '../../../lib/data';
 export async function getStaticPaths(){
+  if (process.env.PUBLIC_STATIC_SITE === 'true') return [];
   const configured = Boolean(process.env.PUBLIC_API_URL || process.env.API_BASE_URL);
   if (process.env.EXPORT_STATIC === '1' && configured) {
     const result = await getProductsResult();

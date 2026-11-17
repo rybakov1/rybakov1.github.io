@@ -20,7 +20,7 @@ function load(relative){
   const code=ts.transpileModule(source,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.CommonJS,jsx:ts.JsxEmit.ReactJSX}}).outputText;
   const requireDependency=name=>{
     if(name.endsWith('.css'))return {};
-    if(name.endsWith('/config'))return {PUBLIC_API_URL:'',PUBLIC_API_ENABLED:false};
+    if(name.endsWith('/config'))return {PUBLIC_API_URL:'',PUBLIC_API_ENABLED:false,productHref:slug=>`/product/${slug}/`};
     if(name==='./Chart')return {__esModule:true,default:()=>null,Sparkline:()=>null};
     if(name.startsWith('.')){
       const base=resolve(dirname(path),name);

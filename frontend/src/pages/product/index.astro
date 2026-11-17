@@ -1,0 +1,6 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import LiveProduct from '../../components/LiveProduct';
+import '../../styles/detail.css';
+---
+<Layout title="Товар" noindex={true} dataMode="import"><LiveProduct client:load /></Layout>

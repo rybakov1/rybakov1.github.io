@@ -1,9 +1,11 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Tracking from '../components/Tracking';
+import LiveTracking from '../components/LiveTracking';
 import '../styles/detail.css';
 import {getProductsResult,getAppConfig} from '../../lib/data';
-const [result,config]=await Promise.all([getProductsResult(),getAppConfig()]);
+const isStatic=process.env.EXPORT_STATIC === '1';
+const [result,config]=isStatic ? [{items:[],available:true},null] : await Promise.all([getProductsResult(),getAppConfig()]);
 const products=result.items;
 ---
-<Layout dataMode={!result.available?'unavailable':products.length?(products.every(p=>p.is_demo)?'demo':products.some(p=>p.is_demo)?'mixed':'import'):undefined} title="Личный кабинет" noindex={true}><div class="page-heading"><h1>Личный кабинет</h1><p>Сохранённые товары и уведомления о цене.</p></div><Tracking client:load products={products} config={config} unavailable={!result.available}/></Layout>
+<Layout dataMode={isStatic?'import':!result.available?'unavailable':products.length?(products.every(p=>p.is_demo)?'demo':products.some(p=>p.is_demo)?'mixed':'import'):undefined} title="Личный кабинет" noindex={true}><div class="page-heading"><h1>Личный кабинет</h1><p>Сохранённые товары и уведомления о цене.</p></div>{isStatic?<LiveTracking client:load/>:config&&<Tracking client:load products={products} config={config} unavailable={!result.available}/>}</Layout>

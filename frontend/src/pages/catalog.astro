@@ -1,9 +1,11 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Catalog from '../components/Catalog';
+import LiveCatalog from '../components/LiveCatalog';
 import { getProductsResult } from '../../lib/data';
-const result=await getProductsResult();
+const isStatic = process.env.EXPORT_STATIC === '1';
+const result=isStatic ? {items:[],available:true} : await getProductsResult();
 const products=result.items;
 const unavailable=!result.available;
 ---
-<Layout dataMode={unavailable?'unavailable':products.length?(products.every(p=>p.is_demo)?'demo':products.some(p=>p.is_demo)?'mixed':'import'):undefined} title="Каталог электроники — сравнение цен" noindex={Astro.url.searchParams.has('q')}><div class="page-heading"><h1>Каталог</h1><p>{unavailable?'Каталог временно недоступен. Попробуйте обновить страницу позже.':`${products.length} записей. Модели и карточки из загруженных файлов. Происхождение данных указано отдельно.`}</p></div><div class="inline-demo">{unavailable?'Данные каталога временно недоступны':products.some(p=>p.is_demo)?'Есть демомодели: синтетические цены помечены отдельно':'Наблюдения из подключённых источников · Для истории нужны повторные замеры'}</div><Catalog client:load products={products} unavailable={unavailable}/></Layout>
+<Layout dataMode={isStatic?'import':unavailable?'unavailable':products.length?(products.every(p=>p.is_demo)?'demo':products.some(p=>p.is_demo)?'mixed':'import'):undefined} title="Каталог электроники — сравнение цен" noindex={Astro.url.searchParams.has('q')}><div class="page-heading"><h1>Каталог</h1><p>{isStatic?'Товары из подключённых источников.':unavailable?'Каталог временно недоступен. Попробуйте обновить страницу позже.':`${products.length} записей. Модели и карточки из загруженных файлов. Происхождение данных указано отдельно.`}</p></div><div class="inline-demo">{unavailable?'Данные каталога временно недоступны':products.some(p=>p.is_demo)?'Есть демомодели: синтетические цены помечены отдельно':'Наблюдения из подключённых источников · Для истории нужны повторные замеры'}</div>{isStatic?<LiveCatalog client:load/>:<Catalog client:load products={products} unavailable={unavailable}/>}</Layout>

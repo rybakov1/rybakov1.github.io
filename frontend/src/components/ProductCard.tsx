@@ -1,3 +1,4 @@
+import { productHref } from '../../lib/config';
 import { useEffect, useRef, useState } from 'react';
 import { Bell, Check, Star } from 'lucide-react';
 import type { Product } from '../../lib/types';
@@ -24,14 +25,14 @@ export default function ProductCard({product:p}:{product:Product}){
   const count=raw?observation?.rating?.review_count:p.reviews_count;
   const price=raw?observedPrice(observation?.offer.price,observation?.offer.currency):rub(p.price);
   return <article className="product-card marketplace-card">
-    <div className="product-image-wrap"><a href={`/product/${p.slug}/`} tabIndex={-1} aria-hidden="true">{raw?<SourceImage url={observation?.images?.[0]} loading="lazy"/>:<img src={productImage(p)} alt="" loading="lazy"/>}</a><WatchButton product={p}/>{p.is_demo&&<span className="card-tag">Демо</span>}</div>
+    <div className="product-image-wrap"><a href={productHref(p.slug)} tabIndex={-1} aria-hidden="true">{raw?<SourceImage url={observation?.images?.[0]} loading="lazy"/>:<img src={productImage(p)} alt="" loading="lazy"/>}</a><WatchButton product={p}/>{p.is_demo&&<span className="card-tag">Демо</span>}</div>
     <div className="product-card-body">
       <div className="card-price-row"><strong className="card-price">{price}</strong></div>
       <p className="price-prefix">{raw?'Последний замер · цена могла измениться':p.status==='stale_price'?'Цена устарела':p.price==null?'Текущая цена не подтверждена':'Текущая цена'}</p>
-      <a className="product-name" href={`/product/${p.slug}/`}>{p.name}</a>
+      <a className="product-name" href={productHref(p.slug)}>{p.name}</a>
       <div className="product-reviews"><Star size={15} fill={rating==null?'none':'#f4b740'} color={rating==null?'#9ca3af':'#f4b740'}/>{rating==null?<span>Нет данных о рейтинге</span>:<><strong>{rating.toFixed(1)}</strong>{count!=null&&<span>· {pluralize(count,'отзыв','отзыва','отзывов')}</span>}</>}</div>
       <p className="snapshot-date">{raw?`Замер: ${formatDate(observation?.source.captured_at||null)}`:`Обновлено: ${p.last_updated||'нет даты'}`}</p>
-      <a className="card-details" href={`/product/${p.slug}/`}>Подробнее</a>
+      <a className="card-details" href={productHref(p.slug)}>Подробнее</a>
     </div>
   </article>;
 }
