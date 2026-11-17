@@ -21,3 +21,5 @@ export const siteConfig = {
 export default siteConfig;
 
 export const PUBLIC_API_ENABLED = env.PUBLIC_API_ENABLED !== 'false';
+export const STATIC_SITE = env.PUBLIC_STATIC_SITE === 'true';
+export const productHref = (slug: string) => STATIC_SITE ? `/product/?slug=${encodeURIComponent(slug)}` : `/product/${encodeURIComponent(slug)}/`;

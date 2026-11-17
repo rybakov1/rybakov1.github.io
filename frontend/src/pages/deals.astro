@@ -1,9 +1,11 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Catalog from '../components/Catalog';
+import LiveCatalog from '../components/LiveCatalog';
 import { getProductsResult } from '../../lib/data';
-const result=await getProductsResult();
+const isStatic = process.env.EXPORT_STATIC === '1';
+const result=isStatic ? {items:[],available:true} : await getProductsResult();
 const products=result.items;
 const unavailable=!result.available;
 ---
-<Layout dataMode={unavailable?'unavailable':products.length?(products.every(p=>p.is_demo)?'demo':products.some(p=>p.is_demo)?'mixed':'import'):undefined} title="Выгодные предложения по истории цен"><div class="page-heading"><h1>Снижения цен</h1><p>Снижения от 5% относительно ежедневной медианы за 30 дней.<br/>Учитываем только сопоставимые предложения с достаточной историей.</p></div><div class="inline-demo">{products.some(p=>p.is_demo)?'Демонстрационные данные помечены отдельно · ':''}Аналитическая оценка, а не обещание скидки</div><Catalog client:load products={products} deals={true} unavailable={unavailable}/></Layout>
+<Layout dataMode={isStatic?'import':unavailable?'unavailable':products.length?(products.every(p=>p.is_demo)?'demo':products.some(p=>p.is_demo)?'mixed':'import'):undefined} title="Выгодные предложения по истории цен"><div class="page-heading"><h1>Снижения цен</h1><p>Снижения от 5% относительно ежедневной медианы за 30 дней.<br/>Учитываем только сопоставимые предложения с достаточной историей.</p></div><div class="inline-demo">{products.some(p=>p.is_demo)?'Демонстрационные данные помечены отдельно · ':''}Аналитическая оценка, а не обещание скидки</div>{isStatic?<LiveCatalog client:load deals={true}/>:<Catalog client:load products={products} deals={true} unavailable={unavailable}/>}</Layout>

@@ -37,6 +37,7 @@ jobs:
           EXPORT_STATIC: "1"
           API_BASE_URL: https://api.inu-apps.ru
           PUBLIC_API_URL: https://api.inu-apps.ru
+          PUBLIC_STATIC_SITE: "true"
           PUBLIC_API_ENABLED: "true"
           PUBLIC_DEMO_FALLBACK: "false"
           PUBLIC_INDEXABLE: "false"

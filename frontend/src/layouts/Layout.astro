@@ -4,7 +4,7 @@ import '../styles/simple.css';
 import '../styles/market.css';
 import Shell from '../components/Shell';
 import {getAppConfig} from '../../lib/data';
-const appConfig=Astro.props.dataMode?null:await getAppConfig();
+const appConfig=Astro.props.dataMode||process.env.PUBLIC_STATIC_SITE==='true'?null:await getAppConfig();
 const dataMode=Astro.props.dataMode||appConfig?.data_mode||'demo';
 const { title = 'Покупайте в нужный момент', description = 'Сравнивайте предложения, изучайте историю цен и свежие отзывы. Ценоскоп помогает принимать взвешенные решения о покупке.', noindex = false } = Astro.props;
 const brand = import.meta.env.PUBLIC_SITE_NAME || 'Ценоскоп';
